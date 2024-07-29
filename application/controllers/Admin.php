@@ -435,10 +435,9 @@ class Admin extends CI_Controller
 		$where = array(
 			'a.department=b.id' => null,
 			'a.emp_catg=c.id' => null,
-			'a.emp_dist=d.district_code' => null,
 			'a.emp_status' => $status
 		);
-		$table_name = 'md_employee a, md_department b, md_category c, md_district d';
+		$table_name = 'md_employee a, md_department b, md_category c';
 
 		$employee['employee_dtls']    =   $this->Admin_Process->f_get_particulars($table_name, $select, $where, 0);
 		//Category List 
@@ -481,16 +480,16 @@ class Admin extends CI_Controller
 			$catg_dtls = $this->Admin_Process->f_get_particulars("md_category", $select, $where, 1);
 			$selected = array(
 				'id' => $id,
-				'category' => $catg_dtls->category,
-				'da' => $catg_dtls->da,
-				'sa' => $catg_dtls->sa,
-				'hra' => $catg_dtls->hra,
-				'hra_max' => $catg_dtls->hra_max,
-				'pf' => $catg_dtls->pf,
-				'pf_max' => $catg_dtls->pf_max,
-				'pf_min' => $catg_dtls->pf_min,
-				'ta' => $catg_dtls->ta,
-				'ma' => $catg_dtls->ma
+				'category' => $catg_dtls->category
+				// 'da' => $catg_dtls->da,
+				// 'sa' => $catg_dtls->sa,
+				// 'hra' => $catg_dtls->hra,
+				// 'hra_max' => $catg_dtls->hra_max,
+				// 'pf' => $catg_dtls->pf,
+				// 'pf_max' => $catg_dtls->pf_max,
+				// 'pf_min' => $catg_dtls->pf_min,
+				// 'ta' => $catg_dtls->ta,
+				// 'ma' => $catg_dtls->ma
 			);
 		}
 		$data['selected'] = $selected;
@@ -507,16 +506,16 @@ class Admin extends CI_Controller
 		$msg = '';
 		$res_dt = false;
 		$data_array = array(
-			'category' => $this->input->post('category'),
-			'da' => $this->input->post('da') > 0 ? $this->input->post('da') : 0,
-			'sa' => $this->input->post('sa') > 0 ? $this->input->post('sa') : 0,
-			'hra' => $this->input->post('hra') > 0 ? $this->input->post('hra') : 0,
-			'hra_max' => $this->input->post('hra_max') > 0 ? $this->input->post('hra_max') : 0,
-			'pf' => $this->input->post('pf') > 0 ? $this->input->post('pf') : 0,
-			'pf_max' => $this->input->post('pf_max') > 0 ? $this->input->post('pf_max') : 0,
-			'pf_min' => $this->input->post('pf_min') > 0 ? $this->input->post('pf_min') : 0,
-			'ta' => $this->input->post('ta') > 0 ? $this->input->post('ta') : 0,
-			'ma' => $this->input->post('ma') > 0 ? $this->input->post('ma') : 0
+			'category' => $this->input->post('category')
+			// 'da' => $this->input->post('da') > 0 ? $this->input->post('da') : 0,
+			// 'sa' => $this->input->post('sa') > 0 ? $this->input->post('sa') : 0,
+			// 'hra' => $this->input->post('hra') > 0 ? $this->input->post('hra') : 0,
+			// 'hra_max' => $this->input->post('hra_max') > 0 ? $this->input->post('hra_max') : 0,
+			// 'pf' => $this->input->post('pf') > 0 ? $this->input->post('pf') : 0,
+			// 'pf_max' => $this->input->post('pf_max') > 0 ? $this->input->post('pf_max') : 0,
+			// 'pf_min' => $this->input->post('pf_min') > 0 ? $this->input->post('pf_min') : 0,
+			// 'ta' => $this->input->post('ta') > 0 ? $this->input->post('ta') : 0,
+			// 'ma' => $this->input->post('ma') > 0 ? $this->input->post('ma') : 0
 		);
 		if ($id > 0) {
 			$data_array['modified_by'] = $this->session->userdata['loggedin']['user_id'];

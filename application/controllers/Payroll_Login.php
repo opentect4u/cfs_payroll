@@ -94,7 +94,7 @@
 		public function main(){
 
 			if($this->session->userdata('loggedin')){
-
+                $bank_id = $this->session->userdata['loggedin']['bank_id'];
 				$_SESSION['sys_date']= date('Y-m-d');
 
 				$_SESSION['module']  = 'P';
@@ -104,10 +104,14 @@
 				$fin_yr = '2020-21';
 
 				$branch_id = 342;
- 
+				$data['sal_upto'] = $this->Login_Process->f_get_particulars("td_salary",array('MAX(trans_date)as trans_date'),array('catg_cd'=> 1,'approval_status'=>'A','bank_id'=>$bank_id),1);
+				$data['tot_emp'] = $this->Login_Process->f_get_particulars("md_employee",array('count(*) as cnt'),array('emp_status'=>'A','bank_id'=>$bank_id),1);
+				$data['tot_ed'] = $this->Login_Process->f_get_particulars("td_pay_slip",array('SUM(CASE WHEN pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,SUM(CASE WHEN pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu'),array('bank_id'=>$bank_id),1);
+				$data['tot_edp'] = $this->Login_Process->f_get_particulars("td_pay_slip",array('SUM(CASE WHEN pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,SUM(CASE WHEN pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu'),array('catg_id'=>'1','bank_id'=>$bank_id),1);
+				$data['tot_edt'] = $this->Login_Process->f_get_particulars("td_pay_slip",array('SUM(CASE WHEN pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,SUM(CASE WHEN pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu'),array('catg_id'=>'2','bank_id'=>$bank_id),1);
 				$this->load->view('post_login/payroll_main');
 
-				$this->load->view('post_login/home');
+				$this->load->view('post_login/home',$data);
 
 				$this->load->view('post_login/footer');
 

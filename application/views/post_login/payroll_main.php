@@ -217,12 +217,7 @@
                 <ul class="submenu-item">
                   <?php if ($this->session->userdata['loggedin']['ho_flag'] != "Y") { ?>
                     <li class="nav-item"><a href="<?php echo site_url("fert/rep/rateslab"); ?>">Sale Rate Slab</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/stkStmt"); ?>">Consolidated Stock</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/stkScomp"); ?>">Stock (Companywise)</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/stkstkpnt"); ?>">Stock (Stokpoint Wise)</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/stkSprodro"); ?>">Product (RO wise)</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/purrep"); ?>">Purchase Ledger</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("fert/rep/salerep"); ?>">Sale Ledger</a></li>
+                   
                     <li class="nav-item"><a href="<?php echo site_url("fert/rep/salerepsoc"); ?>">Sale Ledger(Society Wise)</a></li>
                   <?php } ?>
                   <?php if ($this->session->userdata['loggedin']['ho_flag'] == "Y") { ?>

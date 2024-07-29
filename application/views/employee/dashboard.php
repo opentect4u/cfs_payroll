@@ -55,6 +55,7 @@
                 <table id="order-listing" class="table">
                   <thead>
                     <tr>
+                      <th>SL No</th>
                       <th>Emp code</th>
                       <th>Name</th>
                       <th>Category</th>
@@ -67,9 +68,11 @@
                   <tbody>
                     <?php
                     if ($employee_dtls) {
+                      $i = 0 ;
                       foreach ($employee_dtls as $e_dtls) {
                     ?>
                         <tr>
+                        <td><?= ++$i; ?></td>
                           <td><?= $e_dtls->emp_code; ?></td>
                           <td><?= $e_dtls->emp_name; ?></td>
                           <td><?= $e_dtls->category; ?></td>
