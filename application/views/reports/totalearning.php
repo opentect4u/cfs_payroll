@@ -63,17 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                   <thead>
                     <tr>
                       <th>Sl No.</th>
+                      <th>Emplyees Code</th>
                       <th>Name of Emplyees</th>
-                      <th>S.P.</th>
-                      <th>D.A.</th>
-                      <th>H.R.A.</th>
-                      <th>M.A.</th>
-                      <th>S.A.</th>
-                      <th>T.A.</th>
-                      <th>Arrear</th>
-                      <th>O.T.</th>
-                      <th>LWP</th> 
-                      <th>Final Gross</th>
+                      <th>Earning</th>
+                      <th>Deduction</th>
+                      <th>Net </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -84,54 +78,31 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                       $tot_da = 0;
                       $tot_hra = 0;
                       $tot_ma = 0;
-                      $tot_sa = 0;
-                      $tot_ta = 0;
-                      $tot_arrear = 0;
-                      $tot_ot = 0;
-                      $tot_lwp = 0;
+                
+                      $tot_ded = 0;
+                      $totearn = 0;
                       $tot_final_gross = 0;
                       foreach ($total_ear as $td_list) {
-                        $tot_sp += $td_list->sp;
-                        $tot_da += $td_list->da;
-                        $tot_hra += $td_list->hra;
-                        $tot_ma += $td_list->ma;
-                        $tot_sa += $td_list->sa;
-                        $tot_ta += $td_list->ta;
-                        $tot_arrear += $td_list->arrear;
-                        $tot_ot += $td_list->ot;
-                        $tot_lwp += $td_list->lwp;
-                        $tot_final_gross += $td_list->final_gross;
+                        $totearn += $td_list->tot_earn;
+                        $tot_ded += $td_list->tot_dedu;
 
                     ?>
                         <tr>
                           <td><?= $i++; ?></td>
+                          <td><?= $td_list->emp_code; ?></td>
                           <td><?= $td_list->emp_name; ?></td>
-                          <td><?= $td_list->sp; ?></td>
-                          <td><?= $td_list->da; ?></td>
-                          <td><?= $td_list->hra; ?></td>
-                          <td><?= $td_list->ma; ?></td>
-                          <td><?= $td_list->sa; ?></td>
-                          <td><?= $td_list->ta; ?></td>
-                          <td><?= $td_list->arrear; ?></td>
-                          <td><?= $td_list->ot; ?></td>
-                          <td><?= $td_list->lwp; ?></td>
-                          <td><?= $td_list->final_gross; ?></td>
+                          <td><?= $td_list->tot_earn; ?></td>
+                          <td><?= $td_list->tot_dedu; ?></td>
+                          <td><?= $td_list->tot_earn - $td_list->tot_dedu; ?></td>
                         </tr>
                       <?php
                       }
                       ?>
                       <tr>
-                        <td colspan="2">Total Amount</td>
-                        <td><?= $tot_sp; ?></td>
-                        <td><?= $tot_da; ?></td>
-                        <td><?= $tot_hra; ?></td>
-                        <td><?= $tot_ma; ?></td>
-                        <td><?= $tot_sa; ?></td>
-                        <td><?= $tot_ta; ?></td>
-                        <td><?= $tot_arrear; ?></td>
-                        <td><?= $tot_ot; ?></td>
-                        <td><?= $tot_lwp; ?></td>
-                        <td><?= $tot_final_gross; ?></td>
+                        <td colspan="3">Total Amount</td>
+                        <td><?= $totearn; ?></td>
+                        <td><?= $tot_ded; ?></td>
+                        <td><?= $totearn - $tot_ded; ?></td>
                       </tr>
                     <?php
                     } else {

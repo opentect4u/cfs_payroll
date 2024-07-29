@@ -93,13 +93,13 @@ class Report_Process extends CI_Model
 
 	public function f_get_totalearning($from_date, $to_date)
 	{
-		$this->db->select('a.emp_code, SUM(a.sp) sp, SUM(a.da) da, SUM(a.hra) hra, SUM(a.ma) ma, 
-		SUM(a.sa) sa, SUM(a.ta) ta, SUM(a.arrear) arrear, SUM(a.ot) ot, b.emp_name, SUM(a.lwp) lwp, SUM(a.final_gross) final_gross');
+		
+		$this->db->select('a.emp_code,b.emp_name,SUM(CASE WHEN a.pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,SUM(CASE WHEN a.pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu');
 		$this->db->where(array(
 			'a.emp_code=b.emp_code' => null,
 			'a.sal_month BETWEEN ' . date('m', strtotime($from_date)) . ' AND ' . date('m', strtotime($to_date)) => null
 		));
-		$this->db->group_by('a.emp_code');
+		$this->db->group_by('a.emp_code,b.emp_name');
 		$query = $this->db->get('td_pay_slip a, md_employee b');
 		//echo $this->db->last_query();exit;
 		return $query->result();

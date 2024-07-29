@@ -206,22 +206,7 @@
                 </ul>
               </div>
             </li>
-            <!-- <li class="nav-item">
-              <a href="#" class="nav-link">
-                
-                <span class="menu-title">Leave</span></a>
-                <i class="menu-arrow"></i></a>
-                <div class="submenu">
-                  <ul class="submenu-item">
-                    <li class="nav-item"><a href="<?php echo site_url("adv/advance"); ?>">Advance</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("stock/stock_entry"); ?>">Purchase</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url("trade/sale"); ?>">Sale</a></li>
-                    <li class="nav-item"> <a href="<?php echo site_url("socpay/society_payment"); ?>">Customer Payment</a></li>
-                    <li class="nav-item"> <a href="<?php echo site_url("drcrnote/dr_note"); ?>">Credit Note</a></li>
-                    <li class="nav-item"> <a href="<?php echo site_url("virtualpnt/virtual_stk_point"); ?>">Secondary Stock Point</a></li>
-                  </ul>
-                  </div>
-            </li> -->
+          
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <!-- <i class="mdi mdi-file-document-box-outline menu-icon"></i> -->
@@ -243,8 +228,8 @@
                   <?php if ($this->session->userdata['loggedin']['ho_flag'] == "Y") { ?>
                     <li class="nav-item"><a href="<?php echo site_url('reports/payslipreport'); ?>">Payslip</a></li>
                     <li class="nav-item"><a href="<?php echo site_url('reports/paystatementreport'); ?>">Salary Statement Month Wise</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url('reports/totalearning'); ?>">Total Earning</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url('reports/totaldeduction'); ?>">Total Deduction</a></li>
+                    <li class="nav-item"><a href="<?php echo site_url('reports/totalearning'); ?>">Total Earning Deduction</a></li>
+                    <!-- <li class="nav-item"><a href="<?php //echo site_url('reports/totaldeduction'); ?>">Total Deduction</a></li> -->
                   <?php } ?>
                 </ul>
               </div>
