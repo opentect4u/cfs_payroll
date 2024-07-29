@@ -6,4 +6,4 @@ uploads/
 accessToken.json
 core/db.js
 /application/config
-googleAccessToken.jsong
+googleAccessToken.json
