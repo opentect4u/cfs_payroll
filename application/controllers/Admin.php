@@ -322,10 +322,10 @@ class Admin extends CI_Controller
 
 			$this->form_validation->set_rules('emp_code', 'Employee Code', 'required');
 			$this->form_validation->set_rules('emp_name', 'Employee Name', 'required');
-			$this->form_validation->set_rules('emp_catg', 'Employee Category', 'required');
-			$this->form_validation->set_rules('dob', 'Date of Birth', 'required');
-			$this->form_validation->set_rules('join_dt', 'Joining Date', 'required');
-			$this->form_validation->set_rules('phn_no', 'Phone Number', 'required');
+			// $this->form_validation->set_rules('emp_catg', 'Employee Category', 'required');
+			// $this->form_validation->set_rules('dob', 'Date of Birth', 'required');
+			// $this->form_validation->set_rules('join_dt', 'Joining Date', 'required');
+			// $this->form_validation->set_rules('phn_no', 'Phone Number', 'required');
 			$this->form_validation->set_rules('basic_pay', 'Basic Pay', 'required');
 			if ($this->form_validation->run() == TRUE) {
 
