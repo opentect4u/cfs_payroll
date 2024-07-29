@@ -1,29 +1,19 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class Approves extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-
+        if(!isset($this->session->userdata['loggedin']['user_id'])){
+            redirect(base_url());
+        }
         $this->load->model('Login_Process');
-
         $this->load->model('Salary_Process');
         $this->load->model('Admin_Process');
         $this->load->helper('pdf_helper');
-
         $this->load->library('email');
-
-
-        //For User's Authentication
-        // if(!isset($this->session->userdata('loggedin')->user_id)){
-
-        //     redirect('User_Login/login');
-
-        // }
-
     }
 
 

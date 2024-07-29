@@ -132,4 +132,24 @@ class Report_Process extends CI_Model
 
 		return $result->row();
 	}
+	function sal_emp_amt($month, $year, $catg_id,$bank_id)
+	{
+		$this->db->select('a.emp_code,b.emp_name,b.bank_ac_no,SUM(CASE WHEN a.pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,
+		SUM(CASE WHEN a.pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu');
+		
+		if ( $month && $year && $catg_id ) {
+			
+			$this->db->where(array(
+				'a.emp_code = b.emp_code' => NULL,
+				'a.bank_id' => $bank_id,
+				'a.sal_month' => $month,
+				'a.sal_year' => $year,
+				'a.catg_id' => $catg_id
+			));
+		}
+		$this->db->group_by('a.emp_code,b.emp_name');
+		$query = $this->db->get('td_pay_slip a,md_employee b');
+		return $query->result();
+	
+	}
 }

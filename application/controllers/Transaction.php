@@ -6,6 +6,9 @@ class Transaction extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        if(!isset($this->session->userdata['loggedin']['user_id'])){
+            redirect(base_url());
+        }
         $this->load->model('transaction_model');
     }
 

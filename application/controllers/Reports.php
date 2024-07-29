@@ -6,13 +6,15 @@ class Reports extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-
+        if(!isset($this->session->userdata['loggedin']['user_id'])){
+            redirect(base_url());
+        }
         $this->load->model('Login_Process');
         $this->load->model('Report_Process');
         $this->load->model('Admin_Process');
         $this->load->helper('paddyrate_helper');
+        $this->load->model('Salary_Process');
     }
-
 
     //Category wise 
 
@@ -87,26 +89,15 @@ class Reports extends CI_Controller
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            //Employees salary statement
-            $select = 'a.trans_date, a.trans_no, a.sal_month, a.sal_year, a.emp_code, 
-			a.catg_id, a.basic, a.sp, a.da, a.hra, a.ma, a.sa, a.ta, a.arrear, a.ot, a.lwp, a.final_gross, 
-			a.it, a.cpf, a.gpf, a.gigs, a.lpf, a.fa, 
-			a.gi, a.top, a.eccs, a.hblp, a.hbli, 
-			a.s_adv, a.tot_diduction, a.net_sal, a.remarks, b.emp_name,b.designation,b.phn_no,b.department,b.pan_no, b.bank_ac_no';
+            
+          
+            $month = $this->input->post('sal_month');
+            $year = $this->input->post('year');
+            $catg_id = $this->input->post('category');
+            $bank_id = $this->session->userdata('loggedin')['bank_id'];
 
-            $where  = array(
-                "a.emp_code=b.emp_code" =>  NULL,
-                "a.sal_month"           =>  $this->input->post('sal_month'),
-                "a.sal_year"            =>  $this->input->post('year'),
-                "a.catg_id"            =>  $this->input->post('category'),
-                "b.emp_status"          =>  'A'
-            );
-
-            $table_name = 'td_pay_slip a,md_employee b';
-
-            $statement['statement'] =   $this->Report_Process->f_get_particulars($table_name, $select, $where, 0);
-            //  echo $this->db->last_query();
-            //                 die();
+            $statement['sal_list']   =   $this->Report_Process->sal_emp_amt($month,$year,$catg_id,$bank_id);
+           
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/statement", $statement);
             $this->load->view('post_login/footer');

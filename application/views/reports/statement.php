@@ -55,130 +55,40 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="order-listing" class="table">
-                                    <thead>
+                            <table class="table">
+                                        <thead>
                                         <tr>
-                                            <th>Sl No.</th>
-                                            <th>Name</th>
-                                            <th>Basic Pay</th>
-                                         <!--   <th>S.P.</th>  -->
-                                            <th>D.A.</th>
-                                            <th>H.R.A.</th>
-                                            <th>M.A.</th>
-                                            <th>S.A.</th>
-                                        <!--    <th>T.A.</th>  -->
-                                            <th>Arrear</th>
-                                     <!--       <th>O.T.</th>  -->
-                                            <th>Income Tax</th>
-                                            <th>CON.<br> P.F.</th>
-                                      <!--      <th>GPF of<br>GOVT Staff</th> 
-                                            <th>GI of<br>GOVT Staff</th> -->
-                                            <th>LIC</th>
-                                            <th>Festival Adv.</th>
-                                      <!--    <th>Group Insurance</th> -->
-											<th>S.S.Loan PRIN</th> 
-                                            <th>P.T.</th>
-                                            <!--<th>ECCS</th>  -->
-											<th>S. S. LOAN INTT</th>
-                                            <th>SW Loan Prin.</th>
-                                            <th>SW Loan Int.</th>
-                                            <th>Salary Adv.</th>
-                                            <th>Total <br>Deduction</th>
-                                            <th>Net Amount</th>
-                                            <th>Bank A/C No.</th>
+                                            <th>Emp Code</th>
+                                            <th>Emp Name</th>
+                                            <th>Gross</th>
+                                            <th>Deduction</th>
+                                            <th>Net Sal</th>
+                                            <th>AC/No.</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        if ($statement) {
-                                            $i  =   1;
-                                            $tot_net = 0;$tot_basic = $tot_sp = $tot_da =$tot_hra =$tot_ma =$tot_sa=
-											$tot_arrear= $tot_it=$tot_cpf=$tot_lic=0;$tot_ssloan =0;$tot_pt=0;$tot_ssloan_int=0;
-											$tot_swloan_pr=0;$tot_swloan_int=0;$tot_sal_adv=0;$tot_dedu=0;
-                                            foreach ($statement as $s_list) {
-                                                
-												$tot_basic +=$s_list->basic;
-												$tot_sp +=$s_list->sp;
-												$tot_da += $s_list->da;
-												$tot_hra +=$s_list->hra;
-												$tot_ma +=$s_list->ma;
-												$tot_sa +=$s_list->sa;
-												$tot_arrear +=$s_list->arrear;
-												$tot_it  +=$s_list->it;
-												$tot_cpf +=$s_list->cpf;
-												$tot_lic += $s_list->lpf; 
-												$tot_ssloan +=$s_list->gi; 
-												$tot_pt +=$s_list->top; 
-												$tot_ssloan_int +=$s_list->eccs;
-												$tot_swloan_pr +=$s_list->hblp;
-												$tot_swloan_int +=$s_list->hbli; 
-												$tot_dedu +=$s_list->tot_diduction;
-												$tot_net += $s_list->net_sal;
-												
-                                        ?>
-                                                <tr>
-
-                                                    <td><?= $i++; ?></td>
-                                                    <td><?= $s_list->emp_name; ?></td>
-                                                    <td><?= $s_list->basic; ?></td>
-                                            <!--        <td><?= $s_list->sp; ?></td>  -->
-                                                    <td><?= $s_list->da; ?></td>
-                                                    <td><?= $s_list->hra; ?></td>
-                                                    <td><?= $s_list->ma; ?></td>
-                                                    <td><?= $s_list->sa; ?></td>
-                                             <!--       <td><?= $s_list->ta; ?></td> -->
-                                                    <td><?= $s_list->arrear; ?></td>
-                                            <!--        <td><?= $s_list->ot; ?></td>  -->
-                                                    <td><?= $s_list->it; ?></td>
-                                                    <td><?= $s_list->cpf; ?></td>
-                                              <!--      <td><?php //echo $s_list->gpf; ?></td> 
-                                                    <td><?= $s_list->gigs; ?></td> -->
-                                                    <td><?= $s_list->lpf; ?></td>
-                                                    <td><?= $s_list->fa; ?></td>
-                                                    <td><?= $s_list->gi; ?></td>
-                                                    <td><?= $s_list->top; ?></td>
-                                                    <td><?= $s_list->eccs; ?></td>
-                                                    <td><?= $s_list->hblp; ?></td>
-                                                    <td><?= $s_list->hbli; ?></td>
-                                                    <td><?= $s_list->s_adv; ?></td>
-                                                    <td><?= $s_list->tot_diduction; ?></td>
-                                                    <td><?= $s_list->net_sal; ?></td>
-                                                    <td><?= $s_list->bank_ac_no; ?></td>
-
+                                        </thead>
+                                        <?php 
+                                           $tot_dedu = 0; $tot_earning = 0; $net_sal = 0;
+                                        foreach($sal_list as $elist) { ?>
+                                        <tbody>
+                                        <tr>
+                                            <td><?=$elist->emp_code?></td>
+                                            <td><?=$elist->emp_name?></td>
+                                            <td><?php echo $elist->tot_earn; $tot_earning +=$elist->tot_earn; ?></td>
+                                            <td><?php echo $elist->tot_dedu; $tot_dedu +=$elist->tot_dedu; ?></td>
+                                            <td><?php echo $elist->tot_earn - $elist->tot_dedu; $net_sal +=$elist->tot_earn - $elist->tot_dedu;?></td>
+                                            <td><?php echo $elist->bank_ac_no; ?></td>
+                                        </tr>
+                                        </tbody>
+                                        <?php } ?>
+                                        <tfoot>
+                                                <tr style="font-weight:bold">
+                                                    <td colspan="2">Total</td>
+                                                    <td><?=$tot_earning?></td>
+                                                    <td><?=$tot_dedu?></td>
+                                                    <td><?=$tot_earning - $tot_dedu?></td>
                                                 </tr>
-                                            <?php
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td colspan="2">Total Amount  Rs. </td>
-												<td ><?=$tot_basic?></td>
-										<!--		<td><?=$tot_sp?></td>  -->
-												<td><?=$tot_da?></td>
-												<td><?=$tot_hra?></td>
-												<td><?=$tot_ma?></td>
-												<td><?=$tot_sa?></td>
-											<!--	<td>0</td>  -->
-												<td><?=$tot_arrear?></td>
-												<td><?=$tot_it?></td>
-												<td><?=$tot_cpf?></td>
-												<td><?=$tot_lic?></td>
-												<td>0</td>
-												<td><?=$tot_ssloan?></td>
-												<td><?=$tot_pt?></td>
-												<td><?= $tot_ssloan_int?></td>
-												<td><?= $tot_swloan_pr?></td>
-												<td><?= $tot_swloan_int?></td>
-												<td><?= $tot_sal_adv?></td>
-												<td><?= $tot_dedu?></td>
-                                                <td><?php echo $tot_net; ?></td>
-                                            </tr>
-                                        <?php
-                                        } else {
-                                            echo "<tr><td colspan='32' style='text-align:center;'>No Data Found</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
+                                        </tfoot>
+                                    </table>
                                 <br>
                                 <div>
                                     <p>Amount: <?php echo @$tot_net . ' (' . getIndianCurrency(@$tot_net > 0 ? $tot_net : 0.00) . ').'; ?></p>
