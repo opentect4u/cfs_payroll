@@ -1,4 +1,4 @@
-    <div class="main-panel">
+<div class="main-panel">
         <div class="content-wrapper">
           <div class="card">
             <div class="card-body">
@@ -89,7 +89,7 @@
                                           </select> 
                                       </td>
                                       <td>
-                                        <input type="number" title="" class="form-control" id="" name="damount[]"  value="0.00">
+                                        <input type="number" title="" class="form-control" id="damount_1" name="damount[]"  value="0.00" onchange="countDeduction()">
                                       </td>
                                       </tr>
                                     </tbody>
@@ -112,9 +112,7 @@
                                       <div class="col-6 grid-margin">
                                         Total Deduction
                                       </div>
-                                      <div class="col-6 " id="tot_earning">
-                                        500
-                                      </div>
+                                      <div class="col-6 " id="tot_deduction"></div>
                                     </div> 
                                 </div> 
                             </div>
@@ -141,12 +139,12 @@
                 $("#debitadd").append('<tr class="mb-2"><td><select id="epay_cd_' + x + '" name="epay_cd[]" class="form-control eamount" onchange="set_grDebit(' + x + ')" required><option value="">Select</option>' +
                     "<?php
                         foreach ($epayhead as $key) {
-							   
+                 
                             echo "<option value='" . $key->sl_no . "'>" . $key->pay_head . "</option>";
-							 
+               
                         }
                         ?>" + '</select></td>' +'<td><input type="number" class="form-control"  id="eamount_' + x + '" name="eamount[]"  value="0.00" required ></td>' + '<td><button type = "button" class = "btn btn-danger" id = "removeRow_Debit"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
-			     //  $( ".select2" ).select2();
+           //  $( ".select2" ).select2();
 
             } else {
                 alert('Please Select Voucher Type First');
@@ -170,12 +168,11 @@
                 $("#add").append('<tr class="mb-2"><td><select id="dpay_cd_' + x + '" name="dpay_cd[]" class="form-control"  onchange="set_grded(' + x + ')" required><option value="">Select</option>' +
                     "<?php
                         foreach ($dpayhead as $value) {
-							   
+                 
                             echo "<option value='" . $value->sl_no . "'>" . $value->pay_head . "</option>";
-							 
+               
                         }
-                        ?>" + '</select></td>'+'<td><input type="text" class="form-control"  id="damount_' + x + '" name="damount[]" oninput="validate(this)" required value="0.00"></td>' +  '<td><button type = "button" class = "btn btn-danger" id = "removeRow"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
-			  $( ".select2" ).select2();
+                        ?>" + '</select></td>'+'<td><input type="text" class="form-control"  id="damount_' + x + '" name="damount[]" required value="0.00" onchange="countDeduction()"></td>' +  '<td><button type = "button" class = "btn btn-danger" id = "removeRow"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
 
             } else {
                 alert('Please Select Voucher Type First');
@@ -300,4 +297,13 @@
             }
         });
       }
+
+function countDeduction(){
+  var tot_ded = 0
+  $('input[name="damount[]"]').each(function(){
+    tot_ded += parseFloat($(this).val()) > 0 ? parseFloat($(this).val()) : 0
+    // console.log($(this).val());
+  })
+  $('#tot_deduction').text(tot_ded)
+}
 </script>
