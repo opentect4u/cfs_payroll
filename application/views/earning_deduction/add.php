@@ -60,7 +60,7 @@
                                         </select> 
                                     </td>
                                     <td>
-                                      <input type="number" title="" class="form-control eamount" id="eamount_1" name="eamount[]" value="0.00" required>
+                                      <input type="number" title="" class="form-control eamount" id="eamount_1" name="eamount[]" value="0.00" required onchange="calEarning()">
                                     </td>
                                     </tr>
                                   </tbody>
@@ -102,9 +102,7 @@
                                           <div class="col-md-6" style="padding: 0px 0px 0px 22px">
                                             Total  Earning
                                           </div>
-                                          <div class="col-md-6" id="tot_earning">
-                                            
-                                         </div>
+                                          <div class="col-md-6" id="tot_earning"></div>
                                   </div>       
                                 </div> 
                                 <div class="col-6 grid-margin">
@@ -139,11 +137,9 @@
                 $("#debitadd").append('<tr class="mb-2"><td><select id="epay_cd_' + x + '" name="epay_cd[]" class="form-control eamount" onchange="set_grDebit(' + x + ')" required><option value="">Select</option>' +
                     "<?php
                         foreach ($epayhead as $key) {
-                 
                             echo "<option value='" . $key->sl_no . "'>" . $key->pay_head . "</option>";
-               
                         }
-                        ?>" + '</select></td>' +'<td><input type="number" class="form-control"  id="eamount_' + x + '" name="eamount[]"  value="0.00" required ></td>' + '<td><button type = "button" class = "btn btn-danger" id = "removeRow_Debit"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
+                        ?>" + '</select></td>' +'<td><input type="number" class="form-control eamount"  id="eamount_' + x + '" name="eamount[]"  value="0.00" required onchange="calEarning()" ></td>' + '<td><button type = "button" class = "btn btn-danger" id = "removeRow_Debit"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
            //  $( ".select2" ).select2();
 
             } else {
@@ -228,30 +224,34 @@
                     } else {
                        if(input_flag == 'A'){
                         tot = basic*(result.percentage/100);
-                        $('#eamount_' + id).val(tot.toFixed());
+                        $('#eamount_' + id).val(tot.toFixed()).change();
                         $('.eamount').each(function() {
                           // Parse the value as a float and add to total
                           var inputValue = parseFloat($(this).val());
                           total += isNaN(inputValue) ? 0 : inputValue;
 
-                      });
+                        });
                       total  +=parseFloat(basic);
-                      $('#tot_earning').html(total.toFixed());
+                      // $('#tot_earning').html(total.toFixed());
                     
+                       }
+
+                       if(result.sl_no == '107'){
+                        $('#eamount_' + id).val('300').change()
                        }
                        
                     }
                 } else {
                   if(input_flag == 'A'){
                     tot = basic*(result.percentage/100);
-                    $('#eamount_1').val(tot.toFixed());
+                    $('#eamount_1').val(tot.toFixed()).change();
                     $('.eamount').each(function() {
                           var inputValue = parseFloat($(this).val());
                           total += isNaN(inputValue) ? 0 : inputValue;
 
                       });
                       total  +=parseFloat(basic);
-                      $('#tot_earning').html(total.toFixed());
+                      // $('#tot_earning').html(total.toFixed());
                     
                   }
                 }
@@ -276,6 +276,7 @@
         //    dataType: 'html',
             success: function(result) {
                 var result = $.parseJSON(result);
+                console.log(result, 'DED');
                 var input_flag = result.input_flag;
                 if (id > 1) {
                     pre_val = $('#dpay_cd_' + pre_id).val();
@@ -287,12 +288,40 @@
                         tot = basic*(result.percentage/100);
                         $('#damount_' + id).val(tot.toFixed());
                        }
+
+                       if(result.sl_no == '201'){
+                        $('input[name="epay_cd[]"]').each(function(){
+                          console.log($(this).val(), 'ER VAL');
+                          if($(this).val() == '104'){
+                            var attr = $(this).attr('id')
+                            var ele_id = attr.split('_')[1]
+                            var da_val = $(`eamount_${ele_id}`).val()
+                            console.log(ele_id, da_val);
+                            var pf_val = ((parseFloat(basic) + parseFloat(da_val))*12)/100
+                            $('#damount_' + id).val(pf_val.toFixed());
+                          }
+                        })
+                       }
                     }
+                    console.log('HEHEHE');
                 } else {
                   if(input_flag == 'A'){
                     tot = basic*(result.percentage/100);
                     $('#damount_1').val(tot.toFixed());
                   }
+                  if(result.sl_no == '201'){
+                        $('input[name="epay_cd[]"]').each(function(){
+                          console.log($(this).val(), 'ER VAL');
+                          if($(this).val() == '104'){
+                            var attr = $(this).attr('id')
+                            var ele_id = attr.split('_')[1]
+                            var da_val = $(`eamount_${ele_id}`).val()
+                            console.log(ele_id, da_val);
+                            var pf_val = ((parseFloat(basic) + parseFloat(da_val))*12)/100
+                            $('#damount_' + id).val(pf_val.toFixed());
+                          }
+                        })
+                       }
                 }
             }
         });
@@ -305,5 +334,14 @@ function countDeduction(){
     // console.log($(this).val());
   })
   $('#tot_deduction').text(tot_ded)
+}
+
+function calEarning(){
+  var tot_er = parseFloat($('#basic').val())
+  $('input[name="eamount[]"]').each(function(){
+    tot_er += parseFloat($(this).val()) > 0 ? parseFloat($(this).val()) : 0
+    // console.log($(this).val());
+  })
+  $('#tot_earning').text(tot_er)
 }
 </script>
