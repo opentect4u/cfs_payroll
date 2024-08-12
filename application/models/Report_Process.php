@@ -152,4 +152,34 @@ class Report_Process extends CI_Model
 		return $query->result();
 	
 	}
+
+	function get_emp_list($emp_cat,$sal_month,$sal_year,$bank_id){
+
+		$sql = "SELECT DISTINCT a.emp_code,c.emp_name from td_pay_slip a,td_salary b,md_employee c
+		where a.catg_id = b.catg_cd
+		AND a.emp_code = c.emp_code
+		AND b.approval_status = 'A'
+		AND b.catg_cd = $emp_cat
+		AND a.bank_id = $bank_id
+		AND b.bank_id = $bank_id
+		AND c.bank_id = $bank_id
+		AND a.sal_month = $sal_month AND a.sal_year = $sal_year";
+
+		$result	=	$this->db->query($sql);
+		return $result->result();
+	}
+	function get_emp_saldetail($catg_id,$sal_month,$sal_year,$bank_id){
+
+		$sql ="select a.amount,b.pay_head,a.emp_code,a.pay_head_type from td_pay_slip a,md_pay_head b 
+				where a.pay_head_id = b.sl_no
+				AND a.sal_month = $sal_month
+				AND a.sal_year = $sal_year
+				AND a.bank_id = $bank_id 
+				AND b.bank_id = $bank_id
+				AND a.catg_id = $catg_id
+				" ;
+	
+		$result	=	$this->db->query($sql);
+		return $result->result();
+	}
 }

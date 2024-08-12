@@ -89,7 +89,6 @@ class Reports extends CI_Controller
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            
           
             $month = $this->input->post('sal_month');
             $year = $this->input->post('year');
@@ -217,6 +216,33 @@ class Reports extends CI_Controller
             $payslip['emp_list']   =   $this->Report_Process->f_get_particulars("md_employee", $select, array("emp_catg IN (1,2,3)" => NULL,""), 0);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
+            $this->load->view('post_login/footer');
+        }
+    }
+    public function empeardedu()
+    {
+       
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+          
+            $month = $this->input->post('sal_month');
+            $year = $this->input->post('year');
+            $catg_id = $this->input->post('category');
+            $bank_id = $this->session->userdata('loggedin')['bank_id'];
+           
+
+            $statement['emp_list']   = $this->Report_Process->get_emp_list($catg_id,$month,$year,$bank_id);
+            $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/empeardedu", $statement);
+            $this->load->view('post_login/footer');
+        } else {
+
+            //Month List
+            $statement['month_list'] =   $this->Report_Process->f_get_particulars("md_month", NULL, NULL, 0);
+            //Category List
+            $statement['category']   =   $this->Report_Process->f_get_particulars("md_category", NULL, null, 0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/empeardedu", $statement);
             $this->load->view('post_login/footer');
         }
     }

@@ -29123,6 +29123,12 @@ thead.fixedHeaderTable th {
   color: #ff0000;
 }
 
+.tot_res_amt{
+  border: 1px solid;
+  margin: 2px;
+  padding: 2px;
+}
+
 @media (max-width: 991px) {
   .horizontal-menu {
     position: fixed;
@@ -29145,6 +29151,7 @@ button.btnCustomAdd {
 button.btnCustomAddMarRig {
   margin-right: 15px;
 }
+
 
 
 /*# sourceMappingURL=../maps/horizontal-layout/style.css.map */
