@@ -21,7 +21,7 @@ class Approves extends CI_Controller
 
     public function payapprove()
     {
-
+		ini_set('max_execution_time', 600);
         if ($this->input->get('trans_no')) {
 
             $data_array     =   array(
@@ -39,30 +39,29 @@ class Approves extends CI_Controller
 
             $this->Salary_Process->f_edit("td_salary", $data_array, $where);
 
-            // $data_array1 = array(
-            //     "approval_status" => 'A'
-            // );
-            // $where1 = array(
-            //     "sal_month" => $this->input->get('month'),
-            //     "sal_year" => $this->input->get('year'),
-            //     "trans_date" => $this->input->get('trans_date'),
-            //     "catg_id" => $this->input->get('catg_cd')
-            // );
-            // $this->Salary_Process->f_edit("td_pay_slip", $data_array1, $where1);
+            $where1 = array(
+                "a.bank_id=b.sl_no AND a.pay_head_id=c.sl_no AND a.bank_id=c.bank_id AND a.emp_code=d.emp_code AND a.bank_id=d.bank_id " => null,
+                "a.sal_month" => $this->input->get('month'),
+                "a.sal_year" => $this->input->get('year'),
+                "a.catg_id" => $this->input->get('catg_cd'),
+            );
              
+            $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount, d.bank_ac_no, a.created_by';
+            $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip a, md_bank b, md_pay_head c, md_employee d", $paySel, $where1, 0);
+            
 
-            $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip", null, $where1, 0);
-			
-            // exit;
-            // UPDATE TO ORACLE DB //
-			//var_dump(json_encode($erning_dt));exit;
-            //  $res_dt = $this->save_sal_slip($erning_dt);
-            //  $res_dt = json_decode($res_dt);
-            //  if ($res_dt->suc > 0) {
-            //     $this->session->set_flashdata('msg', 'Successfully Approved!');
-            //  } else {
-            //     $this->session->set_flashdata('msg', 'Data not updated in server');
-            //  }
+            $chunkSize = 50;
+            $chunks = array_chunk($erning_dt, $chunkSize);
+
+            $allProcessed = $this->sendChunksToAPI($chunks, 'https://restaurantapi.opentech4u.co.in/sal/rardb_save');
+
+            if ($allProcessed) {
+                $this->session->set_flashdata('msg', 'Successfully Approved!');
+                // echo "All data inserted successfully!";
+            } else {
+                $this->session->set_flashdata('msg', 'Data not updated in server');
+                // echo "Failed to insert all data.";
+            }
             redirect('payapprv');
         }
 
@@ -71,6 +70,42 @@ class Approves extends CI_Controller
         $this->load->view('post_login/payroll_main');
         $this->load->view("approve/dashboard", $approve);
         $this->load->view('post_login/footer');
+    }
+	
+	function sendChunksToAPI($chunks, $url) {
+        $multiHandle = curl_multi_init();
+        $curlHandles = [];
+    
+        foreach ($chunks as $i => $chunk) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($chunk));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_multi_add_handle($multiHandle, $ch);
+            $curlHandles[$i] = $ch;
+        }
+    
+        $running = null;
+        do {
+            curl_multi_exec($multiHandle, $running);
+        } while ($running);
+    
+        $allProcessed = true;
+        foreach ($curlHandles as $ch) {
+            $response = curl_multi_getcontent($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode != 200) {
+                $allProcessed = false;
+            }
+            curl_multi_remove_handle($multiHandle, $ch);
+            curl_close($ch);
+        }
+    
+        curl_multi_close($multiHandle);
+    
+        return $allProcessed;
     }
 
     function save_sal_slip($data)
