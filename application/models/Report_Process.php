@@ -155,9 +155,10 @@ class Report_Process extends CI_Model
 
 	function get_emp_list($emp_cat,$sal_month,$sal_year,$bank_id){
 
-		$sql = "SELECT DISTINCT a.emp_code,c.emp_name from td_pay_slip a,td_salary b,md_employee c
+		$sql = "SELECT DISTINCT a.emp_code,c.emp_name,d.designation from td_pay_slip a,td_salary b,md_employee c,md_designation d
 		where a.catg_id = b.catg_cd
 		AND a.emp_code = c.emp_code
+		AND c.designation = d.sl_no
 		AND b.approval_status = 'A'
 		AND b.catg_cd = $emp_cat
 		AND a.bank_id = $bank_id
@@ -178,6 +179,36 @@ class Report_Process extends CI_Model
 				AND b.bank_id = $bank_id
 				AND a.catg_id = $catg_id
 				" ;
+	
+		$result	=	$this->db->query($sql);
+		return $result->result();
+	}
+	public function get_emp_salrydetail($emp_code,$sal_month,$sal_year,$bank_id){
+		$sql ="select emp_code,emp_name,pay_head_id,pay_head,emp_desig,sum(e_amt)e_amt,sum(d_amt)d_amt
+					from(
+					SELECT a.emp_code,b.emp_name,a.pay_head_id,c.pay_head,a.amount e_amt,0 d_amt,b.designation,d.designation emp_desig
+					FROM td_pay_slip a,md_employee b,md_pay_head c,md_designation d
+					where a.emp_code = b.emp_code
+					and   a.pay_head_id = c.sl_no
+					and   b.designation = d.sl_no
+					and   a.emp_code = $emp_code
+					and   a.pay_head_type = 'E'
+					and   a.sal_year = $sal_year
+					and   a.sal_month = $sal_month
+					and   a.bank_id = $bank_id
+					UNION
+					SELECT a.emp_code,b.emp_name,a.pay_head_id,c.pay_head,0 e_amt,a.amount d_amt,b.designation,d.designation emp_desig
+					FROM td_pay_slip a,md_employee b,md_pay_head c,md_designation d
+					where a.emp_code = b.emp_code
+					and   a.pay_head_id = c.sl_no
+					and   b.designation = d.sl_no
+					and   a.emp_code = $emp_code 
+					and   a.pay_head_type = 'D'
+					and   a.sal_year = $sal_year
+					and   a.sal_month = $sal_month
+					and   a.bank_id = $bank_id)a
+					group by emp_code,emp_name,pay_head_id,pay_head,emp_desig
+					order by pay_head_id;";
 	
 		$result	=	$this->db->query($sql);
 		return $result->result();

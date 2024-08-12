@@ -231,7 +231,7 @@ class Reports extends CI_Controller
            
 
             $statement['emp_list']   = $this->Report_Process->get_emp_list($catg_id,$month,$year,$bank_id);
-            $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+          //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/empeardedu", $statement);
             $this->load->view('post_login/footer');

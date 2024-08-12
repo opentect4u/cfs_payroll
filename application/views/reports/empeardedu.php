@@ -7,6 +7,7 @@
         WindowObject.document.writeln('<!DOCTYPE html>');
         WindowObject.document.writeln('<html><head><title></title><style type="text/css">');
         WindowObject.document.writeln('@media print { .center { text-align: center;}' +
+            '                                         .row { display: flex;flex-wrap: wrap; }' +
             '                                         .inline { display: inline; }' +
             '                                         .underline { text-decoration: underline; }' +
             '                                         .left { margin-left: 315px;} ' +
@@ -28,6 +29,31 @@
         }, 10);
     }
 </script>
+<!-- <style>
+@media print {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .col-3, .col-8 {
+        flex: 1;
+    }
+    .col-3 {
+        max-width: 25%; /* Since col-3 represents 25% width */
+    }
+    .col-8 {
+        max-width: 75%; /* Since col-8 represents 75% width */
+    }
+    img {
+        max-width: 100%; /* Ensure images fit within their columns */
+        height: auto; /* Maintain aspect ratio */
+    }
+    /* Additional print styles */
+    .no-print {
+        display: none;
+    }
+}
+</style> -->
 
 <style>
     th {
@@ -66,70 +92,62 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <tr>
                                             <td>Emp Name</td>
                                             <td><?=$elist->emp_name?>(<?=$elist->emp_code?>)</td>
+                                            <td><?=$elist->designation?></td>
+                                            <td>NET SAL</td>
+                                            <td>SIGNATURE</td>
+                                            
+                                        </tr>
+                                        <?php 
+                                             $saldetail   = $this->Report_Process->get_emp_salrydetail($elist->emp_code,$this->input->post('sal_month'),$this->input->post('year'),$this->session->userdata('loggedin')['bank_id']);
+                                             foreach($saldetail as $key) { 
+                                                $emp_tot_er +=$key->e_amt;
+                                                $emp_tot_ded +=$key->d_amt;
+                                                $tot_earning  +=$key->e_amt;
+                                                $tot_dedu  +=$key->d_amt;
+                                                ?>
+                                        <tr>
+                                            <td><?=$key->pay_head?></td>
+                                            <td><?=$key->e_amt?></td>
+                                            <td><?=$key->d_amt?></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Earning</td>
-                                            <td>
-                                             <?php 
-                                             foreach($saldetail as $key) { 
-                                                
-                                                if($elist->emp_code  == $key->emp_code  &&  $key->pay_head_type == 'E'){ 
-                                                    $emp_tot_er +=$key->amount;
-                                                    $tot_earning +=$key->amount;
-                                                ?>
-                                              
-                                                <label class="tot_res_amt"><?=$key->pay_head?><?=$key->amount?></label>
-
-                                             <?php  } }?>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Deduction</td>
-                                            <td>
-                                             <?php 
-                                           
-                                             foreach($saldetail as $key) { 
-                                                
-                                                if($elist->emp_code  == $key->emp_code  &&  $key->pay_head_type == 'D'){ 
-                                                    $emp_tot_ded +=$key->amount;
-                                                    $tot_dedu +=$key->amount;
-                                                ?>
-                                              
-                                                <label class="tot_res_amt" ><?=$key->pay_head?><?=$key->amount?></label>
-
-                                             <?php  } }?>
-                                            </td>
+                                        <?php 
+                                        }?>   
                                         </tr>
                                         <tr style="font-weight:bold">
                                             <td>Total</td>
-                                            <td> Earning: <?=$emp_tot_er?>&nbsp;&nbsp;  &nbsp;&nbsp; Deduction: <?=$emp_tot_ded?> &nbsp;&nbsp;  &nbsp;&nbsp; NET <?=$emp_tot_er-$emp_tot_ded?></td>
+                                            <td><?=$emp_tot_er?></td>
+                                            <td><?=$emp_tot_ded?></td>
+                                            <td><?=$emp_tot_er-$emp_tot_ded?></td>
+                                            <td></td>
                                         </tr>
                                         </tbody>
                                         <?php 
                                     
                                          } ?>
-                                        <tfoot>
+                                      
                                                 <tr style="font-weight:bold">
                                                     <td>Total</td>
-                                                    <td>Earning:<?=$tot_earning?>   &nbsp;&nbsp;&nbsp;&nbsp;Deduction:<?=$tot_dedu?></td>
+                                                    <td><?=$tot_earning?></td>
+                                                    <td><?=$tot_dedu?></td>
+                                                    <td><?=$tot_earning-$tot_dedu?></td>
+                                                    <td></td>
                                                 </tr>
-                                                <tr style="font-weight:bold">
-                                                    <td>NET SAL</td>
-                                                    <td><?=$tot_earning - $tot_dedu?></td>
-                                                </tr>
-                                        </tfoot>
+                                       
                                     </table>
                                 <br>
                                 <div>
                                     <!-- <p>Amount: <?php //echo @$tot_net . ' (' . getIndianCurrency(@$tot_net > 0 ? $tot_net : 0.00) . ').'; ?></p> -->
                                 </div>
 
-                                <!-- <div class="bottom">
+                                <div class="bottom">
                                     <p style="display: inline;">Prepared By</p>
                                     <p style="display: inline; margin-left: 8%;"></p>
                                     <p style="display: inline; margin-left: 8%;"></p>
                                     <p style="display: inline; margin-left: 8%;">Chief Executive officer</p>
-                                </div> -->
+                                </div>
 
                             </div>
                         </div>
