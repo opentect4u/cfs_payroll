@@ -1,6 +1,5 @@
 <script>
     function printDiv() {
-
         var divToPrint = document.getElementById('divToPrint');
         var WindowObject = window.open('', 'Print-Window');
         WindowObject.document.open();

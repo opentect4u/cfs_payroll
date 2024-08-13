@@ -213,4 +213,18 @@ class Report_Process extends CI_Model
 		$result	=	$this->db->query($sql);
 		return $result->result();
 	}
+	public function getempsalryd($empcd,$sal_month,$sal_year,$bank_id,$pay_code){
+
+		$sql = "select IFNULL(amount, 0) AS amount from td_pay_slip where emp_code='$empcd' AND bank_id = $bank_id 
+		        AND sal_month =$sal_month AND sal_year= $sal_year AND pay_head_id =$pay_code";
+
+		$array	=	$this->db->query($sql)->row_array();
+		if (isset($array) && is_array($array) && isset($array['amount'])) {
+			return $array['amount'];
+		} else {
+			// Handle the case where $array is null or not set
+			return 0 ; // or any other appropriate action
+		}
+	
+	}
 }

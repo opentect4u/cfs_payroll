@@ -225,7 +225,7 @@
                     <li class="nav-item"><a href="<?php echo site_url('reports/paystatementreport'); ?>">Salary Statement Month Wise</a></li>
                     <li class="nav-item"><a href="<?php echo site_url('reports/totalearning'); ?>">Total Earning Deduction</a></li>
                     <li class="nav-item"><a href="<?php echo site_url('reports/empeardedu'); ?>">Employee Earning Deduction</a></li>
-                  
+                    <li class="nav-item"><a href="<?php echo site_url('reports/empeardedudd'); ?>">Employee Earning Deduction Vertically</a></li>
                   <?php } ?>
                 </ul>
               </div>

@@ -246,4 +246,31 @@ class Reports extends CI_Controller
             $this->load->view('post_login/footer');
         }
     }
+    public function empeardedudd()
+    {
+       
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+          
+            $month = $this->input->post('sal_month');
+            $year = $this->input->post('year');
+            $catg_id = $this->input->post('category');
+            $bank_id = $this->session->userdata('loggedin')['bank_id'];
+            $statement['emp_list']   = $this->Report_Process->get_emp_list($catg_id,$month,$year,$bank_id);
+            $statement['sal_month'] = $this->input->post('sal_month');
+            $statement['year'] = $this->input->post('year');
+            $statement['bank_id'] = $this->session->userdata('loggedin')['bank_id'];
+          //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/empeardedudd", $statement);
+            $this->load->view('post_login/footer');
+        } else {
+            //Month List
+            $statement['month_list'] =   $this->Report_Process->f_get_particulars("md_month", NULL, NULL, 0);
+            //Category List
+            $statement['category']   =   $this->Report_Process->f_get_particulars("md_category", NULL, null, 0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/empeardedudd", $statement);
+            $this->load->view('post_login/footer');
+        }
+    }
 }
