@@ -78,6 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-3"><b>Branch Name:</b><?=$barnch_name?></div>
+                       
+                    </div>
+                    <br>
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
@@ -340,13 +346,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <form method="POST" id="form" action="<?php echo site_url("reports/empeardedudd"); ?>">
                                             <div class="form-group">
                                                 <div class="row">
-                                                    <div class="col-4">
-                                                        <label for="exampleInputName1">Input Year:</label>
-                                                        <input type="text" class="form-control" name="year" id="year" value="<?php echo date('Y'); ?>" require />
+                                                <div class="col-3">
+                                                        <label for="exampleInputName1">Branch:</label>
+                                                        <select class="form-control" name="branch_id" id="branch_id" required>
+                                                            <option value="">Select Branch</option>
+                                                            <option value="0">All Branch</option>
+                                                            <?php foreach ($branchlist as $m_list) { ?>
+                                                                <option value="<?php echo $m_list->id ?>"><?php echo $m_list->branch_name; ?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </select>
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-3">
+                                                        <label for="exampleInputName1">Input Year:</label>
+                                                        <input type="text" class="form-control" name="year" id="year" value="<?php echo date('Y'); ?>" required />
+                                                    </div>
+                                                    <div class="col-3">
                                                         <label for="exampleInputName1">Select Month:</label>
-                                                        <select class="form-control" name="sal_month" id="sal_month" require>
+                                                        <select class="form-control" name="sal_month" id="sal_month" required>
                                                             <option value="">Select Month</option>
                                                             <?php foreach ($month_list as $m_list) { ?>
 
@@ -359,9 +377,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                         </select>
 
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-3">
                                                         <label for="exampleInputName1">Category:</label>
-                                                        <select class="form-control required" name="category" id="category" require>
+                                                        <select class="form-control required" name="category" id="category" required>
 
                                                             <option value="">Select Category</option>
 
@@ -372,7 +390,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                             <?php
                                                             }
                                                             ?>
-
                                                         </select>
                                                     </div>
                                                 </div>

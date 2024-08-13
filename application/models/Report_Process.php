@@ -153,7 +153,11 @@ class Report_Process extends CI_Model
 	
 	}
 
-	function get_emp_list($emp_cat,$sal_month,$sal_year,$bank_id){
+	function get_emp_list($branch_id,$emp_cat,$sal_month,$sal_year,$bank_id){
+		$branchsql = '';
+		if($branch_id > 0){
+			$branchsql = "AND c.branch_id = $branch_id";
+		}
 
 		$sql = "SELECT DISTINCT a.emp_code,c.emp_name,d.designation from td_pay_slip a,td_salary b,md_employee c,md_designation d
 		where a.catg_id = b.catg_cd
@@ -162,8 +166,8 @@ class Report_Process extends CI_Model
 		AND b.approval_status = 'A'
 		AND b.catg_cd = $emp_cat
 		AND a.bank_id = $bank_id
-		AND b.bank_id = $bank_id
-		AND c.bank_id = $bank_id
+		AND b.bank_id = $bank_id 
+		AND c.bank_id = $bank_id $branchsql
 		AND a.sal_month = $sal_month AND a.sal_year = $sal_year";
 
 		$result	=	$this->db->query($sql);
