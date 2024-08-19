@@ -267,7 +267,6 @@ class Reports extends CI_Controller
             }else{
                 $statement['barnch_name'] = 'ALL';
             }
-            
 
           //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
             $this->load->view('post_login/payroll_main');
