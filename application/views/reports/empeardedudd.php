@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                        
                                            $i=0;
                                            $basic_tot = 0;$da_tot = 0; $hra_tot = 0; $ma_tot = 0;
-                                           $sa_tot = 0;$pf_tot = 0;$lic_tot = 0;$it_tot = 0;$pt_tot = 0;
+                                           $sa_tot = 0; $pf_tot = 0; $lic_tot = 0;$it_tot = 0;$pt_tot = 0;
                                            $fa_tot = 0;$lwp_tot = 0;
                                       
                                         foreach($emp_list as $elist) {
@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             <td><?php echo $emp_tot_er;  $tot_earning +=$emp_tot_er; ?></td>
                                             <td><?php echo $this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,201);
                                             $emp_tot_ded +=$this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,201);
-                                            $pt_tot += $this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,201);
+                                            $pf_tot += $this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,201);
                                             ?></td>
                                             <td><?php echo $this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,206);
                                             $emp_tot_ded +=$this->Report_Process->getempsalryd($elist->emp_code,$sal_month,$year,$bank_id,206);
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             <th></th>
                                             <th><?=$sa_tot?></th>
                                             <th><?=$tot_earning?></th>
-                                            <th><?=$pt_tot?></th>
+                                            <th><?=$pf_tot?></th>
                                             <th><?=$lic_tot?></th>
                                             <th><?=$it_tot?></th>
                                             <th><?=$pt_tot?></th>
@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                        
                                            $i=0;
                                            $basic_tot = 0;$da_tot = 0; $hra_tot = 0; $ma_tot = 0;
-                                           $sa_tot = 0;$pf_tot = 0;$lic_tot = 0;$it_tot = 0;$pt_tot = 0;
+                                           $sa_tot = 0;$lic_tot = 0;$it_tot = 0;$pt_tot = 0;
                                            $fa_tot = 0;$lwp_tot = 0;$hblp_tot =0;$hbli_tot=0;$el_tot=0;$eli_tot=0;$pl_tot=0;$pli_tot=0;
                                         foreach($emp_list as $elist) {
                                              $emp_tot_er  = 0; 
