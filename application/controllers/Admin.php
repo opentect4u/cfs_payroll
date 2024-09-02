@@ -143,8 +143,8 @@ class Admin extends CI_Controller
 				
 			} else {
 				$this->session->set_flashdata('msg', 'Name Exist');
-				// $this->dept();
-				redirect('dept');
+			
+				redirect('desig');
 			}
 		} else {
 			$this->load->view('post_login/payroll_main');

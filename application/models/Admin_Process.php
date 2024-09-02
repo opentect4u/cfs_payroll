@@ -71,8 +71,9 @@ class Admin_Process extends CI_Model
 
 	public function match_name($name)
 	{
+		$bank_id  =  $this->session->userdata['loggedin']['bank_id'];
 		$result = NULL;
-		$result = $this->db->query("select ifnull(count(*),0) cnt from md_designation where designation='$name'");
+		$result = $this->db->query("select ifnull(count(*),0) cnt from md_designation where designation='$name' AND bank_id = '$bank_id'");
 		$result = $result->row();
 		return $result->cnt;
 	}
