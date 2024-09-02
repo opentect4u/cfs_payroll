@@ -23,13 +23,14 @@ class Approves extends CI_Controller
     {
 		ini_set('max_execution_time', 600);
         if ($this->input->get('trans_no')) {
-
+            $bank_id = $this->session->userdata['loggedin']['bank_id'];
             $data_array     =   array(
                 "approval_status"   => 'A',
                 "approved_by"       => $this->session->userdata['loggedin']['user_id'],
                 "approved_dt"       => date('Y-m-d')
             );
             $where = array(
+                "bank_id" => $bank_id,
                 "trans_no" => $this->input->get('trans_no'),
                 "trans_date" => $this->input->get('trans_date'),
                 "sal_month" => $this->input->get('month'),

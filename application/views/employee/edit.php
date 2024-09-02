@@ -83,9 +83,10 @@
                                                 <label for="exampleInputName1">Branch:<span class="requiredfield">*</span></label>
                                                 <select class="form-control" name="branch_id" id="branch_id" required>
 
-                                                    <option value="">Select District</option>
-
-                                                    <?php foreach ($branch_dtls as $dist) {
+                                                    <option value="">Select Branch</option>
+                                                    
+                                                    <?php 
+                                                    foreach ($branch_dtls as $dist) {
                                                     ?>
                                                         <option value="<?php echo $dist->id ?>" <?php echo ($employee_dtls->branch_id == $dist->id) ? 'selected' : ''; ?>>
                                                             <?php echo $dist->branch_name; ?>

@@ -77,8 +77,8 @@ class Salary extends CI_Controller
 		} else {
             $where  = array('bank_id' => $this->session->userdata['loggedin']['bank_id'],'emp_status'=>'A');
             $data['emps'] = $this->Admin_Process->f_get_particulars("md_employee", NULL, $where, 0);
-            $data['epayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'E'), 0);
-            $data['dpayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'D'), 0);
+            $data['epayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'E','bank_id'=>$this->session->userdata['loggedin']['bank_id']), 0);
+            $data['dpayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'D','bank_id'=>$this->session->userdata['loggedin']['bank_id']), 0);
 			$this->load->view('post_login/payroll_main');
 			$this->load->view("earning_deduction/add",$data);
 			$this->load->view('post_login/footer');
@@ -102,7 +102,6 @@ class Salary extends CI_Controller
                     );
                     //  *****  Data Set For Adding New Data    *****  //
                     $data_add = array(
-                        'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
                         "effective_dt"  =>  $this->input->post('effective_dt'),
                         "emp_no"        =>  $emp_cd,
                         "pay_head_id"   =>  $epay_cd[$i],
@@ -820,14 +819,12 @@ class Salary extends CI_Controller
     }
     public function get_required_yearmonth()
     {
-
+        $bank_id = $this->session->userdata['loggedin']['bank_id'];
         $category = $this->input->post('category');
-        $max_year =   $this->Salary_Process->f_get_particulars("td_salary", NULL, array("approval_status" => 'A', 'catg_cd' => $category, '1 ORDER BY sal_year DESC, sal_month DESC limit 1' => NULL), 1);
-        // echo '<pre>';
-        // echo $this->db->last_query();
-        // var_dump($max_year);
+        $max_year =   $this->Salary_Process->f_get_particulars("td_salary", NULL, array("bank_id"=>$bank_id,"approval_status" => 'A', 'catg_cd' => $category, '1 ORDER BY sal_year DESC, sal_month DESC limit 1' => NULL), 1);
+ 
         // exit;
-        if ($max_year) {
+        if($max_year) {
             if ($max_year->sal_month == 12) {
                 $data['year'] = ($max_year->sal_year) + 1;
                 $data['month'] = 1;
@@ -846,131 +843,6 @@ class Salary extends CI_Controller
         echo  json_encode($data);
     }
 
-    // public function generation_add()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    //         $trans_dt     =   $this->input->post('sal_date');
-    //         $sal_month    =   $this->input->post('month');
-    //         $year         =   $this->input->post('year');
-    //         $category     =   $this->input->post('category');
-    //         //Check given category exsit or not
-    //         //for given month and date
-    //         $select     =   array("catg_cd");
-    //         $where      =   array(
-    //             "catg_cd"       =>  $category,
-    //             "sal_month"     =>  $sal_month,
-    //             "sal_year"      =>  $year
-    //         );
-    //         $flag     =   $this->Salary_Process->f_get_particulars("td_salary", $select, $where, 1);
-    //         if ($flag) {
-    //             $this->session->set_flashdata('msg', 'For this month and category Payslip already generated!');
-    //         } else {
-    //             //Retrive max trans no
-    //             $select     =   array("MAX(trans_no) trans_no");
-    //             $where      =   array(
-    //                 "trans_date"    =>  $trans_dt,
-    //                 "sal_month"     =>  $sal_month,
-    //                 "sal_year"      =>  $year
-    //             );
-
-    //             $trans_no     =   $this->Salary_Process->f_get_particulars("td_salary", $select, $where, 1);
-
-    //             $data_array = array(
-    //                 "trans_date"   =>  $trans_dt,
-    //                 "trans_no"     => ($trans_no != NULL) ? ($trans_no->trans_no + 1) : '1',
-    //                 "sal_month"    =>  $sal_month,
-    //                 "sal_year"     =>  $year,
-    //                 "catg_cd"      =>  $category,
-    //                 "approval_status" => 'U',
-    //                 "created_by"   =>  $this->session->userdata['loggedin']['user_id'],
-    //                 "created_dt"   =>  date('Y-m-d h:i:s')
-    //             );
-
-    //             if ($this->Salary_Process->f_insert("td_salary", $data_array)) {
-    //                 $emp_list = $this->Salary_Process->get_emp_dtls($category);
-    //                 foreach ($emp_list as $emp) {
-    //                     $er_table_name = 'td_income a';
-    //                     $er_where = array(
-    //                         'a.emp_code' => $emp->emp_code,
-    //                         'a.effective_date = (SELECT MAX(c.effective_date) FROM td_income c)' => null
-    //                     );
-    //                     $erning_dt = $this->Admin_Process->f_get_particulars($er_table_name, null, $er_where, 1);
-
-    //                     $de_table_name = 'td_deductions a';
-    //                     $de_where = array(
-    //                         'a.emp_code' => $emp->emp_code,
-    //                         'a.effective_date = (SELECT MAX(c.effective_date) FROM td_deductions c)' => null
-    //                     );
-    //                     $deduction_dt = $this->Admin_Process->f_get_particulars($de_table_name, null, $de_where, 1);
-
-    //                     $input = array(
-    //                         'trans_date' => $trans_dt,
-    //                         'trans_no' => $data_array['trans_no'],
-    //                         'sal_month' => $sal_month,
-    //                         'sal_year' => $year,
-    //                         'emp_code' => $emp->emp_code,
-    //                         'catg_id' => $category,
-    //                         'basic' => $erning_dt->basic,
-    //                         'sp' => $erning_dt->sp,
-    //                         'da' => $erning_dt->da,
-    //                         'hra' => $erning_dt->hra,
-    //                         'ma' => $erning_dt->ma,
-    //                         'sa' => $erning_dt->sa,
-    //                         'ta' => $erning_dt->ta,
-    //                         'arrear' => $erning_dt->arrear,
-    //                         'ot' => $erning_dt->ot,
-    //                         'lwp' => $erning_dt->lwp,
-    //                         'final_gross' => $erning_dt->final_gross,
-    //                         'it' => $deduction_dt->it,
-    //                         'cpf' => $deduction_dt->cpf,
-    //                         'gpf' => $deduction_dt->gpf,
-    //                         'gigs' => $deduction_dt->gigs,
-    //                         'lpf' => $deduction_dt->lpf,
-    //                         'fa' => $deduction_dt->fa,
-    //                         'gi' => $deduction_dt->gi,
-    //                         'top' => $deduction_dt->top,
-    //                         'eccs' => $deduction_dt->eccs,
-    //                         'hblp' => $deduction_dt->hblp,
-    //                         'hbli' => $deduction_dt->hbli,
-    //                         's_adv' => $deduction_dt->s_adv,
-    //                         'tot_diduction' => $deduction_dt->tot_diduction,
-    //                         'net_sal' => $deduction_dt->net_sal,
-    //                         'remarks' => 'System Generated',
-    //                         'bank_ac_no' => $emp->bank_ac_no
-    //                     );
-                        
-    //                     $this->Salary_Process->f_insert("td_pay_slip", $input);
-	// 				//	 echo $this->db->last_query();
-    //                   //   die();
-    //                 }
-    //             }
-
-    //             $this->session->set_flashdata('msg', 'Successfully generated!');
-    //         }
-
-    //         redirect('genspl');
-    //     } else {
-
-    //         //Month List
-    //         $generation['month_list'] =   $this->Salary_Process->f_get_particulars("md_month", NULL, NULL, 0);
-
-    //         //For Current Date
-    //         $generation['sys_date']   =   $_SESSION['sys_date'];
-
-    //         //Last payslip generation date
-    //         $generation['generation_dtls']    =   $this->Salary_Process->f_get_generation();
-
-    //         //Category List
-    //         $generation['category']   =   $this->Salary_Process->f_get_particulars("md_category", NULL, NULL, 0);
-
-    //         $this->load->view('post_login/payroll_main');
-
-    //         $this->load->view("generation/add", $generation);
-
-    //         $this->load->view('post_login/footer');
-    //     }
-    // }
-
 
     public function generation_add()
     {
@@ -979,10 +851,12 @@ class Salary extends CI_Controller
             $sal_month    =   $this->input->post('month');
             $year         =   $this->input->post('year');
             $category     =   $this->input->post('category');
+            $bank_id = $this->session->userdata['loggedin']['bank_id'];
             //Check given category exsit or not
             //for given month and date
             $select     =   array("catg_cd");
             $where      =   array(
+                "bank_id"       => $bank_id, 
                 "catg_cd"       =>  $category,
                 "sal_month"     =>  $sal_month,
                 "sal_year"      =>  $year
@@ -994,6 +868,7 @@ class Salary extends CI_Controller
                 //Retrive max trans no
                 $select     =   array("MAX(trans_no) trans_no");
                 $where      =   array(
+                    "bank_id"       => $bank_id, 
                     "trans_date"    =>  $trans_dt,
                     "sal_month"     =>  $sal_month,
                     "sal_year"      =>  $year

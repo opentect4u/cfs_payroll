@@ -200,14 +200,9 @@ class Admin extends CI_Controller
 		$table_name = 'md_employee a,md_designation b,md_category c, md_branch d';
 
 		$employee['employee_dtls']    =   $this->Admin_Process->f_get_particulars($table_name, $select, $where, 0);
-        
-		//Category List 
-		// $employee['category_dtls']    =   $this->Admin_Process->f_get_particulars("md_category", NULL, NULL, 0);
 
 		$this->load->view('post_login/payroll_main');
-
 		$this->load->view("employee/dashboard", $employee);
-
 		$this->load->view('post_login/footer');
 	}
 
@@ -229,7 +224,8 @@ class Admin extends CI_Controller
 
 			if ($this->form_validation->run() == TRUE) {
 				$query = null; //emptying in case
-				$query = $this->db->get_where('md_employee', array('emp_code' => trim($this->input->post('emp_code'))));
+				$_where = array('emp_code' => trim($this->input->post('emp_code')),'bank_id' => $this->session->userdata['loggedin']['bank_id']);
+				$query = $this->db->get_where('md_employee',$_where);
 				$count = $query->num_rows(); //counting result from query
 
 				if ($count === 0) {
@@ -287,11 +283,10 @@ class Admin extends CI_Controller
 				'bank_id' => $this->session->userdata['loggedin']['bank_id'],
 			);
 			$employee['category_dtls'] =   $this->Admin_Process->f_get_particulars("md_category", NULL, NULL, 0);
-			$employee['branch_dtls']     =   $this->Admin_Process->f_get_particulars("md_branch", NULL, $where, 0);
-			$employee['dept']          =   $this->Admin_Process->f_get_particulars("md_department", NULL, NULL, 0);
-			$employee['caste']          =   $this->Admin_Process->f_get_particulars("md_caste", NULL, NULL, 0);
+			$employee['branch_dtls']   =   $this->Admin_Process->f_get_particulars("md_branch", NULL, $where, 0);
+			$employee['dept']          =   $this->Admin_Process->f_get_particulars("md_designation", NULL, $where, 0);
+			$employee['caste']         =   $this->Admin_Process->f_get_particulars("md_caste", NULL, NULL, 0);
 			$this->load->view('post_login/payroll_main');
-
 			$this->load->view("employee/add", $employee);
 
 			$this->load->view('post_login/footer');
@@ -302,14 +297,11 @@ class Admin extends CI_Controller
 	{		//Delete Employee
 
 		$where = array(
-
+            'bank_id' => $this->session->userdata['loggedin']['bank_id'],
 			"emp_code"    =>  $this->input->get('empcd'),
-
-
 		);
-
+   
 		$this->Admin_Process->f_delete('md_employee', $where);
-
 		$this->session->set_flashdata('msg', 'Successfully Deleted!');
 
 		redirect("stfemp");
@@ -322,16 +314,10 @@ class Admin extends CI_Controller
 
 			$this->form_validation->set_rules('emp_code', 'Employee Code', 'required');
 			$this->form_validation->set_rules('emp_name', 'Employee Name', 'required');
-			// $this->form_validation->set_rules('emp_catg', 'Employee Category', 'required');
-			// $this->form_validation->set_rules('dob', 'Date of Birth', 'required');
-			// $this->form_validation->set_rules('join_dt', 'Joining Date', 'required');
-			// $this->form_validation->set_rules('phn_no', 'Phone Number', 'required');
 			$this->form_validation->set_rules('basic_pay', 'Basic Pay', 'required');
 			if ($this->form_validation->run() == TRUE) {
 
 				$data_array = array(
-				
-						
 						"emp_name"         =>  $this->input->post('emp_name'),
 						"emp_catg"         =>  $this->input->post('emp_catg'),
 						"branch_id"        =>  $this->input->post('branch_id'),
@@ -361,18 +347,16 @@ class Admin extends CI_Controller
 					"emp_status"       => $this->input->post('emp_status'),
 					"remarks"           => $this->input->post('remarks'),
 					"modified_by"       => $this->session->userdata['loggedin']['user_id'],
-
 					"modified_dt"       =>  date('Y-m-d h:i:s')
 
 				);
 
 				$where  =   array(
-
-					"emp_code"         =>  $this->input->post('emp_code')
+					"bank_id"   => $this->session->userdata['loggedin']['bank_id'],
+					"emp_code"   =>  $this->input->post('emp_code')
 				);
 
 				$this->session->set_flashdata('msg', 'Successfully updated!');
-
 				$this->Admin_Process->f_edit('md_employee', $data_array, $where);
 
 				redirect('stfemp');
@@ -395,18 +379,14 @@ class Admin extends CI_Controller
 
 
 			$where = array(
-
-				"emp_code"       =>  $this->input->get('emp_code')
-
+                "bank_id"   => $this->session->userdata['loggedin']['bank_id'],
+				"emp_code"  =>  $this->input->get('emp_code')
 			);
 
 			//Category List 
 			$employee['category_dtls']    =   $this->Admin_Process->f_get_particulars("md_category", NULL, NULL, 0);
-			$employee['dist_dtls']    =   $this->Admin_Process->f_get_particulars("md_district", NULL, NULL, 0);
-
-			//Employee list
 			$employee['employee_dtls']    =   $this->Admin_Process->f_get_particulars("md_employee", $select, $where, 1);
-			//echo $this->db->last_query();die();
+		
 			$employee['caste']         =   $this->Admin_Process->f_get_particulars("md_caste", NULL, NULL, 0);
 			$employee['branch_dtls']   =   $this->Admin_Process->f_get_particulars("md_branch", NULL,array('bank_id' => $this->session->userdata['loggedin']['bank_id']),0);
 			$employee['dept']          =   $this->Admin_Process->f_get_particulars("md_designation", NULL,array('bank_id' => $this->session->userdata['loggedin']['bank_id']), 0);

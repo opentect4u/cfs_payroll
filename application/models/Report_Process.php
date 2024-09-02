@@ -93,10 +93,12 @@ class Report_Process extends CI_Model
 
 	public function f_get_totalearning($from_date, $to_date)
 	{
-		
+		$bank_id = $this->session->userdata['loggedin']['bank_id'];
 		$this->db->select('a.emp_code,b.emp_name,SUM(CASE WHEN a.pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,SUM(CASE WHEN a.pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu');
 		$this->db->where(array(
 			'a.emp_code=b.emp_code' => null,
+			'a.bank_id'=>$bank_id,
+			'b.bank_id'=>$bank_id,
 			'a.sal_month BETWEEN ' . date('m', strtotime($from_date)) . ' AND ' . date('m', strtotime($to_date)) => null
 		));
 		$this->db->group_by('a.emp_code,b.emp_name');

@@ -213,7 +213,7 @@ class Reports extends CI_Controller
             //Employee List
             unset($select);
             $select = array("emp_code", "emp_name");
-            $payslip['emp_list']   =   $this->Report_Process->f_get_particulars("md_employee", $select, array("emp_catg IN (1,2,3)" => NULL,""), 0);
+            $payslip['emp_list']   =   $this->Report_Process->f_get_particulars("md_employee", $select, array("emp_catg IN (1,2,3)" => NULL,"bank_id"=>$this->session->userdata['loggedin']['bank_id']), 0);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
             $this->load->view('post_login/footer');

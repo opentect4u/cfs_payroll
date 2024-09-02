@@ -96,8 +96,8 @@
                                                 <select class="form-control" name="designation" id="designation">
                                                     <option value="">Select Designation</option>
                                                     <?php foreach ($dept as $dep) { ?>
-                                                        <option value="<?php echo $dep->id ?>">
-                                                            <?php echo $dep->name; ?>
+                                                        <option value="<?php echo $dep->sl_no ?>">
+                                                            <?php echo $dep->designation; ?>
                                                         </option>
                                                     <?php } ?>
                                                 </select>
