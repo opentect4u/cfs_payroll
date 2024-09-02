@@ -184,7 +184,7 @@ class Reports extends CI_Controller
             $emp_select = 'a.*,b.designation';
 
             $payslip['emp_dtls']    =   $this->Report_Process->f_get_particulars("md_employee a,md_designation b", $emp_select, $emp_whr, 1);
-    
+           
             $where = array(
                 'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],
                 "a.trans_date = b.trans_dt" =>  NULL,
