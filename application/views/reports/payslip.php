@@ -192,7 +192,7 @@ th, td {
                         <div class="row" style="margin-bottom:20px">
                             <div class="col-12">
                                 <br>
-                                    <p style="display: inline;">Net Salary :<b><?php echo $tot_earning; ?></b></p>
+                                    <p style="display: inline;">Net Salary :<b><?php echo $tot_earning-$tot_deduction; ?></b></p>
                                     <br>
                                     <p style="display: inline;">Net Salary (<small>in words</small>):
                                                 <b><?php echo getIndianCurrency($tot_earning-$tot_deduction); ?></b>
