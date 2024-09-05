@@ -62,7 +62,7 @@
                       <th>Designation</th>
                       <th>Branch </th>
                       <th>Edit</th>
-                      <th>Delete</th>
+                      <!-- <th>Delete</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -83,11 +83,11 @@
                               <i class="fa fa-edit fa-2x" style="color: #007bff"></i>
                             </a>
                           </td>
-                          <td>
-                            <a type="button" class="delete" id="<?= $e_dtls->emp_code; ?>" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                          <!-- <td>
+                            <a type="button" class="delete" id="" data-toggle="tooltip" data-placement="bottom" title="Delete">
                               <i class="fa fa-trash fa-2x"></i>
                             </a>
-                          </td>
+                          </td> -->
                         </tr>
                     <?php
                       }
