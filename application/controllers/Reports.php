@@ -169,12 +169,12 @@ class Reports extends CI_Controller
             $sal_month  = $this->input->post('sal_month');
             $sal_yr     = $this->input->post('year');
 
-            $where  =   array(
-                "emp_code"            =>  $this->input->post('emp_cd'),
-                "sal_month"         =>  $this->input->post('sal_month'),
-                "sal_year"          =>  $this->input->post('year'),
-                "approval_status"   =>  'U'
-            );
+            // $where  =   array(
+            //     "emp_code"            =>  $this->input->post('emp_cd'),
+            //     "sal_month"         =>  $this->input->post('sal_month'),
+            //     "sal_year"          =>  $this->input->post('year'),
+            //     "approval_status"   =>  'U'
+            // );
 			
 			$emp_whr = array(
                 "a.emp_code" =>  $this->input->post('emp_cd'),
