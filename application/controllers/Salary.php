@@ -1622,7 +1622,8 @@ class Salary extends CI_Controller
     }
     public function get_basic(){
          $emp_cd = $this->input->get('emp_cd');
-         $gross = $this->Admin_Process->f_get_particulars("md_employee",NULL,array('emp_code'=>$emp_cd), 1);
+         $bank_id = $this->session->userdata['loggedin']['bank_id'];
+         $gross = $this->Admin_Process->f_get_particulars("md_employee",NULL,array('emp_code'=>$emp_cd,'bank_id'=>$bank_id), 1);
         echo $gross->basic_pay;
     }
 
