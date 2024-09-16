@@ -104,6 +104,7 @@ class Salary extends CI_Controller
                     );
                     //  *****  Data Set For Adding New Data    *****  //
                     $data_add = array(
+                        'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
                         "effective_dt"  =>  $this->input->post('effective_dt'),
                         "emp_no"        =>  $emp_cd,
                         "pay_head_id"   =>  $epay_cd[$i],
