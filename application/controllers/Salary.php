@@ -192,7 +192,9 @@ class Salary extends CI_Controller
             "a.emp_code = b.emp_no" =>  NULL,
             "b.pay_head_id = c.sl_no" =>  NULL,
             "b.effective_dt"        =>  $qdata['1'],
-            "a.emp_code"            =>  $qdata['0']
+            "a.emp_code"            =>  $qdata['0'],
+            'b.bank_id' => $this->session->userdata['loggedin']['bank_id'],
+            'c.bank_id' => $this->session->userdata['loggedin']['bank_id']
         );
 
         $data['earning_dtls']  = $this->Salary_Process->f_get_particulars("md_employee a,td_earning_deduction b , md_pay_head c", $select, $where, 0);
