@@ -202,7 +202,7 @@ class Salary extends CI_Controller
         $data['earning_dtls']  = $this->Salary_Process->f_get_particulars("md_employee a,td_earning_deduction b , md_pay_head c", $select, $where, 0);
         $sql = 'select pay_head_id from td_earning_deduction where effective_dt = "'.$qdata['1'].'" AND emp_no ="'.$qdata['0'].'" AND bank_id ="'.$bank_id.'"';
         $data['epayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'E','bank_id'=>$bank_id,'sl_no NOT IN('.$sql.')'=> NULL), 0);
-          echo $this->db->last_query();die();
+    
         $data['dpayhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'D','bank_id'=>$bank_id,'sl_no NOT IN('.$sql.')'=> NULL), 0);
         $this->load->view('post_login/payroll_main');
         $this->load->view("earning_deduction/edit", $data);
