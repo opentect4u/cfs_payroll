@@ -617,7 +617,7 @@ class Salary_Process extends CI_Model
 			'a.catg_cd=c.id' => null,
 			'a.approval_status' => 'U',
 			'a.bank_id' => $bank_id,
-			'a.bank_id' => $bank_id,
+			'b.bank_id' => $bank_id,
 		));
 		if ($trans_dt && $month && $year && $catg_id && $trans_no) {
 			$this->db->where(array(
@@ -661,6 +661,7 @@ class Salary_Process extends CI_Model
 	}
 	function sal_emp_amt($trans_dt, $month, $year, $catg_id, $trans_no, $bank_id)
 	{
+		$bank_id = $this->session->userdata['loggedin']['bank_id'];
 		$this->db->select('a.emp_code,b.emp_name,SUM(CASE WHEN a.pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,
 		SUM(CASE WHEN a.pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu');
 		
@@ -673,7 +674,9 @@ class Salary_Process extends CI_Model
 				'a.trans_no' => $trans_no,
 				'a.sal_month' => $month,
 				'a.sal_year' => $year,
-				'a.catg_id' => $catg_id
+				'a.catg_id' => $catg_id,
+				'a.bank_id' => $bank_id,
+			    'b.bank_id' => $bank_id,
 			));
 		}
 		$this->db->group_by('a.emp_code,b.emp_name');
