@@ -605,6 +605,7 @@ class Salary_Process extends CI_Model
 
 	function generate_slip($trans_dt, $month, $year, $catg_id, $trans_no, $flag)
 	{
+		$bank_id = $this->session->userdata['loggedin']['bank_id'];
 		$this->db->select('a.trans_date, a.trans_no, a.sal_month, a.sal_year, a.approval_status, a.catg_cd, c.category,SUM(CASE WHEN pay_head_type = "E" THEN amount ELSE 0 END) AS tot_earn,
 		SUM(CASE WHEN pay_head_type = "D" THEN amount ELSE 0 END) AS tot_dedu');
 		$this->db->where(array(
@@ -615,6 +616,8 @@ class Salary_Process extends CI_Model
 			'a.catg_cd=b.catg_id' => null,
 			'a.catg_cd=c.id' => null,
 			'a.approval_status' => 'U',
+			'a.bank_id' => $bank_id,
+			'a.bank_id' => $bank_id,
 		));
 		if ($trans_dt && $month && $year && $catg_id && $trans_no) {
 			$this->db->where(array(
@@ -622,7 +625,8 @@ class Salary_Process extends CI_Model
 				'a.trans_no' => $trans_no,
 				'a.sal_month' => $month,
 				'a.sal_year' => $year,
-				'a.catg_cd' => $catg_id
+				'a.catg_cd' => $catg_id,
+				'a.bank_id' => $bank_id,
 			));
 		}
 		$this->db->group_by('a.sal_month, a.catg_cd, a.sal_year');
