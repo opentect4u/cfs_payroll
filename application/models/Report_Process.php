@@ -144,6 +144,7 @@ class Report_Process extends CI_Model
 			$this->db->where(array(
 				'a.emp_code = b.emp_code' => NULL,
 				'a.bank_id' => $bank_id,
+				'b.bank_id' => $bank_id,
 				'a.sal_month' => $month,
 				'a.sal_year' => $year,
 				'a.catg_id' => $catg_id
