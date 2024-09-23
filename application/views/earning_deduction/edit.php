@@ -51,7 +51,12 @@
                                      
                                     foreach($earning_dtls as $ekey) {
                                           if($ekey->pay_head_type == 'E') {
-                                            $tot_earning += $ekey->amount;
+                                            if($ekey->input_flag == 'A'){
+                                              $tot_earning += round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100);
+                                            }else{
+                                              $tot_earning += $ekey->amount;
+                                            }
+                                           
                                       ?>
                                     <tr>
                                       <td style="padding: 0px 5px 0px 5px"> 
@@ -59,7 +64,11 @@
                                         <input type="hidden" name="epay_cd[]" id="" class="form-control" value="<?=$ekey->pay_head_id?>">
                                       </td>
                                       <td>
-                                        <input type="number" class="form-control eamount" id="" name="eamount[]" value="<?=$ekey->amount?>" required>
+                                      <?php if($ekey->input_flag == 'A') {  ?>
+                                        <input type="number" class="form-control eamount" id="" name="eamount[]" value="<?=round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100)?>" required>
+                                        <?php }else{  ?>
+                                           <input type="number" class="form-control eamount" id="" name="eamount[]" value="<?=$ekey->amount?>" required> 
+                                        <?php } ?>
                                       </td>
                                     </tr>
                                     <?php } 
@@ -83,7 +92,13 @@
                                       <?php foreach($earning_dtls as $ekey) {
                                           if($ekey->pay_head_type == 'D') {
 
-                                            $tot_deduction += $ekey->amount;
+                                            if($ekey->input_flag == 'A'){
+                                              $tot_deduction += round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100);
+                                            }else{
+                                              $tot_deduction += $ekey->amount;
+                                            }
+
+                                            
                                       ?>
                                     <tr>
                                       <td style="padding: 0px 5px 0px 5px"> 
@@ -91,7 +106,11 @@
                                         <input type="hidden" name="dpay_cd[]" id="" class="form-control" value="<?=$ekey->pay_head_id?>">
                                       </td>
                                       <td>
-                                        <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
+                                      <?php if($ekey->input_flag == 'A') {  ?> 
+                                        <input type="number" class="form-control damount" id="" name="damount[]" value="<?=round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100)?>" required>
+                                        <?php }else{  ?>
+                                          <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
+                                          <?php } ?>
                                       </td>
                                     </tr>
                                     <?php } 

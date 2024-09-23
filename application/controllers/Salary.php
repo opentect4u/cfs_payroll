@@ -185,7 +185,7 @@ class Salary extends CI_Controller
             redirect('salary/eardedu');
         }else{
         $select = array(
-            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","b.amount","c.pay_head"
+            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","c.input_flag","c.percentage","b.amount","c.pay_head"
         );
         $id = $this->input->get('id'); 
         $qdata = explode('/',$id);
