@@ -162,11 +162,21 @@ class Report_Process extends CI_Model
 			$branchsql = "AND c.branch_id = $branch_id";
 		}
 
+		// $sql = "SELECT DISTINCT a.emp_code,c.emp_name,d.designation from td_pay_slip a,td_salary b,md_employee c,md_designation d
+		// where a.catg_id = b.catg_cd
+		// AND a.emp_code = c.emp_code
+		// AND c.designation = d.sl_no
+		// AND b.approval_status = 'A'
+		// AND b.catg_cd = $emp_cat
+		// AND a.bank_id = $bank_id
+		// AND b.bank_id = $bank_id 
+		// AND c.bank_id = $bank_id $branchsql
+		// AND a.sal_month = $sal_month AND a.sal_year = $sal_year order by d.srl_no ASC";
+
 		$sql = "SELECT DISTINCT a.emp_code,c.emp_name,d.designation from td_pay_slip a,td_salary b,md_employee c,md_designation d
 		where a.catg_id = b.catg_cd
 		AND a.emp_code = c.emp_code
 		AND c.designation = d.sl_no
-		AND b.approval_status = 'A'
 		AND b.catg_cd = $emp_cat
 		AND a.bank_id = $bank_id
 		AND b.bank_id = $bank_id 
