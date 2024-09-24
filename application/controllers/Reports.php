@@ -231,6 +231,7 @@ class Reports extends CI_Controller
            
 
             $statement['emp_list']   = $this->Report_Process->get_emp_list($catg_id,$month,$year,$bank_id);
+            $statement['bank_id'] = $bank_id;
           //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/empeardedu", $statement);
@@ -241,6 +242,7 @@ class Reports extends CI_Controller
             $statement['month_list'] =   $this->Report_Process->f_get_particulars("md_month", NULL, NULL, 0);
             //Category List
             $statement['category']   =   $this->Report_Process->f_get_particulars("md_category", NULL, null, 0);
+            $statement['bank_id'] = $this->session->userdata('loggedin')['bank_id'];
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/empeardedu", $statement);
             $this->load->view('post_login/footer');

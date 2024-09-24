@@ -22,7 +22,6 @@ class Approves extends CI_Controller
     public function payapprove()
     {
         $api_end_point = unserialize(API_END_POINTS);
-        var_dump();exit;
 		ini_set('max_execution_time', 600);
         if ($this->input->get('trans_no')) {
             $bank_id = $this->session->userdata['loggedin']['bank_id'];
@@ -49,7 +48,7 @@ class Approves extends CI_Controller
                 "a.catg_id" => $this->input->get('catg_cd'),
             );
              
-            $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount, d.bank_ac_no, a.created_by';
+            $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount, d.bank_ac_no, a.created_by, d.branch_id';
             $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip a, md_bank b, md_pay_head c, md_employee d", $paySel, $where1, 0);
             
 

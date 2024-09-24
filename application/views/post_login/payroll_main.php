@@ -225,9 +225,9 @@
                     <li class="nav-item"><a href="<?php echo site_url('reports/paystatementreport'); ?>">Salary Statement Month Wise</a></li>
                     <li class="nav-item"><a href="<?php echo site_url('reports/totalearning'); ?>">Total Earning Deduction</a></li>
                     <!-- <li class="nav-item"><a href="<?php //echo site_url('reports/empeardedu'); ?>">Employee Earning Deduction</a></li> -->
-                    <?php if ($this->session->userdata['loggedin']['bank_id'] == "1") { ?>
+                    <?php // if ($this->session->userdata['loggedin']['bank_id'] == "1") { ?>
                     <li class="nav-item"><a href="<?php echo site_url('reports/empeardedudd'); ?>">Salary Statement </a></li>
-                    <?php  } ?>
+                    <?php //  } ?>
                   <?php } ?>
                 </ul>
               </div>
