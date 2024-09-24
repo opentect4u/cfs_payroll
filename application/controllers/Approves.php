@@ -21,6 +21,8 @@ class Approves extends CI_Controller
 
     public function payapprove()
     {
+        $api_end_point = unserialize(API_END_POINTS);
+        var_dump();exit;
 		ini_set('max_execution_time', 600);
         if ($this->input->get('trans_no')) {
             $bank_id = $this->session->userdata['loggedin']['bank_id'];
@@ -54,7 +56,7 @@ class Approves extends CI_Controller
             $chunkSize = 50;
             $chunks = array_chunk($erning_dt, $chunkSize);
 
-            $allProcessed = $this->sendChunksToAPI($chunks, 'https://restaurantapi.opentech4u.co.in/sal/rardb_save');
+            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
 
             if ($allProcessed) {
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
