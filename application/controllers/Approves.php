@@ -42,7 +42,7 @@ class Approves extends CI_Controller
             $this->Salary_Process->f_edit("td_salary", $data_array, $where);
 
             $where1 = array(
-                "a.bank_id=b.sl_no AND a.pay_head_id=c.sl_no AND a.bank_id=c.bank_id AND a.emp_code=d.emp_code AND a.bank_id=d.bank_id AND a.pay_head_id=0" => null,
+                "a.bank_id=b.sl_no AND a.pay_head_id=c.sl_no AND a.bank_id=c.bank_id AND a.emp_code=d.emp_code AND a.bank_id=d.bank_id OR a.pay_head_id=0" => null,
                 "a.sal_month" => $this->input->get('month'),
                 "a.sal_year" => $this->input->get('year'),
                 "a.catg_id" => $this->input->get('catg_cd'),
