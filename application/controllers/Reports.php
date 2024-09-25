@@ -96,7 +96,6 @@ class Reports extends CI_Controller
             $bank_id = $this->session->userdata('loggedin')['bank_id'];
 
             $statement['sal_list']   =   $this->Report_Process->sal_emp_amt($month,$year,$catg_id,$bank_id);
-           
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/statement", $statement);
             $this->load->view('post_login/footer');

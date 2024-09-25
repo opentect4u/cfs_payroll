@@ -152,6 +152,7 @@ class Report_Process extends CI_Model
 		}
 		$this->db->group_by('a.emp_code,b.emp_name');
 		$query = $this->db->get('td_pay_slip a,md_employee b');
+		
 		return $query->result();
 	
 	}

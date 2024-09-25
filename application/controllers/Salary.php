@@ -902,11 +902,12 @@ class Salary extends CI_Controller
                         $er_where = array(
                             'a.emp_no' => $emp->emp_code,
                             'a.bank_id'=> $this->session->userdata['loggedin']['bank_id'],
-                            'a.effective_dt = (SELECT MAX(c.effective_dt) FROM td_earning_deduction c where emp_no = '.$emp->emp_code.')' => null
+                            'a.effective_dt = (SELECT MAX(c.effective_dt) FROM td_earning_deduction c where c.emp_no = '.$emp->emp_code.' AND c.bank_id = '.$bank_id.')' => null
                         );
                          $basic_pay = $this->Salary_Process->get_basicpay($emp->emp_code,$this->session->userdata['loggedin']['bank_id']);
                         $erning_dts = $this->Admin_Process->f_get_particulars($table_name, $select, $er_where, 0);
-                       $row_count = $this->db->get_where('td_earning_deduction', array('emp_no =' => $emp->emp_code))->result();
+                        
+                       $row_count = $this->db->get_where('td_earning_deduction', array('emp_no =' => $emp->emp_code,'bank_id'=>$bank_id))->result();
                     
                        if(count($row_count) > 1){
                             $input_basic = array(
@@ -926,9 +927,6 @@ class Salary extends CI_Controller
                             );
                             $this->Salary_Process->f_insert("td_pay_slip", $input_basic);
                         }
-                         
-
-                       
                        
                        foreach($erning_dts as $erning_dt){
                             $input = array(
