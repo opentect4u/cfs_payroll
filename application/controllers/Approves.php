@@ -22,7 +22,8 @@ class Approves extends CI_Controller
     public function payapprove()
     {
         $api_end_point = unserialize(API_END_POINTS);
-		ini_set('max_execution_time', 600);
+        ini_set('max_execution_time', 600);
+        // ini_set('memory_limit', '2048M');
         if ($this->input->get('trans_no')) {
             $bank_id = $this->session->userdata['loggedin']['bank_id'];
             $data_array     =   array(
@@ -40,9 +41,9 @@ class Approves extends CI_Controller
             );
 
             $this->Salary_Process->f_edit("td_salary", $data_array, $where);
-
+            $basic_code = $bank_id == 1 ? 0 : 101;
             $where1 = array(
-                "a.bank_id=b.sl_no AND a.pay_head_id=c.sl_no AND a.bank_id=c.bank_id AND a.emp_code=d.emp_code AND a.bank_id=d.bank_id OR a.pay_head_id=0" => null,
+                "a.bank_id=b.sl_no AND IF(a.pay_head_id > 0, a.pay_head_id, $basic_code)=c.sl_no AND a.bank_id=c.bank_id AND a.emp_code=d.emp_code AND a.bank_id=d.bank_id" => null,
                 "a.sal_month" => $this->input->get('month'),
                 "a.sal_year" => $this->input->get('year'),
                 "a.catg_id" => $this->input->get('catg_cd'),
@@ -51,9 +52,11 @@ class Approves extends CI_Controller
             $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount, d.bank_ac_no, a.created_by, d.branch_id';
             $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip a, md_bank b, md_pay_head c, md_employee d", $paySel, $where1, 0);
             
+            // echo $this->db->last_query();exit;
 
             $chunkSize = 50;
             $chunks = array_chunk($erning_dt, $chunkSize);
+            // var_dump($chunks);exit;
 
             $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
 
