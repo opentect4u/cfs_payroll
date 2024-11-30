@@ -91,7 +91,7 @@
                                                     <td colspan="2">Total</td>
                                                     <td><?=$tot_earning?></td>
                                                     <td><?=$tot_dedu?></td>
-                                                    <td><?=$elist->tot_earn - $elist->tot_dedu?></td>
+                                                    <td><?=$net_sal?></td>
                                                 </tr>
                                         </tfoot>
                                         </table>
