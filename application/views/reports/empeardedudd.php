@@ -70,7 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <div class="card">
                 <div class="card-body" id='divToPrint'>
                     <div class="row">
-                        <div class="col-3"><a href="javascript:void()"><img src="<?= base_url() ?>assets/images/bm_ardb.jpg" alt="logo" height="100" width="100" /></a></div>
+                        <div class="col-3"><a href="javascript:void()"><img src="<?= base_url() ?>assets/images/<?php 
+if (isset($this->session->userdata['loggedin']['logo_path'])) {
+    echo $this->session->userdata['loggedin']['logo_path']; 
+}
+?>" alt="logo" height="100" width="100" /></a></div>
                         <div class="col-9" class="center">
                             <div class="center">
                                  <?php include_once('common_report_header.php'); ?>

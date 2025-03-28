@@ -25,8 +25,8 @@
       <nav class="navbar top-navbar col-lg-12 col-12 p-0">
         <div class="container">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo" href="<?= base_url() ?>"><img src="<?= base_url() ?>assets/images/bm_ardb.jpg" alt="logo" /></a>
-            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="<?= base_url() ?>assets/images/bm_ardb.jpg" alt="logo" /></a>
+            <a class="navbar-brand brand-logo" href="<?= base_url() ?>"><img src="<?= base_url() ?>assets/images/<?php echo $this->session->userdata['loggedin']['logo_path']; ?>" alt="logo" /></a>
+            <a class="navbar-brand brand-logo-mini" href="index.html"><img src="<?= base_url() ?>assets/images/<?php echo $this->session->userdata['loggedin']['logo_path']; ?>" alt="logo" /></a>
           </div>
           <div class="navbar-menu-wrapper d-flex align-items-center">
             <ul class="navbar-nav mr-lg-2">
@@ -135,7 +135,7 @@
               </li> -->
               <li class="nav-item nav-profile dropdown mr-0 mr-sm-2">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                  <img src="<?= base_url() ?>assets/images/bm_ardb.jpg" alt="profile" />
+                  <img src="<?= base_url() ?>assets/images/<?php echo $this->session->userdata['loggedin']['logo_path']; ?>" alt="profile" />
                   <span class="nav-profile-name"><?php echo $this->session->userdata['loggedin']['bank_name']; ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">

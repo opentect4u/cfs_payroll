@@ -48,7 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="card-body" id='divToPrint'>
 <center>
           <div class="row">
-            <div class="col-2 payslip_logo_Uts"><a href="javascript:void()"><img src="<?= base_url() ?>assets/images/bm_ardb.jpg" alt="logo" height="100" width="100" /></a></div>
+            <div class="col-2 payslip_logo_Uts"><a href="javascript:void()"><img src="<?= base_url() ?>assets/images/<?php 
+if (isset($this->session->userdata['loggedin']['logo_path'])) {
+    echo $this->session->userdata['loggedin']['logo_path']; 
+}
+?>" alt="logo" height="100" width="100" /></a></div>
 			  <div class="col-10 payslip_logo_Desc_Uts">
         <?php include_once('common_report_header.php'); ?>
 				  <h4>Total earning of Regular employees From <?php echo date('d/m/Y', strtotime($this->input->post('from_date'))) . ' To ' . date('d/m/Y', strtotime($this->input->post('to_date'))); ?>
