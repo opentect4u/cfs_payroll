@@ -37,6 +37,7 @@
 							//$loggedin['branch_id']   		= $user_data->branch_id;
 							$loggedin['bank_id']   		    = $user_data->bank_id;
 							$loggedin['bank_name']   		= $bank->bank_name;
+							$loggedin['logo_path']   		= $bank->logo_path;
 							///$loggedin['branch_id']   		= $this->input->post('branch_id');
 						//	$loggedin['branch_name']   		= $branch_data->branch_name;
 							$loggedin['ho_flag']            = 'Y';

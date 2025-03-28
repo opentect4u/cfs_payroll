@@ -535,7 +535,7 @@ class Admin extends CI_Controller
 
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-			$results = $this->db->get_where('md_pay_head', array('pay_head =' => $this->input->post('pay_head')))->result();
+			$results = $this->db->get_where('md_pay_head', array('pay_head =' => $this->input->post('pay_head'),'bank_id' => $this->session->userdata['loggedin']['bank_id']))->result();
 			if (count($results) == 0) {
 				$data_array = array(
 					'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
@@ -554,7 +554,7 @@ class Admin extends CI_Controller
 				
 			} else {
 				$this->session->set_flashdata('msg', 'Name Exist');
-				redirect('dept');
+				redirect('payhead');
 			}
 		} else {
 			$this->load->view('post_login/payroll_main');
