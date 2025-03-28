@@ -79,7 +79,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <label for="exampleInputName1">Branch:</label>
-                                                <select class="form-control required" name="branch_id" id="branch_id">
+                                                <select class="form-control" name="branch_id" id="branch_id" required>
                                                     <option value="">Select Branch</option>
                                                     <?php foreach ($branch_dtls as $branch) {
                                                     ?>

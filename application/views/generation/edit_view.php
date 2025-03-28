@@ -35,7 +35,6 @@
                                                     $selected = 'selected';
                                                 }
                                             ?>
-
                                                 <option value="<?= $c_list->id; ?>" <?= $selected ?>><?= $c_list->category; ?></option>
 
                                             <?php
