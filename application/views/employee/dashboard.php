@@ -73,7 +73,7 @@
                     ?>
                         <tr>
                         <td><?= ++$i; ?></td>
-                          <td><?= $e_dtls->emp_code; ?></td>
+                          <td><?php if (strlen($e_dtls->prefix_emp_cd) > 0) echo $e_dtls->prefix_emp_cd; ?><?= $e_dtls->emp_code; ?></td>
                           <td><?= $e_dtls->emp_name; ?></td>
                           <td><?= $e_dtls->category; ?></td>
                           <td><?= $e_dtls->designation; ?></td>

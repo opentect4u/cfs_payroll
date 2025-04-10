@@ -189,7 +189,7 @@ class Admin extends CI_Controller
 
 	public function employee()
 	{		//Employee Dashboard
-		$select = 'a.emp_code, a.emp_name, b.designation,  c.category, d.branch_name';
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation,  c.category, d.branch_name';
 		$where = array(
 			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,
