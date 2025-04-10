@@ -91,7 +91,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                             <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->emp_name; ?></td>
                                             <td style="width:15%;"> Code </td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td><?php echo $emp_dtls->emp_code; ?></td>
+                                            <td><?php if (strlen($emp_dtls->prefix_emp_cd) > 0) echo $emp_dtls->prefix_emp_cd; ?><?php echo $emp_dtls->emp_code; ?></td>
                                         </tr>
                                         <tr>
                                             <td style="width:15%;">Date of Joining</td>

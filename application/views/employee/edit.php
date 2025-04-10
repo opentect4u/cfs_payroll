@@ -10,7 +10,11 @@
                                 <form method="POST" id="myform" action="<?php echo site_url("estem"); ?>">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-4">
+                                        <div class="col-2">
+                                                <label for="exampleInputName1">Employee Code:<span class="requiredfield">*</span></label>
+                                                <input type="text" name="" class="form-control" value="<?php echo $employee_dtls->prefix_emp_cd; ?>" readonly />
+                                            </div>
+                                            <div class="col-2">
                                                 <label for="exampleInputName1">Employee Code:<span class="requiredfield">*</span></label>
                                                 <input type="text" name="emp_code" class="form-control" id="emp_code" value="<?php echo $employee_dtls->emp_code; ?>" readonly />
                                             </div>

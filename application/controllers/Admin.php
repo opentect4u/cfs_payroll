@@ -208,7 +208,7 @@ class Admin extends CI_Controller
 
 	public function employee_add()
 	{	//Add Employee		
-
+           
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 			$validation_error = '';
@@ -232,6 +232,7 @@ class Admin extends CI_Controller
 					// $this->Admin_Process->f_get_particulars('md_employee', $data_array);
 					$data_array = array(
 						"bank_id"          =>  $this->session->userdata['loggedin']['bank_id'],
+						"prefix_emp_cd"    =>  $this->input->post('prefix_emp_cd'),
 						"emp_code"         =>  $this->input->post('emp_code'),
 						"emp_name"         =>  $this->input->post('emp_name'),
 						"emp_catg"         =>  $this->input->post('emp_catg'),
@@ -265,6 +266,7 @@ class Admin extends CI_Controller
 					);
 
 					$this->Admin_Process->f_insert('md_employee', $data_array);
+					
 					$this->session->set_flashdata('msg', 'Successfully added!');
 					redirect('stfemp');
 				} else {
@@ -371,7 +373,7 @@ class Admin extends CI_Controller
 			//For Employee Details
 			unset($select);
 			$select = array(
-				"emp_code", "emp_name", "emp_catg", "dob", "email", "phn_no","emp_sex","pi_no",
+				"emp_code", "emp_name",'prefix_emp_cd',"emp_catg", "dob", "email", "phn_no","emp_sex","pi_no",
 				"designation", "department", "emp_addr",'father_name','qualification','hra_flag','pf_flag','cash_flag',
 				"pan_no", "bank_name", "bank_ac_no", "join_dt", "ret_dt",'caste',"branch_id",'food_flag',
 				"pf_ac_no", "uan", "basic_pay", "aadhar_no", "emp_status",'remarks'

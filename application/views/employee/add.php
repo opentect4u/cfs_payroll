@@ -16,7 +16,12 @@
                                 <form method="POST" id="form" action="<?php echo site_url("emadst"); ?>">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-4">
+                                        
+                                            <div class="col-2">
+                                                <label for="exampleInputName1">Code Prefix:<span class="requiredfield">*</span></label>
+                                                <input type="text" name="prefix_emp_cd" class="form-control" id="prefix_emp_cd" value="" required />
+                                            </div>
+                                            <div class="col-2">
                                                 <label for="exampleInputName1">Employee Code:<span class="requiredfield">*</span></label>
                                                 <input type="text" name="emp_code" class="form-control" id="emp_code" value="" required />
                                             </div>
