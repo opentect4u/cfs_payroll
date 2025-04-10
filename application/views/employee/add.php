@@ -19,7 +19,7 @@
                                         
                                             <div class="col-2">
                                                 <label for="exampleInputName1">Code Prefix:<span class="requiredfield">*</span></label>
-                                                <input type="text" name="prefix_emp_cd" class="form-control" id="prefix_emp_cd" value="" required />
+                                                <input type="text" name="prefix_emp_cd" class="form-control" id="prefix_emp_cd" value=""  />
                                             </div>
                                             <div class="col-2">
                                                 <label for="exampleInputName1">Employee Code:<span class="requiredfield">*</span></label>
