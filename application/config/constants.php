@@ -89,7 +89,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 $api_end_points = array(
     1 => 'rardb_save',
-    2 => 'cbardb_save'
+    2 => 'cbardb_save',
+    3 => 'utkal_save',
 );
 
 define('API_END_POINTS', serialize($api_end_points));
