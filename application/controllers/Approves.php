@@ -114,10 +114,9 @@ class Approves extends CI_Controller
 
             $chunkSize = 50;
             $chunks = array_chunk($erning_dt, $chunkSize);
-            // var_dump($chunks);exit;
-
-            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
-
+      
+             $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
+          //   die();
             if ($allProcessed) {
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
