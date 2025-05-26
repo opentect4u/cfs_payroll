@@ -23,9 +23,12 @@ class Approves extends CI_Controller
     public function payapprove()
     {
         $api_end_point = unserialize(API_END_POINTS);
+        $proc_end_points = unserialize(PROC_END_POINTS);
         ini_set('max_execution_time', 600);
         // ini_set('memory_limit', '2048M');
         if ($this->input->get('trans_no')) {
+              $month = $this->input->get('month');
+              $year  = $this->input->get('year');
             $bank_id = $this->session->userdata['loggedin']['bank_id'];
             $data_array     =   array(
                 "approval_status"   => 'A',
@@ -100,8 +103,13 @@ class Approves extends CI_Controller
       
             $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
          
-          //   die();
             if ($allProcessed) {
+                if($bank_id == 4){
+                    $this->save_sal_slip($erning_dt);
+                $data = array(
+                    "month" => $month,"year" => $year);
+                $this->call_procedure($data, "https://restaurantapi.opentech4u.co.in/sal/".$proc_end_points[$bank_id]);
+                }
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
             } else {
@@ -152,6 +160,32 @@ class Approves extends CI_Controller
         curl_multi_close($multiHandle);
     
         return $allProcessed;
+    }
+
+    function call_procedure($data, $url)
+    {
+       
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return $response;
+        exit;
+        // exit;
     }
 
     function save_sal_slip($data)

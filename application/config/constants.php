@@ -93,5 +93,12 @@ $api_end_points = array(
     3 => 'utkal_save',
     4 => 'chalk_save',
 );
+$proc_end_points = array(
+    1 => 'rardb_proc',
+    2 => 'cbardb_proc',
+    3 => 'utkal_proc',
+    4 => 'chalk_proc',
+);
 
 define('API_END_POINTS', serialize($api_end_points));
+define('PROC_END_POINTS', serialize($proc_end_points));
