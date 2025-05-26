@@ -105,7 +105,6 @@ class Approves extends CI_Controller
          
             if ($allProcessed) {
                 if($bank_id == 4){
-                    $this->save_sal_slip($erning_dt);
                 $data = array(
                     "month" => $month,"year" => $year);
                 $this->call_procedure($data, "https://restaurantapi.opentech4u.co.in/sal/".$proc_end_points[$bank_id]);
