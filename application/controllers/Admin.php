@@ -413,17 +413,26 @@ class Admin extends CI_Controller
 	public function ajaxemplist()
 	{
 		$status = $this->input->post('active_status');
-		$select = 'a.emp_code, a.emp_name, a.designation, b.name department, c.category, d.district_name';
+		// $select = 'a.emp_code, a.emp_name, a.designation, b.name department, c.category';
+		// $where = array(
+		// 	'a.department=b.id' => null,
+		// 	'a.emp_catg=c.id' => null,
+		// 	'a.emp_status' => $status
+		// );
+		// $table_name = 'md_employee a, md_department b, md_category c';
+
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation,  c.category, d.branch_name';
 		$where = array(
-			'a.department=b.id' => null,
+			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,
-			'a.emp_status' => $status
+			'a.branch_id=d.id' => null,
+			'a.emp_status' => $status,
+			'a.bank_id'    => $this->session->userdata['loggedin']['bank_id']
 		);
-		$table_name = 'md_employee a, md_department b, md_category c';
+		$table_name = 'md_employee a,md_designation b,md_category c, md_branch d';
 
 		$employee['employee_dtls']    =   $this->Admin_Process->f_get_particulars($table_name, $select, $where, 0);
-		//Category List 
-		// $employee['category_dtls']    =   $this->Admin_Process->f_get_particulars("md_category", NULL, NULL, 0);
+		
 		$data = $this->load->view('employee/ajaxemplist', $employee);
 		return $data;
 	}

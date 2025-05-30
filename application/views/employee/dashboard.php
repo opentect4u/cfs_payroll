@@ -135,21 +135,25 @@
 
     });
 
-    //$("#active_status").change(function(){
-    $('input[type=radio][name=active_status]').on('change', function(e) {
-      $('#ajaxl').html('');
+    $('input[type=radio][name=active_status]').on('change', function() {
+      const selectedValue = $(this).val();
+      $('#ajaxl').html('<p>Loading...</p>');
+
       $.ajax({
         url: "<?= base_url() ?>index.php/admin/ajaxemplist",
         type: "POST",
-        data: {
-          active_status: $(this).val()
-        },
+        data: { active_status: selectedValue },
         success: function(result) {
           $('#ajaxl').html(result);
           $('#order-listing').DataTable({
-            "destroy": true, //use for reinitialize datatable
+            destroy: true // Required to reinitialize the DataTable
           });
+        },
+        error: function(xhr, status, error) {
+          $('#ajaxl').html('<p style="color:red;">Failed to load data. Please try again.</p>');
+          console.error("AJAX Error:", status, error);
         }
       });
     });
+
   </script>
