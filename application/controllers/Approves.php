@@ -112,7 +112,7 @@ class Approves extends CI_Controller
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
             } else {
-                $this->session->set_flashdata('msg', 'Data Send To Banking');
+                $this->session->set_flashdata('msg', 'Data Not Send To Banking');
                 // echo "Failed to insert all data.";
             }
             redirect('payapprv');
@@ -149,9 +149,15 @@ class Approves extends CI_Controller
         foreach ($curlHandles as $ch) {
             $response = curl_multi_getcontent($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            if ($httpCode != 200) {
+             // Debug log
+            log_message('debug', "Chunk Response Code: $httpCode, Response: $response");
+
+            if (!in_array($httpCode, [200, 201, 202, 204])) {
                 $allProcessed = false;
             }
+            // if ($httpCode != 200) {
+            //     $allProcessed = false;
+            // }
             curl_multi_remove_handle($multiHandle, $ch);
             curl_close($ch);
         }
