@@ -136,6 +136,8 @@ class Approves extends CI_Controller
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($chunk));
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
             curl_multi_add_handle($multiHandle, $ch);
             $curlHandles[$i] = $ch;
         }
