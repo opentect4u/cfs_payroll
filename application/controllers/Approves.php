@@ -66,7 +66,7 @@ class Approves extends CI_Controller
                             a.amount, 
                             d.bank_ac_no, 
                             a.created_by, 
-                            d.branch_id 
+                            d.branch_id,d.pf_ac_no 
                         FROM 
                             td_pay_slip a
                         JOIN 
