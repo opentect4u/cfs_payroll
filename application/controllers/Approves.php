@@ -102,7 +102,7 @@ class Approves extends CI_Controller
             $chunks = array_chunk($erning_dt, $chunkSize);
       
             $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
-         
+             
             if ($allProcessed) {
                 if($bank_id == 4){
                 $data = array(
@@ -112,7 +112,7 @@ class Approves extends CI_Controller
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
             } else {
-                $this->session->set_flashdata('msg', 'Data not updated in server');
+                $this->session->set_flashdata('msg', 'Data Send To Banking');
                 // echo "Failed to insert all data.";
             }
             redirect('payapprv');
