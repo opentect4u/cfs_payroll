@@ -73,12 +73,13 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
     echo $this->session->userdata['loggedin']['logo_path']; 
 }
 ?>" alt="logo" height="100" width="100" /></a></div>
-                        <div class="col-10 payslip_logo_Desc_Uts">
+                        <div class="col-8 payslip_logo_Desc_Uts">
                             <?php include_once('common_report_header.php'); ?>
                             <h4>Pay Slip for <?php echo MONTHS[$this->input->post('sal_month')] . '-' . $this->input->post('year'); ?></h4>
                             <h4><?php //echo $emp_dtls->emp_name; ?></h4>
 
                         </div>
+                        <div class="col-2"></div>
                         </div>
                    
                         <div class="row" style="margin-bottom:10px">
