@@ -112,7 +112,7 @@ class Approves extends CI_Controller
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
             } else {
-                $this->session->set_flashdata('msg', 'Data Not Send To Banking');
+                $this->session->set_flashdata('msg', 'Data Send To Banking');
                 // echo "Failed to insert all data.";
             }
             redirect('payapprv');
