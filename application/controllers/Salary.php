@@ -867,6 +867,7 @@ class Salary extends CI_Controller
                 "sal_year"      =>  $year
             );
             $flag     =   $this->Salary_Process->f_get_particulars("td_salary", $select, $where, 1);
+            //echo $this->db->last_query(); die();
             if ($flag) {
                 $this->session->set_flashdata('msg', 'For this month and category Payslip already generated!');
             } else {
@@ -902,7 +903,7 @@ class Salary extends CI_Controller
                         $er_where = array(
                             'a.emp_no' => $emp->emp_code,
                             'a.bank_id'=> $this->session->userdata['loggedin']['bank_id'],
-                            'a.effective_dt = (SELECT MAX(c.effective_dt) FROM td_earning_deduction c where c.emp_no = '.$emp->emp_code.' AND c.bank_id = '.$bank_id.')' => null
+                            'a.effective_dt = (SELECT MAX(c.effective_dt) FROM td_earning_deduction c where c.emp_no = "'.$emp->emp_code.'" AND c.bank_id = "'.$bank_id.'")' => null
                         );
                          $basic_pay = $this->Salary_Process->get_basicpay($emp->emp_code,$this->session->userdata['loggedin']['bank_id']);
                         $erning_dts = $this->Admin_Process->f_get_particulars($table_name, $select, $er_where, 0);
