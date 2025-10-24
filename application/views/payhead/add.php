@@ -19,6 +19,7 @@
                                     <select name="input_flag"  class="form-control" required>
                                       <option value="M">Manual</option>
                                       <option value="A">Automatic</option>
+                                      <option value="AD">Arrear DA</option>
                                     </select>
                                     </div>
                                     <div class="col-4">

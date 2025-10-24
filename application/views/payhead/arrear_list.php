@@ -4,10 +4,10 @@
         <div class="card-body">
           <div class="row">
             <div class="col-10">
-              <h3>Payhead List</h3>
+              <h3>Arrear List</h3>
             </div>
             <div class="col-2">
-              <small><a href="<?php echo base_url(); ?>index.php/payheadadd" class="btn btn-primary customFloat_Uts">Add</a></small>
+              <small><a href="<?php echo base_url(); ?>index.php/salary/calculate_arrears" class="btn btn-primary ">Calculate Arrear</a></small>
             </div>
           </div>
           <br>
@@ -18,35 +18,30 @@
                   <thead>
                     <tr>
                       <th>Sl No</th>
-                      <th>Pay Head</th>
-                      <th>Input Flag</th>
-                      <th>Pay Flag</th>
-                      <th>Per (%)</th>
-                      <th>Account CD</th>
-                      <th>Edit</th>
+                     
+                      <th>Payment Date</th>
+                      <th>Emp name</th>
+                      <th>Amount</th>
+                      <th>Delete</th>
 
                     </tr>
                   </thead>
                   <tbody>
                     <?php
 
-                    if ($payhead) {
+                    if ($arrear_dtl) {
                       $i = 0;
-                      foreach ($payhead as $d_dtls) {
+                      foreach ($arrear_dtl as $d_dtls) {
                     ?>
                         <tr>
 
                           <td><?php echo ++$i; ?></td>
-                          <td><?php echo $d_dtls->pay_head; ?></td>
-                          <td><?php  if($d_dtls->input_flag=='M') { echo 'Manual'; }else if($d_dtls->input_flag=='AD'){ echo 'Arrear';}else{
-                                  echo 'Automatic';
-                          } ?></td>
-                          <td><?php  if($d_dtls->pay_flag=='E') { echo 'Earning'; }else{ echo 'Deduction';} ?></td>
-                          <td><?php echo $d_dtls->percentage; ?></td>
-                          <td><?php echo $d_dtls->acc_cd; ?></td>
+                          <td><?php echo $d_dtls->trans_dt; ?></td>
+                           <td><?php echo $d_dtls->emp_name; ?></td>
+                          <td><?php echo $d_dtls->amount; ?></td>
                           <td>
-                            <a href="<?php echo base_url(); ?>index.php/payheadedit?id=<?php echo $d_dtls->sl_no; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit">
-                              <i class="fa fa-edit fa-2x" style="color: #007bff"></i>
+                            <a href="<?php echo base_url(); ?>index.php/salary/arrear_delete?id=<?php echo $d_dtls->id; ?>" data-toggle="tooltip" data-placement="bottom" title="Delete">
+                              <i class="fa fa-trash fa-2x" style="color: #007bff;"></i>
                             </a>
                           </td>
 

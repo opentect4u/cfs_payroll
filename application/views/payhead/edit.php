@@ -20,6 +20,7 @@
                                     <select name="input_flag"  class="form-control" required>
                                       <option value="M" <?php  if($payhead_dtls->input_flag=='M') { echo 'selected'; }?>>Manual</option>
                                       <option value="A" <?php  if($payhead_dtls->input_flag=='A') { echo 'selected'; } ?>>Automatic</option>
+                                      <option value="AD" <?php  if($payhead_dtls->input_flag=='AD') { echo 'selected'; } ?>>Arrear DA</option>
                                     </select>
                                     </div>
                                     <div class="col-4">
