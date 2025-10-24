@@ -175,7 +175,6 @@
                 <div class="submenu">
                   <ul class="submenu-item">
                     <li class="nav-item"><a href="<?php echo base_url(); ?>index.php/desig">Designation</a></li>
-                    <!-- <li class="nav-item"><a href="<?php echo site_url("vls"); ?>">Set Parameters</a></li> -->
                     <li class="nav-item"><a href="<?php echo site_url("catg"); ?>">Employee Category</a></li>
                     <li class="nav-item"><a href="<?php echo base_url(); ?>index.php/ptax">Professional Tax</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("stfemp"); ?>">Employee</a></li>
@@ -197,9 +196,8 @@
 
                   <?php }
                   if ($this->session->userdata['loggedin']['ho_flag'] == "Y") { ?>
+                    <li class="nav-item"><a href="<?php echo site_url("salary/calculate_arrears"); ?>">Arrear DA Generation</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("salary/eardedu"); ?>">Earnings Deduction</a></li>
-                    <!-- <li class="nav-item"><a href="<?php //echo site_url("slrydtl"); ?>">Earnings</a></li>
-                    <li class="nav-item"><a href="<?php //echo site_url("slryded"); ?>">Deductions</a></li> -->
                     <li class="nav-item"><a href="<?php echo site_url("genspl"); ?>">Generate Payslip</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("payapprv"); ?>">Approve</a> </li>
                   <?php } ?>
