@@ -1632,4 +1632,241 @@ class Salary extends CI_Controller
         $result = $this->Admin_Process->f_get_particulars("md_pay_head",NULL,$where,1);
         echo json_encode($result);
     }
+    public function payheadrevision_bk(){
+        if($_SERVER['REQUEST_METHOD'] == "POST"){
+
+            $this->form_validation->set_rules('payhead_id', 'Payhead', 'required');
+            $this->form_validation->set_rules('category', 'category', 'required');
+            $this->form_validation->set_rules('year', 'Year', 'required|integer|exact_length[4]|greater_than_equal_to[1900]|less_than_equal_to[2100]');
+            $this->form_validation->set_rules('month_id', 'Month', 'required|integer|greater_than_equal_to[1]|less_than_equal_to[12]');
+            $this->form_validation->set_rules('percentage', 'Percentage', 'required|numeric|greater_than[0]');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('/salary/payheadrevision');
+            }else{
+                $category = $this->input->post('category');
+                $payhead_id = $this->input->post('payhead_id');
+                $year = $this->input->post('year');
+                $month_id = $this->input->post('month_id');
+                $percentage = $this->input->post('percentage');
+                $bank_id = $this->session->userdata['loggedin']['bank_id'];
+               // Update each employee's payhead amount
+                $data['emp_list'] = $this->Admin_Process->f_get_particulars(
+                    "md_employee",
+                    array('basic_pay','emp_code'),
+                    array('bank_id' => $bank_id, 'emp_status' => 'A', 'emp_catg' => $category),
+                    0
+                );
+
+                $this->db->trans_start(); // Start transaction
+
+                foreach($data['emp_list'] as $emp){
+                    $new_amount = round(($emp->basic_pay * $percentage) / 100); // total round
+                    $this->db->set('amount', $new_amount, FALSE);
+                    $this->db->where('bank_id', $bank_id);
+                    $this->db->where('pay_head_id', $payhead_id);
+                    $this->db->where('emp_no', $emp->emp_code);
+                    $this->db->update('td_earning_deduction');
+                }
+
+                $this->db->trans_complete(); // Complete transaction
+
+                // Check if transaction succeeded
+                if ($this->db->trans_status() === FALSE) {
+                    // Transaction failed: rollback happened
+                    $this->session->set_flashdata('error', 'Failed to update employee payhead amounts.');
+                    redirect('payheadrevision'); // redirect or handle error
+                } else {
+                    // Transaction succeeded: all updates applied
+                     // Enclose post-salary processing in try-catch
+                    try {
+                        $data_array = array(
+                            'bank_id'      => $bank_id,
+                            'process_dttime'=> date('Y-m-d H:i:s'),
+                            'years'        => $year,
+                            'month_id'     => $month_id,
+                            'payhead_id'   => $payhead_id,
+                            'perc'         => $percentage,
+                            'created_by'   => $this->session->userdata['loggedin']['user_id'],
+                            'created_ip'   => $_SERVER["REMOTE_ADDR"]
+                        );
+
+                        // Insert process record
+                        $this->Salary_Process->f_insert('td_payhead_process', $data_array);
+
+                        // Update percentage in master payhead
+                        $this->Salary_Process->f_edit(
+                            'md_pay_head',
+                            array('percentage' => $percentage),
+                            array('bank_id' => $bank_id, 'sl_no' => $payhead_id)
+                        );
+                        $this->session->set_flashdata('success', 'Payhead process updated successfully.');
+                      redirect('salary/payheadrevision');
+                    } catch (Exception $e) {
+                        // Handle exception
+                        log_message('error', 'Payhead process error: ' . $e->getMessage());
+                        $this->session->set_flashdata('error', 'Error occurred while updating payhead process.');
+                        redirect('salary/payheadrevision'); // or any other page
+                    }
+                }
+            }
+        }else{
+            $where  = array('bank_id' => $this->session->userdata['loggedin']['bank_id'],'input_flag'=>'A','pay_flag'=>'E' ,'sl_no !='=>0);
+            $data['payhead_dtls'] = $this->Admin_Process->f_get_particulars("md_pay_head",NULL,$where,0);
+            $data['month_list'] = $this->Admin_Process->f_get_particulars("md_month",NULL,NULL,0);
+            $data['category'] = $this->Admin_Process->f_get_particulars("md_category",NULL,NULL,0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("payhead/payheadrevision",$data);
+            $this->load->view('post_login/footer');
+        }
+    }
+
+    public function calculate_arrears(){
+        if($_SERVER['REQUEST_METHOD'] == "POST"){
+
+            $this->form_validation->set_rules('payhead_id', 'Payhead', 'required');
+            $this->form_validation->set_rules('category', 'category', 'required');
+            $this->form_validation->set_rules('from_date', 'From Date', 'required|date');
+            $this->form_validation->set_rules('to_date', 'To Date', 'required|date');
+            $this->form_validation->set_rules('payment_date', 'Payment Date', 'required|date');
+            $this->form_validation->set_rules('percentage', 'Percentage', 'required|numeric|greater_than[0]');
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->session->set_flashdata('error', validation_errors());
+                redirect('/salary/calculate_arrears');
+            }else{
+                $category = $this->input->post('category');
+                $payhead_id = $this->input->post('payhead_id');
+                $payment_date = $this->input->post('payment_date');
+                $year = date('Y', strtotime($payment_date));
+                $month = date('n', strtotime($payment_date));
+                $percentage = $this->input->post('percentage');
+                $from_date = $this->input->post('from_date');
+                $to_date = $this->input->post('to_date');
+                $bank_id = $this->session->userdata['loggedin']['bank_id'];
+               // Update each employee's payhead amount
+                $data['emp_list'] = $this->Admin_Process->f_get_particulars(
+                    "md_employee",
+                    array('emp_code'),
+                    array('bank_id' => $bank_id, 'emp_status' => 'A', 'emp_catg' => $category),
+                    0
+                );
+                $select     =   array("ifnull(MAX(trans_no), 0) trans_no");
+                $where      =   array(
+                    "bank_id"       => $bank_id, 
+                    "sal_month"     =>  $month,
+                    "sal_year"      =>  $year,
+                    "catg_cd"      =>  $category,
+                );
+
+                $trans_no     =   $this->Salary_Process->f_get_particulars("td_salary", $select, $where, 1);
+                $this->db->trans_start(); // Start transaction
+
+                foreach ($data['emp_list'] as $emp) {
+                    $emp_code = $emp->emp_code;
+
+                    // 1️⃣ Fetch basic sum between from and to date
+                    $this->db->select_sum('amount', 'total_basic');
+                    $this->db->where('bank_id', $bank_id);
+                    $this->db->where('emp_code', $emp_code);
+                    $this->db->where('pay_head_id', '0'); // or BASIC payhead_id
+                    $this->db->where("CONCAT(sal_year, LPAD(sal_month, 2, '0')) BETWEEN 
+                                    DATE_FORMAT('$from_date', '%Y%m') AND 
+                                    DATE_FORMAT('$to_date', '%Y%m')", NULL, FALSE);
+                    $basic = $this->db->get('td_pay_slip')->row()->total_basic;
+
+                    // 2️⃣ Calculate arrear DA
+                    $arrear_amount = round(($basic * $percentage) / 100);
+
+                    // 3️⃣ Insert new row in td_payslip
+                    $insertData = [
+                        'bank_id' => $bank_id,
+                        'trans_dt' => $payment_date,
+                        'trans_no' => ($trans_no->trans_no != 0) ? ($trans_no->trans_no) : '1',
+                        'sal_month' => $month,
+                        'sal_year' => $year,
+                        'emp_code' => $emp->emp_code,
+                        'catg_id' => $category,
+                        'pay_head_id' => $payhead_id,
+                        'pay_head_type' => 'E',
+                        'amount' => $arrear_amount,
+                        'created_by' => $this->session->userdata['loggedin']['user_id'],
+                        'created_dt' => date('Y-m-d H:i:s'),
+                        'created_ip' => $_SERVER["REMOTE_ADDR"]
+                    ];
+                    $this->db->insert('td_pay_slip', $insertData);
+             
+                    
+                }
+
+                $this->db->trans_complete(); // Complete transaction
+
+                // Check if transaction succeeded
+                if ($this->db->trans_status() === FALSE) {
+                    // Transaction failed: rollback happened
+                    $this->session->set_flashdata('error', 'Failed to update employee payhead amounts.');
+                    redirect('/salary/calculate_arrears'); // redirect or handle error
+                } else {
+                    // Transaction succeeded: all updates applied
+                     // Enclose post-salary processing in try-catch
+                    try {
+                        $data_array = array(
+                            'bank_id'      => $bank_id,
+                            'from_date'    => $from_date,
+                            'to_date'      => $to_date,
+                            'process_dttime'=> date('Y-m-d H:i:s'),
+                            'years'        => $year,
+                            'month_id'     => $month,
+                            'payhead_id'   => $payhead_id,
+                            'perc'         => $percentage,
+                            'created_by'   => $this->session->userdata['loggedin']['user_id'],
+                            'created_ip'   => $_SERVER["REMOTE_ADDR"]
+                        );
+
+                        // Insert process record
+                        $this->Salary_Process->f_insert('td_payhead_process', $data_array);
+
+                        // Update percentage in master payhead
+                        $this->Salary_Process->f_edit(
+                            'md_pay_head',
+                            array('percentage' => $percentage),
+                            array('bank_id' => $bank_id, 'sl_no' => $payhead_id)
+                        );
+                        $this->session->set_flashdata('success', 'Payhead process updated successfully.');
+                      redirect('/salary/calculate_arrears');
+                    } catch (Exception $e) {
+                        // Handle exception
+                        log_message('error', 'Payhead process error: ' . $e->getMessage());
+                        $this->session->set_flashdata('error', 'Error occurred while updating payhead process.');
+                        redirect('/salary/calculate_arrears'); // or any other page
+                    }
+                }
+            }
+        }else{
+            $where  = array('bank_id' => $this->session->userdata['loggedin']['bank_id'],'input_flag'=>'AD','pay_flag'=>'E' );
+            $data['payhead_dtls'] = $this->Admin_Process->f_get_particulars("md_pay_head",NULL,$where,0);
+            $data['month_list'] = $this->Admin_Process->f_get_particulars("md_month",NULL,NULL,0);
+            $data['category'] = $this->Admin_Process->f_get_particulars("md_category",NULL,NULL,0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("payhead/calculate_arrears",$data);
+            $this->load->view('post_login/footer');
+        }
+    }
+    public function arrear_list()
+    {
+            $where  = array('a.sl_no= b.pay_head_id'=>NULL,'b.emp_code =c.emp_code'=>NULL,'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],'b.bank_id' => $this->session->userdata['loggedin']['bank_id'],'c.bank_id' => $this->session->userdata['loggedin']['bank_id'],'a.input_flag'=>'AD' );
+            $data['arrear_dtl'] = $this->Admin_Process->f_get_particulars("md_pay_head a,td_pay_slip b,md_employee c",array("b.*","c.emp_name"),$where,0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("payhead/arrear_list",$data);
+            $this->load->view('post_login/footer');
+    }
+    public function arrear_delete()
+    {
+            $where  = array('bank_id' => $this->session->userdata['loggedin']['bank_id'],'id' => $this->input->get('id'));
+            $data['arrear_dtl'] = $this->Admin_Process->f_delete("td_pay_slip",$where);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("payhead/arrear_list",$data);
+            $this->load->view('post_login/footer');
+    }
 }

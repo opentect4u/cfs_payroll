@@ -629,7 +629,9 @@ class Salary_Process extends CI_Model
 				'a.bank_id' => $bank_id,
 			));
 		}
-		$this->db->group_by('a.sal_month, a.catg_cd, a.sal_year');
+		//$this->db->group_by('a.sal_month, a.catg_cd, a.sal_year');
+		$this->db->group_by('a.trans_date, a.trans_no, a.sal_month, a.sal_year, a.approval_status, a.catg_cd, c.category');
+		
 		$query = $this->db->get('td_salary a, td_pay_slip b, md_category c');
 		if ($flag > 0) {
 			return $query->row();
