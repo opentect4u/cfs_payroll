@@ -77,4 +77,20 @@ class Admin_Process extends CI_Model
 		$result = $result->row();
 		return $result->cnt;
 	}
+	public function checkOldPassword($oldpassword){
+			$user_id=$this->session->userdata['loggedin']['user_id'];
+			
+			$data=$this->db->where('user_id',$user_id)->get('md_users');
+			
+			if ($data->num_rows() > 0) {
+				$row = $data->row();
+				if(password_verify($oldpassword, $row->password)){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+	}
 }

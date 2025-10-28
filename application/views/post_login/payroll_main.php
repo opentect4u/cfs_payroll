@@ -238,13 +238,11 @@
               <i class="menu-arrow"></i></a>
               <div class="submenu">
                 <ul class="submenu-item">
-                  <!-- <li class="nav-item"><a href="<?php //echo site_url("profile") 
-                                                      ?>">Change Password</a></li> -->
-                  <li class="nav-item"><a href="#">Change Password</a></li>
+                  <li class="nav-item"><a href="<?php echo site_url("admin/change_password") ?>">Change Password</a></li>
+                 
                   <?php if ($this->session->userdata['loggedin']['user_type'] != "U") {
                   ?>
-                    <!-- <li class="nav-item"> <a href="<?php //echo site_url('admin/user'); 
-                                                        ?>">Create User</a></li> -->
+                   
                     <li class="nav-item"> <a href="#">Create User</a></li>
                   <?php } ?>
                 </ul>
