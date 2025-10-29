@@ -292,4 +292,15 @@
                 $("#myform :input").prop("disabled", true);
             });
         <?php } ?>
+
+            $('#dob').change(function() {
+
+            var now = new Date($('#dob').val());
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+            var year = now.getFullYear() + 60;
+            var rtday = year + "-" + (month) + "-" + (day);
+            $('#ret_dt').val(rtday);
+
+        })
     </script>
