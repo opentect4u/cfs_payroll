@@ -246,14 +246,35 @@
         </div>
     </div>
     <script>
-        $('#dob').change(function() {
+       $('#dob').change(function() {
+    // 1. Get the Date of Birth value
+    var dob = new Date($('#dob').val());
 
-            var now = new Date($('#dob').val());
-            var day = ("0" + now.getDate()).slice(-2);
-            var month = ("0" + (now.getMonth() + 1)).slice(-2);
-            var year = now.getFullYear() + 60;
-            var rtday = year + "-" + (month) + "-" + (day);
-            $('#ret_dt').val(rtday);
+    // 2. Calculate the Retirement Year (DOB Year + 60)
+    var retirementYear = dob.getFullYear() + 60;
 
-        })
+    // 3. Determine the Retirement Month (DOB Month)
+    //    We want the *last day* of this month, so we calculate the *first day* of the *next* month.
+    var retirementMonth = dob.getMonth() + 1; // Month index starts at 0, so DOB month is current month + 1
+
+    // 4. Create a new Date object for the FIRST DAY of the *NEXT* month
+    //    - year: retirementYear
+    //    - month: retirementMonth (since month index is 0-based, this represents the NEXT month)
+    //    - day: 1
+    var nextMonth = new Date(retirementYear, retirementMonth, 1);
+
+    // 5. Subtract one day (86400000 milliseconds) from the 'nextMonth' date
+    //    This rolls the date back to the last day of the desired retirement month.
+    var lastDayOfMonth = new Date(nextMonth.getTime() - 86400000);
+
+    // 6. Format the resulting date as YYYY-MM-DD
+    var day = ("0" + lastDayOfMonth.getDate()).slice(-2);
+    var month = ("0" + (lastDayOfMonth.getMonth() + 1)).slice(-2);
+    var year = lastDayOfMonth.getFullYear();
+
+    var rtday = year + "-" + month + "-" + day;
+
+    // 7. Set the value of the retirement date input
+    $('#ret_dt').val(rtday);
+});
     </script>
