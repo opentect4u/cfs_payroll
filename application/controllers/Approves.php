@@ -96,12 +96,13 @@ class Approves extends CI_Controller
             $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount, d.bank_ac_no, a.created_by, d.branch_id';
             $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip a, md_bank b, md_pay_head c, md_employee d", $paySel, $where1, 0);
          } 
-          //   echo $this->db->last_query();exit;
+          $integrated_salary = $this->session->userdata['loggedin']['integrated_salary'];
+          if($integrated_salary == 1){
 
             $chunkSize = 50;
             $chunks = array_chunk($erning_dt, $chunkSize);
       
-            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
+           $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
              
             if ($allProcessed) {
                 if($bank_id == 4){
@@ -115,6 +116,11 @@ class Approves extends CI_Controller
                 $this->session->set_flashdata('msg', 'Data Send To Banking');
                 // echo "Failed to insert all data.";
             }
+
+        }else {
+            $this->session->set_flashdata('msg', 'Successfully Approved!');
+        }
+
             redirect('payapprv');
         }
 

@@ -43,6 +43,7 @@
 							$loggedin['ho_flag']            = 'Y';
 							$loggedin['fin_id']  			= 1;
 							$loggedin['fin_yr']   			= '2020-21';
+							$loggedin['integrated_salary']  = $bank->integrated_salary;
 
 							$this->session->set_userdata('loggedin',$loggedin);
 			                //  Setting Id OF logged Person in System
