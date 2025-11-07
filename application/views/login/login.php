@@ -31,7 +31,7 @@
                     <div class="col-3"> 
                       <img src="<?= base_url() ?>assets/images/contai.png" alt="logo" style="height: 80px;width: 80px;" />
                     </div>
-                    <div class="col-9"> 
+                    <div class="col-9" style="text-align: center;"> 
                       <p style="font-weight:bold">CONTAI CO-OPERATIVE AGRICULTURE & RURAL DEVELOPMENT BANK LTD</p>
                     </div>
                    </div>
