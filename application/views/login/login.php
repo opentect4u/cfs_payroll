@@ -27,9 +27,16 @@
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left py-5 px-4 px-sm-5">
                 <div class="brand-logo">
-                  <img src="<?= base_url() ?>assets/images/synergic.png" alt="logo" style="height: 80px;width: 80px;" />
+                   <div class="row">
+                    <div class="col-3"> 
+                      <img src="<?= base_url() ?>assets/images/contai.png" alt="logo" style="height: 80px;width: 80px;" />
+                    </div>
+                    <div class="col-9"> 
+                      <p style="font-weight:bold">CONTAI CO-OPERATIVE AGRICULTURE & RURAL DEVELOPMENT BANK LTD</p>
+                    </div>
+                   </div>
                 </div>
-                <!-- <h4>Hello! let's get started</h4> -->
+                
                 <h6 class="font-weight-light">Sign in to continue.</h6>
                 <form class="pt-3" method="post" action='<?= base_url() ?>index.php/payroll_Login/'>
                   <div class="form-group">
