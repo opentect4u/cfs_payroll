@@ -39,8 +39,8 @@
                                     <input type="number" name="percentage" class="form-control" id="percentage" step=".01" value="<?php echo $payhead_dtls->percentage; ?>" required/>
                                     </div>
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Account Code:</label>
-                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value="<?php echo $payhead_dtls->acc_cd; ?>" required/>
+                                    <label for="exampleInputName1">Account Code: <?= $accocde_required ? '<b> * </b>' : '' ?></label>
+                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value="<?php echo $payhead_dtls->acc_cd; ?>" <?php echo $accocde_required ;  ?> />
                                     </div>
                                 </div>
                             </div>

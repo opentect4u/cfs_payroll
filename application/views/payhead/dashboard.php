@@ -5,6 +5,12 @@
           <div class="row">
             <div class="col-10">
               <h3>Payhead List</h3>
+                   <?php if($this->session->flashdata('error')): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <?php echo $this->session->flashdata('error'); ?>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          <?php endif; ?>
             </div>
             <div class="col-2">
               <small><a href="<?php echo base_url(); ?>index.php/payheadadd" class="btn btn-primary customFloat_Uts">Add</a></small>

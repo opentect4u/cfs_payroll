@@ -10,6 +10,7 @@ class Admin extends CI_Controller
             redirect(base_url());
         }
 		$this->load->model('Login_Process');
+		$this->load->library('form_validation');
 		$this->load->model('Admin_Process');
 	}
 
@@ -545,56 +546,75 @@ class Admin extends CI_Controller
 
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-			$results = $this->db->get_where('md_pay_head', array('pay_head =' => $this->input->post('pay_head'),'bank_id' => $this->session->userdata['loggedin']['bank_id']))->result();
-			if (count($results) == 0) {
-				$data_array = array(
-					'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
-					"input_flag"    =>  $this->input->post('input_flag'),
-					"pay_flag"      =>  $this->input->post('pay_flag'),
-					"pay_head"      =>  $this->input->post('pay_head'),
-					"acc_cd"        =>  $this->input->post('acc_cd'),
-					"percentage"    =>  $this->input->post('percentage'),
-					"created_by"    =>  $this->session->userdata['loggedin']['user_id'],
-					"created_at"    =>  date('Y-m-d h:i:s')
-				);
+			$this->form_validation->set_rules('pay_head', 'Pay Head', 'required');
+			if($this->session->userdata['loggedin']['integrated_salary']==1){
+			    $this->form_validation->set_rules('acc_cd', 'Account Code', 'required');
+		    }
 
-				$this->Admin_Process->f_insert('md_pay_head', $data_array);
-				$this->session->set_flashdata('msg', 'Successfully added!');
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('error', validation_errors());
 				redirect('payhead');
-				
-			} else {
-				$this->session->set_flashdata('msg', 'Name Exist');
-				redirect('payhead');
+			}else{
+				$results = $this->db->get_where('md_pay_head', array('pay_head =' => $this->input->post('pay_head'),'bank_id' => $this->session->userdata['loggedin']['bank_id']))->result();
+				if (count($results) == 0) {
+					$data_array = array(
+									'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
+									"input_flag"    =>  $this->input->post('input_flag'),
+									"pay_flag"      =>  $this->input->post('pay_flag'),
+									"pay_head"      =>  $this->input->post('pay_head'),
+									"acc_cd"        =>  $this->input->post('acc_cd'),
+									"percentage"    =>  $this->input->post('percentage'),
+									"created_by"    =>  $this->session->userdata['loggedin']['user_id'],
+									"created_at"    =>  date('Y-m-d h:i:s')
+									);
+
+					$this->Admin_Process->f_insert('md_pay_head', $data_array);
+					$this->session->set_flashdata('msg', 'Successfully added!');
+					redirect('payhead');
+			
+				} else {
+					$this->session->set_flashdata('msg', 'Name Exist');
+					redirect('payhead');
+				}
 			}
 		} else {
+			$data['accocde_required'] = $this->session->userdata['loggedin']['integrated_salary']==1 ? 'required' : '';
 			$this->load->view('post_login/payroll_main');
-			$this->load->view("payhead/add");
+			$this->load->view("payhead/add",$data);
 			$this->load->view('post_login/footer');
 		}
 	}
 	public function payhead_edit()
 	{
 		if ($_SERVER['REQUEST_METHOD'] == "POST") {
-			$data_array = array(
+			$this->form_validation->set_rules('pay_head', 'Pay Head', 'required');
+			if($this->session->userdata['loggedin']['integrated_salary']==1){
+			    $this->form_validation->set_rules('acc_cd', 'Account Code', 'required');
+		    }
+			if ($this->form_validation->run() == FALSE) {
+				$this->session->set_flashdata('error', validation_errors());
+				redirect('payhead');
+			}else{
+			  $data_array = array(
 				"input_flag"    =>  $this->input->post('input_flag'),
 				"pay_flag"      =>  $this->input->post('pay_flag'),
 				"pay_head"      =>  $this->input->post('pay_head'),
 				"acc_cd"        =>  $this->input->post('acc_cd'),
 				"percentage"    =>  $this->input->post('percentage'),
 				"modified_by"  => $this->session->userdata['loggedin']['user_id'],
-				"modified_at"  =>  date('Y-m-d h:i:s')
-			);
+				"modified_at"  =>  date('Y-m-d h:i:s') );
 
-			$where  =   array("sl_no" =>  $this->input->post('id'));
-
-			$this->session->set_flashdata('msg', 'Successfully updated!');
-			$this->Admin_Process->f_edit('md_pay_head', $data_array, $where);
-			$this->payhead();
-		} else {
+			   $where  =   array("sl_no" =>  $this->input->post('id'));
+			   $this->session->set_flashdata('msg', 'Successfully updated!');
+			   $this->Admin_Process->f_edit('md_pay_head', $data_array, $where);
+			   $this->payhead();
+		    }
+		}else {
 
 			$where = array("sl_no"       =>  $this->input->get('id'));
-
 			$data['payhead_dtls']  =  $this->Admin_Process->f_get_particulars("md_pay_head", NULL, $where, 1);
+			$data['accocde_required'] = $this->session->userdata['loggedin']['integrated_salary']==1 ? 'required' : '';
+			
 			$this->load->view('post_login/payroll_main');
 			$this->load->view("payhead/edit", $data);
 			$this->load->view('post_login/footer');

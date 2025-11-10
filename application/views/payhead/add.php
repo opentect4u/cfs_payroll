@@ -11,7 +11,7 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Payhead Name:</label>
+                                    <label for="exampleInputName1">Payhead Name: <b> * </b></label>
                                     <input type="text" name="pay_head" class="form-control" id="pay_head" value="" required/>
                                     </div>
                                     <div class="col-4">
@@ -38,8 +38,8 @@
                                     <input type="number" name="percentage" class="form-control" id="percentage" value="0.0" step=".01" required/>
                                     </div>
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Account Code:</label>
-                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value="" required/>
+                                    <label for="exampleInputName1">Account Code: <?= $accocde_required ? '<b> * </b>' : '' ?></label>
+                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value=""  <?php echo $accocde_required ;  ?> />
                                     </div>
                                 </div>
                             </div>
