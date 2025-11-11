@@ -190,7 +190,7 @@ class Admin extends CI_Controller
 
 	public function employee()
 	{		//Employee Dashboard
-		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation,  c.category, d.branch_name';
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, basic_pay, phn_no, pan_no, UAN';
 		$where = array(
 			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,
@@ -421,7 +421,7 @@ class Admin extends CI_Controller
 		// );
 		// $table_name = 'md_employee a, md_department b, md_category c';
 
-		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation,  c.category, d.branch_name';
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, basic_pay, phn_no, pan_no, UAN';
 		$where = array(
 			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,

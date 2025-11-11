@@ -9,11 +9,13 @@
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/dataTables.bootstrap4.css">
+  <!--link rel="stylesheet" href="<?= base_url() ?>assets/css/dataTables.bootstrap4.css"-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css">
+  
   <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.ico" />
 
 </head>

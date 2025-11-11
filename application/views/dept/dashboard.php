@@ -14,13 +14,12 @@
           <div class="row">
             <div class="col-12">
               <div class="table-responsive">
-                <table id="order-listing" class="table">
+                <table id="tbl" class="table stripe row-border order-column" style="width:100%">
                   <thead>
                     <tr>
                       <th>Sl No</th>
                       <th>Designation</th>
-                      <th>Edit</th>
-
+                      <th class="not-export">Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -31,7 +30,6 @@
                       foreach ($dept_dtls as $d_dtls) {
                     ?>
                         <tr>
-
                           <td><?php echo ++$i; ?></td>
                           <td><?php echo $d_dtls->designation; ?></td>
                           <td>
@@ -59,7 +57,7 @@
   </div>
   <script>
     $(document).ready(function() {
-
+      _datatable('Designation List');
       $('.delete').click(function() {
         var id = $(this).attr('id');
         var result = confirm("Do you really want to delete this record?");
