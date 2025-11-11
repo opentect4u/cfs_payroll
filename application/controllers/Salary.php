@@ -17,9 +17,9 @@ class Salary extends CI_Controller
     }
     public function eardedu()
 	{	
-        $select = array('a.effective_dt','a.emp_no','b.emp_name');
-        $where  = array('a.emp_no = b.emp_code' => NULL,'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],'b.bank_id' => $this->session->userdata['loggedin']['bank_id'],'1 group by a.effective_dt,a.emp_no,b.emp_name' => NULL);
-		$dept['payhead']    =   $this->Admin_Process->f_get_particulars("td_earning_deduction a,md_employee b", $select, $where, 0);
+        $select = array('a.effective_dt','a.emp_no','b.emp_name', 'c.designation');
+        $where  = array('a.emp_no = b.emp_code' => NULL,'a.bank_id' => $this->session->userdata['loggedin']['bank_id'], 'b.designation = c.sl_no' => NULL,'b.bank_id' => $this->session->userdata['loggedin']['bank_id'],'1 group by a.effective_dt,a.emp_no,b.emp_name' => NULL);
+		$dept['payhead']    =   $this->Admin_Process->f_get_particulars("td_earning_deduction a, md_employee b, md_designation c", $select, $where, 0);
      
 		$this->load->view('post_login/payroll_main');
 		$this->load->view("earning_deduction/dashboard", $dept);
