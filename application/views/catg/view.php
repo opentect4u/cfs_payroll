@@ -14,13 +14,12 @@
                   <div class="row">
                       <div class="col-12">
                           <div class="table-responsive">
-                              <table id="order-listing" class="table">
+                              <table id="tbl" class="table stripe row-border order-column" style="width:100%">
                                   <thead>
                                       <tr>
                                           <th>Sl No</th>
                                           <th>Category</th>
-                                          <th>Action</th>
-
+                                          <th class="not-export">Action</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -59,7 +58,7 @@
   </div>
   <script>
       $(document).ready(function() {
-
+        _datatable('Employee Category List');
           $('.delete').click(function() {
               var id = $(this).attr('id');
               var result = confirm("Do you really want to delete this record?");

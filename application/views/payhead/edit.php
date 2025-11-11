@@ -2,7 +2,7 @@
         <div class="content-wrapper">
           <div class="card">
             <div class="card-body">
-              <h3>Designation Edit</h3>
+              <h3>Payhead Edit</h3>
               <div class="row">
                 <div class="col-12 grid-margin stretch-card">
                     <div class="card">
@@ -11,9 +11,9 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Designation Name:</label>
+                                    <label for="exampleInputName1">Payhead Name:</label>
                                     <input type='hidden' name='id' value='<?php echo $payhead_dtls->sl_no; ?>' />
-                                    <input type="text" name="pay_head" class="form-control required" id="name" value="<?php echo $payhead_dtls->pay_head; ?>" />
+                                    <input type="text" name="pay_head" class="form-control" id="name" value="<?php echo $payhead_dtls->pay_head; ?>" required />
                                     </div>
                                     <div class="col-4">
                                     <label for="exampleInputName1">Input Flag:</label>
@@ -39,8 +39,8 @@
                                     <input type="number" name="percentage" class="form-control" id="percentage" step=".01" value="<?php echo $payhead_dtls->percentage; ?>" required/>
                                     </div>
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Account Code:</label>
-                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value="<?php echo $payhead_dtls->acc_cd; ?>" required/>
+                                    <label for="exampleInputName1">Account Code: <?= $accocde_required ? '<b> * </b>' : '' ?></label>
+                                    <input type="number" name="acc_cd" class="form-control" id="acc_cd" value="<?php echo $payhead_dtls->acc_cd; ?>" <?php echo $accocde_required ;  ?> />
                                     </div>
                                 </div>
                             </div>

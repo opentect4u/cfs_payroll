@@ -5,6 +5,12 @@
           <div class="row">
             <div class="col-10">
               <h3>Payhead List</h3>
+                   <?php if($this->session->flashdata('error')): ?>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <?php echo $this->session->flashdata('error'); ?>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          <?php endif; ?>
             </div>
             <div class="col-2">
               <small><a href="<?php echo base_url(); ?>index.php/payheadadd" class="btn btn-primary customFloat_Uts">Add</a></small>
@@ -14,7 +20,7 @@
           <div class="row">
             <div class="col-12">
               <div class="table-responsive">
-                <table id="order-listing" class="table">
+                <table id="tbl" class="table stripe row-border order-column" style="width:100%">
                   <thead>
                     <tr>
                       <th>Sl No</th>
@@ -23,8 +29,7 @@
                       <th>Pay Flag</th>
                       <th>Per (%)</th>
                       <th>Account CD</th>
-                      <th>Edit</th>
-
+                      <th class="not-export">Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -35,7 +40,6 @@
                       foreach ($payhead as $d_dtls) {
                     ?>
                         <tr>
-
                           <td><?php echo ++$i; ?></td>
                           <td><?php echo $d_dtls->pay_head; ?></td>
                           <td><?php  if($d_dtls->input_flag=='M') { echo 'Manual'; }else if($d_dtls->input_flag=='AD'){ echo 'Arrear';}else{
@@ -69,7 +73,7 @@
   </div>
   <script>
     $(document).ready(function() {
-
+      _datatable('Payhead List', 2);
       $('.delete').click(function() {
         var id = $(this).attr('id');
         var result = confirm("Do you really want to delete this record?");
