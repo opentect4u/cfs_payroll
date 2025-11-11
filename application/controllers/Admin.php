@@ -253,6 +253,7 @@ class Admin extends CI_Controller
 						"pan_no"           =>  $this->input->post('pan_no'),
 						"aadhar_no"        =>  $this->input->post('aadhar'),
 						"bank_name"        =>  $this->input->post('bank_name'),
+						"ifsc"        	   =>  $this->input->post('ifsc'),
 						"bank_ac_no"       =>  $this->input->post('bank_ac_no'),
 						"pf_ac_no"         =>  $this->input->post('pf_ac_no'),
 						"uan"              =>  $this->input->post('uan'),
@@ -339,6 +340,7 @@ class Admin extends CI_Controller
 						"aadhar_no"        =>  $this->input->post('aadhar'),
 						"bank_name"        =>  $this->input->post('bank_name'),
 						"bank_ac_no"       =>  $this->input->post('bank_ac_no'),
+						"ifsc"        	   =>  $this->input->post('ifsc'),
 						"pf_ac_no"         =>  $this->input->post('pf_ac_no'),
 						"uan"              =>  $this->input->post('uan'),
 						"basic_pay"        =>  $this->input->post('basic_pay'),
@@ -374,7 +376,7 @@ class Admin extends CI_Controller
 			unset($select);
 			$select = array(
 				"emp_code", "emp_name",'prefix_emp_cd',"emp_catg", "dob", "email", "phn_no","emp_sex","pi_no",
-				"designation", "department", "emp_addr",'father_name','qualification','hra_flag','pf_flag','cash_flag',
+				"designation", "department", "emp_addr",'father_name','qualification','hra_flag','pf_flag','cash_flag','ifsc',
 				"pan_no", "bank_name", "bank_ac_no", "join_dt", "ret_dt",'caste',"branch_id",'food_flag',
 				"pf_ac_no", "uan", "basic_pay", "aadhar_no", "emp_status",'remarks'
 			);
