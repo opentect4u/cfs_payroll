@@ -210,11 +210,13 @@
             type: "GET",
             url: "<?php echo site_url('salary/paytype_detail'); ?>",
             data: {
-              epay_cd: $('#epay_cd_' + id).val()
+              epay_cd: $('#epay_cd_' + id).val(),
+              emp_cd: $('#emp_cd').val()
             },
         //    dataType: 'html',
             success: function(result) {
                 var result = $.parseJSON(result);
+                result = result[0];
                 var input_flag = result.input_flag;
                 if (id > 1) {
                     pre_val = $('#epay_cd_' + pre_id).val();
@@ -239,6 +241,10 @@
                        if(result.sl_no == '107'){
                         $('#eamount_' + id).val('300').change()
                        }
+                       console.log('amount: ' + result.amount);
+                       if(+result.amount > 0){
+                        $('#eamount_' + id).val(result.amount).change();
+                       }
                        
                     }
                 } else {
@@ -253,6 +259,12 @@
                       total  +=parseFloat(basic);
                       // $('#tot_earning').html(total.toFixed());
                     
+                  }
+
+                  console.log(result);
+                  console.log('amount: ' + result.amount);
+                  if(+result.amount > 0){
+                    $('#eamount_' + id).val(result.amount).change();
                   }
                 }
             }
@@ -271,11 +283,13 @@
             type: "GET",
             url: "<?php echo site_url('salary/paytype_detail'); ?>",
             data: {
-              epay_cd: $('#dpay_cd_' + id).val()
+              epay_cd: $('#dpay_cd_' + id).val(),
+              emp_cd: $('#emp_cd').val()
             },
         //    dataType: 'html',
             success: function(result) {
                 var result = $.parseJSON(result);
+                result = result[0];
                 console.log(result, 'DED');
                 var input_flag = result.input_flag;
                 if (id > 1) {
@@ -302,6 +316,10 @@
                           }
                         })
                        }
+
+                       if(+result.amount > 0){
+                        $('#damount_' + id).val(result.amount).change();
+                       }
                     }
                     console.log('HEHEHE');
                 } else {
@@ -310,18 +328,21 @@
                     $('#damount_1').val(tot.toFixed());
                   }
                   if(result.sl_no == '201'){
-                        $('input[name="epay_cd[]"]').each(function(){
-                          console.log($(this).val(), 'ER VAL');
-                          if($(this).val() == '104'){
-                            var attr = $(this).attr('id')
-                            var ele_id = attr.split('_')[1]
-                            var da_val = $(`eamount_${ele_id}`).val()
-                            console.log(ele_id, da_val);
-                            var pf_val = ((parseFloat(basic) + parseFloat(da_val))*12)/100
-                            $('#damount_' + id).val(pf_val.toFixed());
-                          }
-                        })
-                       }
+                    $('input[name="epay_cd[]"]').each(function(){
+                      console.log($(this).val(), 'ER VAL');
+                      if($(this).val() == '104'){
+                        var attr = $(this).attr('id')
+                        var ele_id = attr.split('_')[1]
+                        var da_val = $(`eamount_${ele_id}`).val()
+                        console.log(ele_id, da_val);
+                        var pf_val = ((parseFloat(basic) + parseFloat(da_val))*12)/100
+                        $('#damount_' + id).val(pf_val.toFixed());
+                      }
+                    });
+                  }
+                  if(+result.amount > 0){
+                    $('#damount_' + id).val(result.amount).change();
+                  }
                 }
             }
         });

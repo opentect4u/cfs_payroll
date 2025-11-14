@@ -11,7 +11,7 @@ class Admin extends CI_Controller
         }
 		$this->load->model('Login_Process');
 		$this->load->library('form_validation');
-		$this->load->model('Admin_Process');
+		$this->load->model('Admin_Process');		
 	}
 
 	public function parameter()
@@ -659,4 +659,124 @@ class Admin extends CI_Controller
             $this->load->view('post_login/footer');
         }
     }
+
+	public function payheadearning()
+	{	
+		//$this->session->set_flashdata('msg', '');
+		$select = 'a.id, b.pay_head, c.designation, a.amount';
+		$where = array(
+			'a.payhead_id=b.sl_no' => null,
+			'a.designation_id=c.sl_no' => null,
+			'b.bank_id=c.bank_id' => null,
+			'a.isactive' => 1,
+			'b.bank_id' => $this->session->userdata['loggedin']['bank_id']
+		);
+		$table_name = 'md_payhead_earning a, md_pay_head b, md_designation c';
+
+		$data['list'] = $this->Admin_Process->f_get_particulars($table_name, $select, $where, 0);
+		$this->load->view('post_login/payroll_main');
+		$this->load->view("phearning/view", $data);
+		$this->load->view('post_login/footer');
+	}
+
+	function phearning_update() {
+		$data = $this->input->post();
+		if ($this->Admin_Process->f_edit('md_payhead_earning', array('amount' => $data['amount']), array('id' => $data['id']))) {
+			$this->session->set_flashdata('msg', 'Successfully updated!');
+			echo true;
+		} else {
+			$this->session->set_flashdata('msg', 'Something went wrong!');
+			echo false;
+		}
+	}
+
+	public function payheadearning_edit()
+	{	
+		$data['payhead'] = $this->Admin_Process->f_get_particulars("md_pay_head", NULL, array('pay_flag'=>'E','bank_id'=>$this->session->userdata['loggedin']['bank_id']), 0);
+		$data['designation'] = $this->Admin_Process->f_get_particulars("md_designation", NULL, array('bank_id'=>$this->session->userdata['loggedin']['bank_id']), 0);
+		$this->load->view('post_login/payroll_main');
+		$this->load->view("phearning/entry", $data);
+		$this->load->view('post_login/footer');
+	}
+
+	function payheadearning_save()
+	{
+		$payhead_id = $this->input->post('payhead_id');
+		$designation_id = $this->input->post('designation_id');
+		$amount = $this->input->post('amount');
+
+		if ($payhead_id && $designation_id && $amount) {
+			$where = array(
+				'payhead_id' => $payhead_id,
+				'designation_id' => $designation_id
+			);
+			$row = $this->Admin_Process->f_get_particulars('md_payhead_earning', NULL, $where, 0);
+			if ($row) {
+				$data = array(
+					'amount' => $amount,
+					'isactive' => 1
+				);
+				if ($this->Admin_Process->f_edit('md_payhead_earning', $data, $where)) {
+					$this->session->set_flashdata('msg', 'Successfully updated!');
+				} else {
+					$this->session->set_flashdata('msg', 'Something went wrong!');
+				}
+			} else {
+				$data = array(
+					'created' => date('Y-m-d'),
+					'payhead_id' => $payhead_id,
+					'designation_id' => $designation_id,
+					'amount' => $amount,
+					'isactive' => 1
+				);
+				if ($this->Admin_Process->f_insert('md_payhead_earning', $data)) {
+					$this->session->set_flashdata('msg', 'Successfully saved!');
+				} else {
+					$this->session->set_flashdata('msg', 'Something went wrong!');
+				}
+			}
+		} else {
+			$this->session->set_flashdata('msg', 'Something went wrong!');
+		}
+		redirect('phearning');
+	}
+
+	function phearning_apply()
+	{
+		$id = $this->input->post('id');
+		$cnt = $this->Admin_Process->phearning_apply($id);
+		$this->session->set_flashdata('msg', 'Successfully ' . $cnt . ' employee(s) updated!');
+		echo true;
+	}
+
+	public function increment()
+	{	
+		$month = $this->input->post('month') ? $this->input->post('month') : date('m');
+		$year = $this->input->post('year') ? $this->input->post('year') : date('Y');
+		$data['month_list'] = $this->Admin_Process->f_get_particulars('md_month');
+		$data['month'] = $month;
+		$data['year'] = $year;
+		$data['list'] = $this->Admin_Process->increment($month, $year);
+		$this->load->view('post_login/payroll_main');
+		$this->load->view("increment/view", $data);
+		$this->load->view('post_login/footer');
+	}
+
+	function increment_update() {
+		$data = $this->input->post();
+		if ($this->Admin_Process->increment_update($data)) {
+			$this->session->set_flashdata('msg', 'Successfully updated!');
+			echo true;
+		} else {
+			$this->session->set_flashdata('msg', 'Something went wrong!');
+			echo false;
+		}
+	}
+
+	function increment_apply() {
+		$id = $this->input->post('id');
+		$this->Admin_Process->increment_apply($id);
+		$this->session->set_flashdata('msg', 'Successfully updated!');
+		echo true;
+	}
 }

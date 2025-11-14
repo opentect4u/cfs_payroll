@@ -56,6 +56,12 @@ $route['payhead'] = 'admin/payhead';
 $route['payheadadd'] = 'admin/payhead_add';
 $route['payheadedit'] = 'admin/payhead_edit';
 
+$route['phearning'] = 'admin/payheadearning';
+$route['phearningedit'] = 'admin/payheadearning_edit';
+$route['sphearning'] = 'admin/payheadearning_save';
+
+$route['incr'] = 'admin/increment';
+
 //   *******  End Route Pay Head
 
 $route['slrydtl'] = 'salary/earning';

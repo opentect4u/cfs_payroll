@@ -1628,8 +1628,10 @@ class Salary extends CI_Controller
 
     public function paytype_detail(){
         $epay_cd = $this->input->get('epay_cd');
-        $where  = array('sl_no'=>$epay_cd,'bank_id' => $this->session->userdata['loggedin']['bank_id']);
-        $result = $this->Admin_Process->f_get_particulars("md_pay_head",NULL,$where,1);
+        $emp_cd = $this->input->get('emp_cd');
+        $result = $this->Admin_Process->paytype_detail($emp_cd, $epay_cd);
+        //$where  = array('sl_no'=>$epay_cd,'bank_id' => $this->session->userdata['loggedin']['bank_id']);
+        //$result = $this->Admin_Process->f_get_particulars("md_pay_head",NULL,$where,1);
         echo json_encode($result);
     }
     public function payheadrevision_bk(){

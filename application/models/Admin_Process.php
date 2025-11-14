@@ -93,4 +93,130 @@ class Admin_Process extends CI_Model
 				return false;
 			}
 	}
+
+	function phearning_apply($id){
+		$where = array(
+			'id' => $id
+		);
+		$phearning = $this->f_get_particulars('md_payhead_earning', NULL, $where, 0);
+		$phearning = $phearning[0];
+		$sql = 'UPDATE td_earning_deduction a, md_employee b SET a.amount = ' . $phearning->amount . ' WHERE a.emp_no=b.emp_code AND a.pay_head_id = ' . $phearning->payhead_id . ' AND b.designation = ' . $phearning->designation_id . ' AND b.emp_status = "A"';
+		$this->db->query($sql);
+		return $this->db->affected_rows();
+	}
+
+	function paytype_detail($emp_cd, $epay_cd) {
+		$sql = 'SELECT a.*, ifnull(b.amount, 0) amount FROM md_pay_head a LEFT JOIN md_payhead_earning b ON a.sl_no = b.payhead_id AND b.payhead_id = ' . $epay_cd . ' AND b.designation_id = (SELECT designation FROM md_employee WHERE emp_code = ' . $emp_cd . ') WHERE a.sl_no = ' . $epay_cd . ' AND a.bank_id = ' . $this->session->userdata['loggedin']['bank_id'];
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function increment($month, $year) {
+		$sql = 'SELECT ifnull(i.id, 0) as id, e.emp_code, e.emp_name, d.designation, c.category, e.join_dt, if(i.basic_old > 0, i.basic_old, e.basic_pay) as old_basic, if(i.basic_new > 0, i.basic_new, e.basic_pay) as new_basic, ifnull(i.isapplied, 0) as isapplied  
+				FROM md_employee e JOIN md_designation d ON e.designation = d.sl_no JOIN md_category c ON e.emp_catg = c.id 
+				LEFT JOIN md_increment_hd i ON e.emp_code = i.emp_code AND i.month = ' . $month . ' AND i.year = ' . $year . '
+				WHERE e.emp_status = "A" AND e.join_dt like "%-' . $month . '-%" AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY c.category, d.designation, e.emp_name';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function increment_update ($data) {
+		$this->db->trans_start();
+		$id = $data['id'];
+		$basic = $data['basic'] + $data['increment'];
+		$input = array (
+			'emp_code' => $data['code'],
+			'basic_old' => $data['basic'],
+			'basic_new' => $basic,
+			'month' => $data['month'],
+			'year' => $data['year'],
+			'isactive' => 1
+		);
+		if ($id > 0) {
+			$this->Admin_Process->f_edit('md_increment_hd', $input, array('id' => $id));
+		} else {
+			$where = array (
+				'emp_code' => $data['code'],
+				'month' => $data['month'],
+				'year' => $data['year']
+			);
+			$result = $this->f_get_particulars('md_increment_hd', NULL, $where, 0);			
+			if (count($result) > 0) {
+				$id = $result[0]->id;
+				$this->Admin_Process->f_edit('md_increment_hd', $input, array('id' => $id));
+			} else {
+				$input['created'] = date('Y-m-d');
+				$this->Admin_Process->f_insert('md_increment_hd', $input);
+				$id = $this->db->insert_id();
+			}
+		}
+		if($id > 0) {
+			$sql = 'SELECT ph.sl_no, ph.percentage, ed.amount FROM td_earning_deduction ed JOIN md_pay_head ph ON ed.pay_head_id = ph.sl_no WHERE emp_no = ' . $data['code'] . ' AND ph.input_flag = "A"';
+			$result = $this->db->query($sql);
+			if($result->num_rows() > 0) {
+				foreach ($result->result() as $row) {
+					$where = array (
+						'increment_id' => $id,
+						'payhead_id' => $row->sl_no
+					);
+					$result = $this->f_get_particulars('md_increment_dt', NULL, $where, 0);
+					$amount = round(($basic * $row->percentage) / 100, 0);
+					if (count($result) > 0) {
+						$input = array (
+							'percentage' => $row->percentage,
+							'amt_new' => $amount,
+							'isactive' => 1
+						);
+						$this->Admin_Process->f_edit('md_increment_dt', $input, array('id' => $result[0]->id));
+					} else {
+						$input = array (
+							'created' => date('Y-m-d'),
+							'increment_id' => $id,
+							'payhead_id' => $row->sl_no,
+							'percentage' => $row->percentage,
+							'amt_old' => $row->amount,
+							'amt_new' => $amount,
+							'isactive' => 1
+						);
+						$this->Admin_Process->f_insert('md_increment_dt', $input);
+					}
+				}
+			}
+		}
+		$this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return FALSE;
+        } else {
+            $this->db->trans_commit();
+            return TRUE;
+        }
+	}
+
+	function increment_apply($id) {
+		$this->db->trans_start();
+		$where = array(
+			'id' => $id
+		);
+		$result = $this->f_get_particulars('md_increment_hd', NULL, $where, 0);
+		if (count($result) > 0) {
+			$incr = $result[0];
+			$this->Admin_Process->f_edit('md_employee', array('basic_pay' => $incr->basic_new), array('emp_code' => $incr->emp_code));
+			$result = $this->f_get_particulars('md_increment_dt', NULL, array('increment_id' => $id), 0);
+			if(count($result) > 0) {
+				foreach ($result as $row) {
+					$this->Admin_Process->f_edit('td_earning_deduction', array('amount' => $row->amt_new), array('emp_no' => $incr->emp_code, 'pay_head_id' => $row->payhead_id));
+				}
+			}
+			$this->Admin_Process->f_edit('md_increment_hd', array('isapplied' => 1), array('id' => $id));
+		}
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return FALSE;
+		} else {
+			$this->db->trans_commit();
+			return TRUE;
+		}
+	}
 }

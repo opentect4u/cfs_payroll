@@ -29164,6 +29164,14 @@ button.btnCustomAddMarRig {
   margin-right: 15px;
 }
 
+.pointer {
+  cursor: pointer;
+}
 
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+  color: #a3a4a5;
+}
 
 /*# sourceMappingURL=../maps/horizontal-layout/style.css.map */
