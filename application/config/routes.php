@@ -62,6 +62,8 @@ $route['sphearning'] = 'admin/payheadearning_save';
 
 $route['incr'] = 'admin/increment';
 
+$route['oded'] = 'admin/other_deduction';
+
 //   *******  End Route Pay Head
 
 $route['slrydtl'] = 'salary/earning';

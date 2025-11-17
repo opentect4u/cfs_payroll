@@ -60,10 +60,21 @@
                       <th>Category</th>
                       <th>Designation</th>
                       <th>Branch </th>
-                      <th>Mobile</th>
-                      <th>Aadhaar No</th>
+                      <th>UAN No</th>
+                      <th>DoB</th>
+                      <th>DoA</th>
+                      <th>DoR</th>
+                      <th>Date of Exit from EPS</th>
+                      <th>Date of Exit from EPF</th>
                       <th>PAN No</th>
-                      <th>PF No</th>
+                      <th>Aadhaar No</th>
+                      <th>Mobile No</th>
+                      <th>Qualification</th>
+                      <th>Address</th>
+                      <th>Mail ID</th>
+                      <th>Account No</th>
+                      <th>IFSC Code</th>
+                      <th>Bank Name</th>                      
                       <th>Basic</th>
                       <th class="not-export">Edit</th>
                       <!-- <th>Delete</th> -->
@@ -81,10 +92,21 @@
                           <td><?= $e_dtls->category; ?></td>
                           <td><?= $e_dtls->designation; ?></td>
                           <td><?= $e_dtls->branch_name; ?></td>
-                          <td><?= $e_dtls->phn_no; ?></td>
-                          <td><?= $e_dtls->aadhar_no; ?></td>
-                          <td><?= $e_dtls->pan_no; ?></td>
                           <td><?= $e_dtls->UAN; ?></td>
+                          <td><?= date('d.m.Y', strtotime($e_dtls->dob)); ?></td>
+                          <td><?= date('d.m.Y', strtotime($e_dtls->join_dt)); ?></td>
+                          <td><?= date('d.m.Y', strtotime($e_dtls->ret_dt)); ?></td>
+                          <td></td>
+                          <td></td>
+                          <td><?= $e_dtls->pan_no; ?></td>
+                          <td><?= $e_dtls->aadhar_no; ?></td>
+                          <td><?= $e_dtls->phn_no; ?></td>   
+                          <td><?= $e_dtls->qualification; ?></td>
+                          <td><?= $e_dtls->emp_addr; ?></td>
+                          <td><?= $e_dtls->email; ?></td>      
+                          <td><?= $e_dtls->bank_ac_no; ?></td>
+                          <td><?= $e_dtls->ifsc; ?></td>
+                          <td><?= $e_dtls->bank_name; ?></td>                 
                           <td><?= $e_dtls->basic_pay; ?></td>
                           <td>
                             <a href="estem?emp_code=<?= $e_dtls->emp_code; ?>" data-toggle="tooltip" data-placement="bottom" title="Edit">
@@ -114,7 +136,7 @@
   </div>
   <script>
     $(document).ready(function() {
-      _datatable('Employee List',2, 1, 'order-listing');
+      _datatable('Employee List',2, 2, 'order-listing');
       $('.delete').click(function() {
 
         var id = $(this).attr('id');

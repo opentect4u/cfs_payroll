@@ -52,7 +52,7 @@
                                 <tbody id="debitadd">
                                   <tr>
                                     <td style="padding: 0px 5px 0px 5px"> 
-                                      <select name="epay_cd[]" id="epay_cd_1" class="form-control" onchange="set_grDebit(1)">
+                                      <select name="epay_cd[]" id="epay_cd_1" class="form-control epay" onchange="set_grDebit(1)">
                                             <option value="">Select Payhead</option>
                                             <?php foreach($epayhead as $key) { ?>
                                             <option value="<?=$key->sl_no?>"><?=$key->pay_head?></option>
@@ -81,7 +81,7 @@
                                   <tbody id="add">
                                     <tr>
                                       <td style="padding: 0px 5px 0px 5px">
-                                        <select name="dpay_cd[]" class="form-control" id="dpay_cd_1" onchange="set_grded(1)">
+                                        <select name="dpay_cd[]" class="form-control dpay" id="dpay_cd_1" onchange="set_grded(1)">
                                               <option value="">Select Payhead</option>
                                               <?php foreach($dpayhead as $key) { ?>
                                               <option value="<?=$key->sl_no?>"><?=$key->pay_head?></option>
@@ -129,12 +129,13 @@
     <script>
     $(document).ready(function() {
         var tot_amt = 0;
+        var pf_percentage = 0;
         $("#debitnewrow").click(function() {
             if ($('#v_type').val() != '') {
                 var tr_len = $('#debit_vau_tab #debitadd>tr').length;
                 var x = tr_len + 1;
                 
-                $("#debitadd").append('<tr class="mb-2"><td><select id="epay_cd_' + x + '" name="epay_cd[]" class="form-control eamount" onchange="set_grDebit(' + x + ')" required><option value="">Select</option>' +
+                $("#debitadd").append('<tr class="mb-2"><td><select id="epay_cd_' + x + '" name="epay_cd[]" class="form-control epay" onchange="set_grDebit(' + x + ')" required><option value="">Select</option>' +
                     "<?php
                         foreach ($epayhead as $key) {
                             echo "<option value='" . $key->sl_no . "'>" . $key->pay_head . "</option>";
@@ -161,7 +162,7 @@
                 var tr_len = $('#vau_tab #add>tr').length;
                 var x = tr_len + 1;
 
-                $("#add").append('<tr class="mb-2"><td><select id="dpay_cd_' + x + '" name="dpay_cd[]" class="form-control"  onchange="set_grded(' + x + ')" required><option value="">Select</option>' +
+                $("#add").append('<tr class="mb-2"><td><select id="dpay_cd_' + x + '" name="dpay_cd[]" class="form-control dpay"  onchange="set_grded(' + x + ')" required><option value="">Select</option>' +
                     "<?php
                         foreach ($dpayhead as $value) {
                  
@@ -180,6 +181,7 @@
             $(this).parent().parent().remove();
             //$('.preferenceSelect').change();
             $('.amount_cls').change();
+            calculatePF();
         });
 
         $('#emp_cd').on('change', function() {
@@ -267,6 +269,8 @@
                     $('#eamount_' + id).val(result.amount).change();
                   }
                 }
+                //sujay
+                calculatePF();
             }
         });
 
@@ -344,6 +348,11 @@
                     $('#damount_' + id).val(result.amount).change();
                   }
                 }
+                if($('#dpay_cd_' + id).val() == '463'){
+                  pf_percentage = result.percentage;
+                }
+                //sujay
+                calculatePF();
             }
         });
       }
@@ -354,7 +363,7 @@ function countDeduction(){
     tot_ded += parseFloat($(this).val()) > 0 ? parseFloat($(this).val()) : 0
     // console.log($(this).val());
   })
-  $('#tot_deduction').text(tot_ded)
+  $('#tot_deduction').text(tot_ded);
 }
 
 function calEarning(){
@@ -364,5 +373,32 @@ function calEarning(){
     // console.log($(this).val());
   })
   $('#tot_earning').text(tot_er)
+}
+//sujay - da 457 pf 463
+function calculatePF() {
+  var basic = $('#basic').val();
+  var da_index = 0;
+  var pf_index = 0;
+  var deduction = 0;
+  $(".epay").each(function () {
+      if ($(this).val() === '457') {
+        var arr = $(this).attr("id").split("_");
+        da_index = arr[2];
+        basic = +basic + +$('#eamount_' + da_index).val();
+      }
+  });
+  $(".dpay").each(function () {
+    var arr = $(this).attr("id").split("_");
+    var index = arr[2];
+    if ($(this).val() === '463') {
+        pf_index = index;          
+    } else {
+      deduction = +deduction + +$('#damount_' + index).val();
+    }
+  });
+  console.log('pf_index: ' + pf_index);
+  var pf = pf_index > 0 ? Math.round(basic * (+pf_percentage/100)) : 0;
+  $('#damount_' + pf_index).val(pf);
+  $('#tot_deduction').text(deduction + +pf);
 }
 </script>

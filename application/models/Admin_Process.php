@@ -219,4 +219,64 @@ class Admin_Process extends CI_Model
 			return TRUE;
 		}
 	}
+
+	function get_deduction_header()
+	{
+		$sql = 'SELECT sl_no, pay_head FROM md_pay_head WHERE input_flag = "M" AND pay_flag = "D" AND bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY sl_no';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function other_deduction()
+	{
+		$sql = 'SELECT ed.emp_no as id, e.emp_code, e.emp_name, d.designation, group_concat(ed.pay_head_id) as pay_head_id, group_concat(ed.amount) as amount 
+				FROM td_earning_deduction ed 
+				JOIN md_employee e ON ed.emp_no = e.emp_code JOIN md_designation d ON e.designation = d.sl_no
+				JOIN md_pay_head ph ON ed.pay_head_id = ph.sl_no 
+				WHERE e.emp_status="A" AND ph.input_flag = "M" AND ph.pay_flag = "D" AND ed.amount > 0 AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' 
+				GROUP BY ed.emp_no, e.emp_code, e.emp_name, d.designation ORDER BY e.emp_name, ph.sl_no';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function other_deduction_update($data) {
+		$this->db->trans_start();
+		$emp_code = $data['code'];
+		foreach ($data['payhead_data'] as $key => $value) {
+			$where = array (
+				'emp_no' => $emp_code,
+				'pay_head_id' => $key
+			);
+			$result = $this->f_get_particulars('td_earning_deduction', NULL, $where, 0);
+			if (count($result) > 0) {
+				$input = array (
+					'amount' => $value
+				);
+				$this->Admin_Process->f_edit('td_earning_deduction', $input, $where);
+			} 
+			$result = $this->f_get_particulars('td_other_deduction', NULL, $where, 0);
+			if (count($result) > 0) {
+				$input = array (
+					'amount' => $value
+				);
+				$this->Admin_Process->f_edit('td_other_deduction', $input, $where);
+			} else {
+				$input = array (
+					'emp_no' => $emp_code,
+					'pay_head_id' => $key,
+					'amount' => $value,
+					'created' => date('Y-m-d')
+				);
+				$this->Admin_Process->f_insert('td_other_deduction', $input);
+			}
+		}
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return FALSE;
+		} else {
+			$this->db->trans_commit();
+			return TRUE;
+		}
+	}
 }

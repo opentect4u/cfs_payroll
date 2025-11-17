@@ -190,7 +190,9 @@ class Admin extends CI_Controller
 
 	public function employee()
 	{		//Employee Dashboard
-		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, basic_pay, phn_no, pan_no, UAN';
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, 
+		a.basic_pay, a.phn_no, a.pan_no, a.UAN, a.dob, a.join_dt, a.ret_dt, a.qualification, a.emp_addr, a.email, 
+		a.bank_ac_no, a.ifsc, a.bank_name';
 		$where = array(
 			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,
@@ -778,5 +780,25 @@ class Admin extends CI_Controller
 		$this->Admin_Process->increment_apply($id);
 		$this->session->set_flashdata('msg', 'Successfully updated!');
 		echo true;
+	}
+
+	public function other_deduction()
+	{	
+		$data['header'] = $this->Admin_Process->get_deduction_header();
+		$data['list'] = $this->Admin_Process->other_deduction();
+		$this->load->view('post_login/payroll_main');
+		$this->load->view("other_deduction/view", $data);
+		$this->load->view('post_login/footer');
+	}
+
+	function other_deduction_update() {
+		$data = $this->input->post();
+		if ($this->Admin_Process->other_deduction_update($data)) {
+			$this->session->set_flashdata('msg', 'Successfully updated!');
+			echo true;
+		} else {
+			$this->session->set_flashdata('msg', 'Something went wrong!');
+			echo false;
+		}
 	}
 }

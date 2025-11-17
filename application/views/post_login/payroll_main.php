@@ -183,6 +183,7 @@
                     <li class="nav-item"><a href="<?php echo site_url("payhead"); ?>">Pay Head</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("phearning"); ?>">Pay Head Earning</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("incr"); ?>">Increment</a></li>
+                    <li class="nav-item"><a href="<?php echo site_url("oded"); ?>">Other Deduction</a></li>
                   </ul>
                 </div>
               </li>

@@ -6,9 +6,6 @@
                       <div class="col-10">
                           <h3>Increment</h3>
                       </div>
-                      <div class="col-2">
-                          <a href="<?= site_url('phearningedit') ?>" class="btn btn-primary customFloat_Uts">Add</a>
-                      </div>
                   </div>
                   <div class="row">
                       <div class="col-12"><hr></div>
