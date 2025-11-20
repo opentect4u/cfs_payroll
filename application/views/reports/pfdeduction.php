@@ -87,6 +87,9 @@ $selected = (object) $selected;
                                                         $i = 0; 
                                                         foreach ($list as $row) {
                                                             $age = date_diff(date_create($row->dob), date_create('now'))->y;
+                                                            if($age > 60) {
+                                                                continue;
+                                                            }
                                                             $row->gross = round($row->gross,0);
                                                             $row->epf_wages = round($row->wages,0);
                                                             $row->eps_wages = $age > 58 ? 0 : (round($row->wages,0) > 15000 ? 15000 : round($row->wages,0));
@@ -94,7 +97,6 @@ $selected = (object) $selected;
                                                             $row->epf_contri_remitted = round(($row->epf_wages*12)/100,0);
                                                             $row->eps_contri_remitted = round(($row->eps_wages*12)/100,0);
                                                             $row->epf_eps_diff_remitted = round($row->epf_contri_remitted - $row->eps_contri_remitted,0);
-                                                            $row->ncp_days = round($row->wages/1000,0);
                                                             echo '<tr>';
                                                             echo '<td>'.++$i.'</td>';
                                                             echo '<td>'.$row->branch_name.'</td>';

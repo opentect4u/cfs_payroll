@@ -417,15 +417,9 @@ class Admin extends CI_Controller
 	public function ajaxemplist()
 	{
 		$status = $this->input->post('active_status');
-		// $select = 'a.emp_code, a.emp_name, a.designation, b.name department, c.category';
-		// $where = array(
-		// 	'a.department=b.id' => null,
-		// 	'a.emp_catg=c.id' => null,
-		// 	'a.emp_status' => $status
-		// );
-		// $table_name = 'md_employee a, md_department b, md_category c';
-
-		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, basic_pay, phn_no, pan_no, UAN';
+		$select = 'a.prefix_emp_cd,a.emp_code, a.emp_name, b.designation, c.category, d.branch_name, a.aadhar_no, 
+		a.basic_pay, a.phn_no, a.pan_no, a.UAN, a.dob, a.join_dt, a.ret_dt, a.qualification, a.emp_addr, a.email, 
+		a.bank_ac_no, a.ifsc, a.bank_name';
 		$where = array(
 			'a.designation =b.sl_no' => null,
 			'a.emp_catg=c.id' => null,

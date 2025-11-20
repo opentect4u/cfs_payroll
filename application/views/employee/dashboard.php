@@ -85,6 +85,8 @@
                     if ($employee_dtls) {
                       $i = 0 ;
                       foreach ($employee_dtls as $e_dtls) {
+                        $exit_eps = date("Y-m-d", strtotime($e_dtls->dob . " +58 years"));
+                        $exit_epf = date("Y-m-d", strtotime($e_dtls->dob . " +60 years"));
                     ?>
                         <tr>
                           <td><?php if (strlen($e_dtls->prefix_emp_cd) > 0) echo $e_dtls->prefix_emp_cd; ?><?= $e_dtls->emp_code; ?></td>
@@ -96,8 +98,8 @@
                           <td data-sort="<?= strtotime($e_dtls->dob) ?>"><?= date('d.m.Y', strtotime($e_dtls->dob)); ?></td>
                           <td data-sort="<?= strtotime($e_dtls->join_dt) ?>"><?= date('d.m.Y', strtotime($e_dtls->join_dt)); ?></td>
                           <td data-sort="<?= strtotime($e_dtls->ret_dt) ?>"><?= date('d.m.Y', strtotime($e_dtls->ret_dt)); ?></td>
-                          <td></td>
-                          <td></td>
+                          <td data-sort="<?= strtotime($exit_eps) ?>"><?= date('d.m.Y', strtotime($exit_eps)); ?></td>
+                          <td data-sort="<?= strtotime($exit_epf) ?>"><?= date('d.m.Y', strtotime($exit_epf)); ?></td>
                           <td><?= $e_dtls->pan_no; ?></td>
                           <td><?= $e_dtls->aadhar_no; ?></td>
                           <td><?= $e_dtls->phn_no; ?></td>   
@@ -121,9 +123,7 @@
                         </tr>
                     <?php
                       }
-                    } else {
-                      echo "<tr><td colspan='10' style='text-align: center;'>No data Found</td></tr>";
-                    }
+                    } 
                     ?>
                   </tbody>
                 </table>
@@ -175,9 +175,9 @@
         data: { active_status: selectedValue },
         success: function(result) {
           $('#ajaxl').html(result);
-          $('#order-listing').DataTable({
-            destroy: true // Required to reinitialize the DataTable
-          });
+          // $('#order-listing').DataTable({
+          //   destroy: true // Required to reinitialize the DataTable
+          // });
         },
         error: function(xhr, status, error) {
           $('#ajaxl').html('<p style="color:red;">Failed to load data. Please try again.</p>');
