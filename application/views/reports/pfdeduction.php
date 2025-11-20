@@ -15,7 +15,7 @@ $selected = (object) $selected;
                                         <div class="row">
                                         <div class="col-3">
                                                 <label for="exampleInputName1">Branch:</label>
-                                                <select class="form-control" name="branch_id" id="branch_id" required>
+                                                <select class="form-control" name="branch_id" id="branch_id">
                                                     <option value="">Select Branch</option>
                                                     <option value="0" <?= $selected->branch_id == 0 ? 'selected' : '' ?>>All Branch</option>
                                                     <?php 
@@ -44,7 +44,7 @@ $selected = (object) $selected;
                                             </div>
                                             <div class="col-3">
                                                 <label for="exampleInputName1">Category:</label>
-                                                <select class="form-control required" name="category_id" id="category_id" required>
+                                                <select class="form-control" name="category_id" id="category_id">
                                                     <option value="">Select Category</option>
                                                     <?php 
                                                     foreach ($category as $row) {
@@ -128,6 +128,6 @@ $selected = (object) $selected;
 </div>
 <script>
     $(document).ready(function() {
-      _datatable('PF Deduction for ' + $('#branch_id option:selected').text() + '_' + $('#month').val() + $('#year').val(), 2);
+      _datatable('PF Deduction for ' + $('#branch_id option:selected').text() + '_' + $('#month').val() + $('#year').val(), 4, 0);
     });
 </script>

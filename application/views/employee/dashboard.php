@@ -93,9 +93,9 @@
                           <td><?= $e_dtls->designation; ?></td>
                           <td><?= $e_dtls->branch_name; ?></td>
                           <td><?= $e_dtls->UAN; ?></td>
-                          <td><?= date('d.m.Y', strtotime($e_dtls->dob)); ?></td>
-                          <td><?= date('d.m.Y', strtotime($e_dtls->join_dt)); ?></td>
-                          <td><?= date('d.m.Y', strtotime($e_dtls->ret_dt)); ?></td>
+                          <td data-sort="<?= strtotime($e_dtls->dob) ?>"><?= date('d.m.Y', strtotime($e_dtls->dob)); ?></td>
+                          <td data-sort="<?= strtotime($e_dtls->join_dt) ?>"><?= date('d.m.Y', strtotime($e_dtls->join_dt)); ?></td>
+                          <td data-sort="<?= strtotime($e_dtls->ret_dt) ?>"><?= date('d.m.Y', strtotime($e_dtls->ret_dt)); ?></td>
                           <td></td>
                           <td></td>
                           <td><?= $e_dtls->pan_no; ?></td>
