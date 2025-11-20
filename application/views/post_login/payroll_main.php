@@ -231,6 +231,7 @@
                     <?php // if ($this->session->userdata['loggedin']['bank_id'] == "1") { ?>
                     <li class="nav-item"><a href="<?php echo site_url('reports/empeardedudd'); ?>">Salary Statement </a></li>
                     <?php //  } ?>
+                    <li class="nav-item"><a href="<?php echo site_url('reports/pfdeduction'); ?>">PF Deduction</a></li>
                   <?php } ?>
                 </ul>
               </div>

@@ -284,4 +284,32 @@ class Reports extends CI_Controller
             $this->load->view('post_login/footer');
         }
     }
+
+    public function pfdeduction()
+    {
+        $list = array();
+        $selected = array(
+            'branch_id' => '',
+            'year' => date('Y'),
+            'month' => date('m')-1,
+            'category_id' => ''
+        );
+        if($this->input->post()){
+            $selected = array(
+                'branch_id' => $this->input->post('branch_id'),
+                'year' => $this->input->post('year'),
+                'month' => $this->input->post('month'),
+                'category_id' => $this->input->post('category_id')
+            );
+            $list = $this->Report_Process->pfdeduction($selected);
+        }
+        $data['branch'] = $this->Report_Process->f_get_particulars('md_branch', NULL, array('bank_id'=>$this->session->userdata('loggedin')['bank_id']), 0);
+        $data['month'] = $this->Report_Process->f_get_particulars('md_month');        
+        $data['category'] = $this->Report_Process->f_get_particulars('md_category');
+        $data['selected'] = $selected;
+        $data['list'] = $list;
+        $this->load->view('post_login/payroll_main');
+        $this->load->view("reports/pfdeduction", $data);
+        $this->load->view('post_login/footer');
+    }
 }

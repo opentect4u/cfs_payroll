@@ -245,4 +245,28 @@ class Report_Process extends CI_Model
 		}
 	
 	}
+
+	function pfdeduction ($data) {
+		$branch_id = $data['branch_id'];
+		$year = $data['year'];
+		$month = $data['month'];
+		$category_id = $data['category_id'];
+		$where = '';
+		if ($branch_id != '') {
+			$where .= ' AND e.branch_id = ' . $branch_id;
+		}
+		if ($category_id != '') {
+			$where .= ' AND e.emp_catg = ' . $category_id;
+		}
+		$sql = 'SELECT e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay, sum(p.amount) as gross, 
+				(if(p.pay_head_id = 0, p.amount, 0) + if(p.pay_head_id = 457, p.amount, 0)) as wages 
+				FROM md_employee e 
+				JOIN td_pay_slip p ON e.emp_code = p.emp_code JOIN md_branch b ON e.branch_id = b.id
+				WHERE e.bank_id=p.bank_id AND p.pay_head_type="E" AND b.bank_id=e.bank_id 
+				'.$where.' AND p.sal_month = '.$month.' AND p.sal_year = '.$year.
+				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . 
+				' GROUP BY e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay ORDER BY e.emp_name';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
 }
