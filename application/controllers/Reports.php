@@ -285,7 +285,7 @@ class Reports extends CI_Controller
         }
     }
 
-    public function pfdeduction()
+    public function pf_deduction()
     {
         $list = array();
         $selected = array(
@@ -301,7 +301,7 @@ class Reports extends CI_Controller
                 'month' => $this->input->post('month'),
                 'category_id' => $this->input->post('category_id')
             );
-            $list = $this->Report_Process->pfdeduction($selected);
+            $list = $this->Report_Process->pf_deduction($selected);
         }
         $data['branch'] = $this->Report_Process->f_get_particulars('md_branch', NULL, array('bank_id'=>$this->session->userdata('loggedin')['bank_id']), 0);
         $data['month'] = $this->Report_Process->f_get_particulars('md_month');        
@@ -309,7 +309,39 @@ class Reports extends CI_Controller
         $data['selected'] = $selected;
         $data['list'] = $list;
         $this->load->view('post_login/payroll_main');
-        $this->load->view("reports/pfdeduction", $data);
+        $this->load->view("reports/pf_deduction", $data);
+        $this->load->view('post_login/footer');
+    }
+
+    public function tds_deduction()
+    {
+        $from_date = date('Y-m-d');
+        $to_date = date('Y-m-d');
+        $list = array();
+        $month = date('m')-1;
+        $year = date('Y');
+        if($month < 4){
+            $from_date = date(($year-1) . '-04-01');
+            $to_date = date('Y-m-d'); //date($year . '-03-31');
+        } else {
+            $from_date = date($year . '-04-01');
+            $to_date = date('Y-m-d'); //date(($year+1) . '-03-31');
+        }
+        $selected = array(
+            'from_date' => $from_date,
+            'to_date' => $to_date
+        );
+        if($this->input->post()){
+            $selected = array(
+                'from_date' => $this->input->post('from_date'),
+                'to_date' => $this->input->post('to_date')
+            );
+            $list = $this->Report_Process->tds_deduction($selected);
+        }
+        $data['selected'] = $selected;
+        $data['list'] = $list;
+        $this->load->view('post_login/payroll_main');
+        $this->load->view("reports/tds_deduction", $data);
         $this->load->view('post_login/footer');
     }
 }

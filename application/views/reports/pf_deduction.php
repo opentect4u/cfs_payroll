@@ -10,7 +10,7 @@ $selected = (object) $selected;
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form method="POST" id="form" action="<?php echo site_url("reports/pfdeduction"); ?>">
+                                <form method="POST" id="form" action="<?php echo site_url("reports/pf_deduction"); ?>">
                                     <div class="form-group">
                                         <div class="row">
                                         <div class="col-3">

@@ -246,7 +246,7 @@ class Report_Process extends CI_Model
 	
 	}
 
-	function pfdeduction ($data) {
+	function pf_deduction ($data) {
 		$branch_id = $data['branch_id'];
 		$year = $data['year'];
 		$month = $data['month'];
@@ -266,6 +266,27 @@ class Report_Process extends CI_Model
 				'.$where.' AND p.sal_month = '.$month.' AND p.sal_year = '.$year.
 				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . 
 				' GROUP BY e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay ORDER BY e.emp_name';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function tds_deduction ($data) {
+		$from_month = date('m', strtotime($data['from_date']));
+		$to_month = date('m', strtotime($data['to_date']));
+		$from_year = date('Y', strtotime($data['from_date']));
+		$to_year = date('Y', strtotime($data['to_date']));
+		$where = '';
+		if ($from_year == $to_year) {
+			$where .= ' AND (p.sal_month >= ' . $from_month . ' AND p.sal_month <= ' . $to_month . ' AND p.sal_year = ' . $from_year . ')';
+		} else {
+			$where .= ' AND ((p.sal_month >= ' . $from_month . ' AND p.sal_year = ' . $from_year . ') OR (p.sal_month <= ' . $to_month . ' AND p.sal_year = ' . $to_year . '))';
+		}
+		$sql = 'SELECT e.emp_code, e.emp_name, b.branch_name, d.designation, e.pan_no, p.sal_month, p.sal_year, p.amount 
+				FROM md_employee e JOIN td_pay_slip p ON e.emp_code = p.emp_code 
+				JOIN md_branch b ON e.branch_id = b.id JOIN md_designation d ON e.designation = d.sl_no
+				WHERE e.bank_id=p.bank_id AND p.pay_head_type="D" AND b.bank_id=e.bank_id 
+				AND p.pay_head_id = 475 AND p.amount > 0 '.$where.
+				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.branch_name, e.emp_name, p.sal_year, p.sal_month';
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
