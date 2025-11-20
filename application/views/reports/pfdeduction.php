@@ -5,7 +5,7 @@ $selected = (object) $selected;
     <div class="content-wrapper">
         <div class="card">
             <div class="card-body">
-                <h3>Employee Salary Statement Report</h3>
+                <h3>PF Deduction Report</h3>
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
