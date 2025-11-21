@@ -279,4 +279,10 @@ class Admin_Process extends CI_Model
 			return TRUE;
 		}
 	}
+
+	function transfer() {
+		$sql = 'SELECT * FROM md_pay_head WHERE input_flag = "M" AND pay_flag = "E" AND bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY sl_no';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
 }

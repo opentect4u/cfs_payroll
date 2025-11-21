@@ -795,4 +795,12 @@ class Admin extends CI_Controller
 			echo false;
 		}
 	}
+
+	function transfer()
+	{
+		$data['list'] = $this->Admin_Process->transfer();
+		$this->load->view('post_login/payroll_main');
+		$this->load->view("transfer/view", $data);
+		$this->load->view('post_login/footer');
+	}
 }

@@ -91,12 +91,12 @@
                                  
                                       <?php foreach($earning_dtls as $ekey) {
                                           if($ekey->pay_head_type == 'D') {
-
-                                            if($ekey->input_flag == 'A'){
-                                              $tot_deduction += round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100);
-                                            }else{
-                                              $tot_deduction += $ekey->amount;
-                                            }
+                                            $tot_deduction += $ekey->amount;
+                                            // if($ekey->input_flag == 'A'){
+                                            //   $tot_deduction += round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100);
+                                            // }else{
+                                            //   $tot_deduction += $ekey->amount;
+                                            // }
 
                                             
                                       ?>
@@ -106,11 +106,12 @@
                                         <input type="hidden" name="dpay_cd[]" id="" class="form-control" value="<?=$ekey->pay_head_id?>">
                                       </td>
                                       <td>
-                                      <?php if($ekey->input_flag == 'A') {  ?> 
+                                        <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
+                                      <!-- <?php if($ekey->input_flag == 'A') {  ?> 
                                         <input type="number" class="form-control damount" id="" name="damount[]" value="<?=round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100)?>" required>
                                         <?php }else{  ?>
                                           <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
-                                          <?php } ?>
+                                          <?php } ?> -->
                                       </td>
                                     </tr>
                                     <?php } 

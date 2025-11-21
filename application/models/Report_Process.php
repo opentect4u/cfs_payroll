@@ -285,7 +285,7 @@ class Report_Process extends CI_Model
 				FROM md_employee e JOIN td_pay_slip p ON e.emp_code = p.emp_code 
 				JOIN md_branch b ON e.branch_id = b.id JOIN md_designation d ON e.designation = d.sl_no
 				WHERE e.bank_id=p.bank_id AND p.pay_head_type="D" AND b.bank_id=e.bank_id 
-				AND p.pay_head_id = 475 AND p.amount > 0 '.$where.
+				AND p.pay_head_id = 474 AND p.amount > 0 '.$where.
 				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.branch_name, e.emp_name, p.sal_year, p.sal_month';
 		$query = $this->db->query($sql);
 		return $query->result();

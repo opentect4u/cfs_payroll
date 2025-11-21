@@ -184,6 +184,7 @@
                     <li class="nav-item"><a href="<?php echo site_url("phearning"); ?>">Pay Head Earning</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("incr"); ?>">Increment</a></li>
                     <li class="nav-item"><a href="<?php echo site_url("oded"); ?>">Other Deduction</a></li>
+                    <li class="nav-item"><a href="#">Transfer</a></li>
                   </ul>
                 </div>
               </li>
@@ -232,7 +233,7 @@
                     <li class="nav-item"><a href="<?php echo site_url('reports/empeardedudd'); ?>">Salary Statement </a></li>
                     <?php //  } ?>
                     <li class="nav-item"><a href="<?php echo site_url('reports/pf_deduction'); ?>">PF Deduction</a></li>
-                    <li class="nav-item"><a href="<?php echo site_url('reports/tds_deduction'); ?>">TDS Deduction</a></li>
+                    <li class="nav-item"><a href="<?php echo site_url('reports/tds_deduction'); ?>">Income Tax Deduction</a></li>
                   <?php } ?>
                 </ul>
               </div>
