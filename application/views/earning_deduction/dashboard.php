@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-10">
-            <h3>Employee Salary List</h3>
+            <h3>Earning Deduction</h3>
           </div>
           <div class="col-2">
             <small><a href="<?php echo base_url(); ?>index.php/salary/eardeduadd" class="btn btn-primary customFloat_Uts">Add</a></small>

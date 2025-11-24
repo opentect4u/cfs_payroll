@@ -273,15 +273,9 @@ class Salary_Process extends CI_Model
 	//For Salary slip generation
 	public function f_get_generation()
 	{
-
-		$sql = "SELECT sal_month, sal_year, 
-						   MAX(trans_date) trans_date
-					FROM   td_salary 
-					GROUP BY sal_month, 
-							 sal_year LIMIT 1";
-
+		$sql = 'SELECT sal_month, sal_year, MAX(trans_date) trans_date FROM td_salary WHERE bank_id = '.$this->session->userdata['loggedin']['bank_id'].' GROUP BY sal_month, sal_year LIMIT 1';
 		$result	=	$this->db->query($sql);
-
+		//echo $this->db->last_query(); exit;
 		return $result->row();
 	}
 

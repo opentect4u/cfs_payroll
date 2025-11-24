@@ -4,7 +4,7 @@
               <div class="card-body">
                   <div class="row">
                       <div class="col-10">
-                          <h3>Increment</h3>
+                          <h3>Other Deduction</h3>
                       </div>
                   </div>
                   <div class="row">

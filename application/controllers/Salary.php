@@ -840,8 +840,10 @@ class Salary extends CI_Controller
                 $data['monthn'] = $this->Salary_Process->f_get_particulars("md_month", NULL, array('id' => $data['month']), 1)->month_name;
             }
         } else {
-            $data['year'] = $max_year ? $max_year->sal_year : date('Y');
-            $data['month'] = $max_year ? ($max_year->sal_month) + 1 : date('m');
+            // $data['year'] = $max_year ? $max_year->sal_year : date('Y');
+            // $data['month'] = $max_year ? ($max_year->sal_month) + 1 : date('m');
+            $data['year'] = date('Y', strtotime('first day of last month'));
+            $data['month'] = date('m', strtotime('first day of last month'));
             $data['monthn'] = $this->Salary_Process->f_get_particulars("md_month", NULL, array('id' => $data['month']), 1)->month_name;
         }
 

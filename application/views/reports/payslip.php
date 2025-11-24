@@ -1,3 +1,7 @@
+<?php 
+// echo '<pre>';
+// print_r($payslip_dtls);
+?>
 <script>
     function printDiv() {
 

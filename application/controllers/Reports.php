@@ -183,22 +183,23 @@ class Reports extends CI_Controller
             $emp_select = 'a.*,b.designation';
 
             $payslip['emp_dtls']    =   $this->Report_Process->f_get_particulars("md_employee a,md_designation b", $emp_select, $emp_whr, 1);
-           
-            $where = array(
-                'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],
-                "a.trans_date = b.trans_dt" =>  NULL,
-                "a.trans_no = b.trans_no" =>  NULL,
-                "a.sal_month = b.sal_month" =>  NULL,
-                "a.sal_year = b.sal_year" =>  NULL,
-                "a.bank_id = b.bank_id" =>  NULL,
-                "a.catg_cd = b.catg_id" =>  NULL,
-                "b.pay_head_id = c.sl_no" =>  NULL,
-                "a.approval_status"        =>  'A',
-                "b.emp_code"            =>  $empno,
-                "b.sal_month"           =>  $sal_month,
-                "b.sal_year"            =>  $sal_yr,
-            );
-            $payslip['payslip_dtls']  = $this->Report_Process->f_get_particulars("td_salary a,td_pay_slip b , md_pay_head c", array('b.*','c.pay_head'), $where, 0);
+            $payslip['payslip_dtls'] = $this->Report_Process->get_payslip_dtls($empno,$sal_month,$sal_yr);
+            // $where = array(
+            //     'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],
+            //     "a.trans_date = b.trans_dt" =>  NULL,
+            //     "a.trans_no = b.trans_no" =>  NULL,
+            //     "a.sal_month = b.sal_month" =>  NULL,
+            //     "a.sal_year = b.sal_year" =>  NULL,
+            //     "a.bank_id = b.bank_id" =>  NULL,
+            //     "a.catg_cd = b.catg_id" =>  NULL,
+            //     "b.pay_head_id = c.sl_no" =>  NULL,
+            //     "a.approval_status"        =>  'A',
+            //     "b.emp_code"            =>  $empno,
+            //     "b.sal_month"           =>  $sal_month,
+            //     "b.sal_year"            =>  $sal_yr,
+            // );
+            // $payslip['payslip_dtls']  = $this->Report_Process->f_get_particulars("td_salary a,td_pay_slip b , md_pay_head c", array('b.*','c.pay_head'), $where, 0);
+            // echo $this->db->last_query(); exit;
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
             $this->load->view('post_login/footer');
@@ -212,7 +213,7 @@ class Reports extends CI_Controller
             //Employee List
             unset($select);
             $select = array("emp_code", "emp_name");
-            $payslip['emp_list']   =   $this->Report_Process->f_get_particulars("md_employee", $select, array("emp_catg IN (1,2,3)" => NULL,"bank_id"=>$this->session->userdata['loggedin']['bank_id']), 0);
+            $payslip['emp_list']   =   $this->Report_Process->f_get_particulars("md_employee", $select, array("emp_catg IN (1,2,3,5)" => NULL,"bank_id"=>$this->session->userdata['loggedin']['bank_id']), 0);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
             $this->load->view('post_login/footer');

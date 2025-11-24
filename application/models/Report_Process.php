@@ -290,4 +290,15 @@ class Report_Process extends CI_Model
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
+
+	function get_payslip_dtls($empno,$sal_month,$sal_yr) {
+		$sql = 'SELECT b.*, if(b.pay_head_id > 0, c.pay_head, "Basic") as pay_head FROM td_salary a 
+		JOIN td_pay_slip b ON a.trans_date = b.trans_dt AND a.trans_no = b.trans_no 
+		LEFT JOIN md_pay_head c ON b.pay_head_id = c.sl_no 
+		WHERE a.sal_month=b.sal_month AND a.sal_year=b.sal_year AND a.bank_id=b.bank_id AND a.catg_cd=b.catg_id 
+		AND b.emp_code ='.$empno.' AND a.approval_status="A" 
+		AND b.sal_month ='.$sal_month.' AND b.sal_year ='.$sal_yr.' AND a.bank_id ='.$this->session->userdata['loggedin']['bank_id'];
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
 }
