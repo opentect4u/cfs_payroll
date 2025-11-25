@@ -558,8 +558,12 @@ class Admin extends CI_Controller
 				redirect('payhead');
 			}else{
 				$results = $this->db->get_where('md_pay_head', array('pay_head =' => $this->input->post('pay_head'),'bank_id' => $this->session->userdata['loggedin']['bank_id']))->result();
+                $max_sl = $this->Admin_Process->f_get_particulars('md_pay_head','ifNULL(max(sl_no),0)+1 as max_sl',NULL,1);
+			
 				if (count($results) == 0) {
+
 					$data_array = array(
+						            'sl_no'         =>  $max_sl->max_sl,
 									'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
 									"input_flag"    =>  $this->input->post('input_flag'),
 									"pay_flag"      =>  $this->input->post('pay_flag'),
@@ -597,7 +601,7 @@ class Admin extends CI_Controller
 				$this->session->set_flashdata('error', validation_errors());
 				redirect('payhead');
 			}else{
-			  $data_array = array(
+			     $data_array = array(
 				"input_flag"    =>  $this->input->post('input_flag'),
 				"pay_flag"      =>  $this->input->post('pay_flag'),
 				"pay_head"      =>  $this->input->post('pay_head'),
@@ -605,15 +609,15 @@ class Admin extends CI_Controller
 				"percentage"    =>  $this->input->post('percentage'),
 				"modified_by"  => $this->session->userdata['loggedin']['user_id'],
 				"modified_at"  =>  date('Y-m-d h:i:s') );
-
-			   $where  =   array("sl_no" =>  $this->input->post('id'));
+                
+			   $where  =   array("sl_no" =>  $this->input->post('id'),'bank_id' => $this->session->userdata['loggedin']['bank_id'] );
 			   $this->session->set_flashdata('msg', 'Successfully updated!');
 			   $this->Admin_Process->f_edit('md_pay_head', $data_array, $where);
 			   $this->payhead();
 		    }
 		}else {
 
-			$where = array("sl_no"       =>  $this->input->get('id'));
+			$where = array("sl_no" => $this->input->get('id'), 'bank_id' => $this->session->userdata['loggedin']['bank_id']);
 			$data['payhead_dtls']  =  $this->Admin_Process->f_get_particulars("md_pay_head", NULL, $where, 1);
 			$data['accocde_required'] = $this->session->userdata['loggedin']['integrated_salary']==1 ? 'required' : '';
 			

@@ -24,10 +24,10 @@
                                     </select>
                                     </div>
                                     <div class="col-4">
-                                    <label for="exampleInputName1">Pay Flag:</label>
+                                    <label for="exampleInputName1">Pay Flag: </label>
                                     <select name="pay_flag"  class="form-control" required>
-                                      <option value="E" <?php  if($payhead_dtls->input_flag=='E') { echo 'selected'; }?> >Earning</option>
-                                      <option value="D" <?php  if($payhead_dtls->input_flag=='D') { echo 'selected'; }?> >Deduction</option>
+                                      <option value="E" <?php  if($payhead_dtls->pay_flag=='E') { echo 'selected'; }?> >Earning</option>
+                                      <option value="D" <?php  if($payhead_dtls->pay_flag=='D') { echo 'selected'; }?> >Deduction</option>
                                     </select>
                                     </div>
                                 </div>
