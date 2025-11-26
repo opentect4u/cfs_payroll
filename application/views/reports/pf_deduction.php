@@ -95,20 +95,20 @@ $selected = (object) $selected;
                                                             $row->eps_wages = $age > 58 ? 0 : (round($row->wages,0) > 15000 ? 15000 : round($row->wages,0));
                                                             $row->edli_wages = round($row->wages,0) > 15000 ? 15000 : round($row->wages,0);
                                                             $row->epf_contri_remitted = round(($row->epf_wages*12)/100,0);
-                                                            $row->eps_contri_remitted = round(($row->eps_wages*12)/100,0);
+                                                            $row->eps_contri_remitted = round(($row->eps_wages*8.33)/100,0);
                                                             $row->epf_eps_diff_remitted = round($row->epf_contri_remitted - $row->eps_contri_remitted,0);
                                                             echo '<tr>';
                                                             echo '<td>'.++$i.'</td>';
                                                             echo '<td>'.$row->branch_name.'</td>';
                                                             echo '<td>'.$row->uan.'</td>';
                                                             echo '<td>'.$row->emp_name.'</td>';
-                                                            echo '<td>'.$row->gross.'</td>';
-                                                            echo '<td>'.$row->epf_wages.'</td>';
-                                                            echo '<td>'.$row->eps_wages.'</td>';
-                                                            echo '<td>'.$row->edli_wages.'</td>';
-                                                            echo '<td>'.$row->epf_contri_remitted.'</td>';
-                                                            echo '<td>'.$row->eps_contri_remitted.'</td>';
-                                                            echo '<td>'.$row->epf_eps_diff_remitted.'</td>';
+                                                            echo '<td align="right">'.$row->gross.'</td>';
+                                                            echo '<td align="right">'.$row->epf_wages.'</td>';
+                                                            echo '<td align="right">'.$row->eps_wages.'</td>';
+                                                            echo '<td align="right">'.$row->edli_wages.'</td>';
+                                                            echo '<td align="right">'.$row->epf_contri_remitted.'</td>';
+                                                            echo '<td align="right">'.$row->eps_contri_remitted.'</td>';
+                                                            echo '<td align="right">'.$row->epf_eps_diff_remitted.'</td>';
                                                             echo '<td>0</td>';
                                                             echo '<td>0</td>';
                                                             echo '</tr>';
@@ -116,6 +116,23 @@ $selected = (object) $selected;
                                                     }
                                                 ?>
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'gross')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'epf_wages')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'eps_wages')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'edli_wages')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'epf_contri_remitted')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'eps_contri_remitted')) ?></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'epf_eps_diff_remitted')) ?></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -130,6 +147,6 @@ $selected = (object) $selected;
 </div>
 <script>
     $(document).ready(function() {
-      _datatable('PF Deduction for ' + $('#branch_id option:selected').text() + '_' + $('#month').val() + $('#year').val(), 4, 0);
+      _datatable('PF Deduction for ' + $('#branch_id option:selected').text() + '_' + $('#month').val() + $('#year').val(), 4, 0, 'tbl', 'landscape');
     });
 </script>

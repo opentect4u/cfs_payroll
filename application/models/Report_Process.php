@@ -252,21 +252,25 @@ class Report_Process extends CI_Model
 		$month = $data['month'];
 		$category_id = $data['category_id'];
 		$where = '';
-		if ($branch_id != '') {
+		if ($branch_id > 0) {
 			$where .= ' AND e.branch_id = ' . $branch_id;
 		}
 		if ($category_id != '') {
 			$where .= ' AND e.emp_catg = ' . $category_id;
 		}
 		$sql = 'SELECT e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay, sum(p.amount) as gross, 
-				(if(p.pay_head_id = 0, p.amount, 0) + if(p.pay_head_id = 457, p.amount, 0)) as wages 
+				(p1.amount+p2.amount+ifnull(p3.amount,0)) as wages 
 				FROM md_employee e 
-				JOIN td_pay_slip p ON e.emp_code = p.emp_code JOIN md_branch b ON e.branch_id = b.id
+				JOIN td_pay_slip p ON e.emp_code = p.emp_code JOIN md_branch b ON e.branch_id = b.id 
+				LEFT JOIN td_pay_slip p1 ON p1.emp_code=p.emp_code AND p1.pay_head_id=0 AND p1.sal_month=p.sal_month AND p1.sal_year=p.sal_year 
+				LEFT JOIN td_pay_slip p2 ON p2.emp_code=p.emp_code AND p2.pay_head_id=457 AND p2.sal_month=p.sal_month AND p2.sal_year=p.sal_year 
+				LEFT JOIN td_pay_slip p3 ON p3.emp_code=p.emp_code AND p3.pay_head_id=459 AND p3.sal_month=p.sal_month AND p3.sal_year=p.sal_year
 				WHERE e.bank_id=p.bank_id AND p.pay_head_type="E" AND b.bank_id=e.bank_id 
 				'.$where.' AND p.sal_month = '.$month.' AND p.sal_year = '.$year.
 				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . 
 				' GROUP BY e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay ORDER BY e.emp_name';
 		$query = $this->db->query($sql);
+		//echo $this->db->last_query(); exit;
 		return $query->result();
 	}
 
@@ -298,6 +302,30 @@ class Report_Process extends CI_Model
 		WHERE a.sal_month=b.sal_month AND a.sal_year=b.sal_year AND a.bank_id=b.bank_id AND a.catg_cd=b.catg_id 
 		AND b.emp_code ='.$empno.' AND a.approval_status="A" 
 		AND b.sal_month ='.$sal_month.' AND b.sal_year ='.$sal_yr.' AND a.bank_id ='.$this->session->userdata['loggedin']['bank_id'];
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function get_payhead($bank_id, $branch_id, $catg_id, $month, $year) {
+		$where = $catg_id > 0 ? ' AND ps.catg_id='.$catg_id : '';
+		$where .= $branch_id > 0 ? ' AND e.branch_id='.$branch_id : '';
+		$sql = 'SELECT DISTINCT ps.pay_head_id, ph.pay_head, ps.pay_head_type 
+		FROM td_pay_slip ps JOIN md_pay_head ph ON ps.pay_head_id = ph.sl_no JOIN md_employee e ON ps.emp_code=e.emp_code
+		WHERE ps.bank_id='.$bank_id.' AND ps.sal_month='.$month.' AND ps.sal_year='.$year.$where.' ORDER BY ph.sl_no';
+		$query = $this->db->query($sql);
+		return $query->result();
+	}
+
+	function get_salary_statement($bank_id, $branch_id, $catg_id, $month, $year) {
+		$where = $catg_id > 0 ? ' AND ps.catg_id='.$catg_id : '';
+		$where .= $branch_id > 0 ? ' AND e.branch_id='.$branch_id : '';
+		$sql = 'SELECT DISTINCT e.emp_code, e.emp_name, b.branch_name, d.designation, 
+		GROUP_CONCAT(ps.pay_head_id ORDER BY ps.pay_head_id) as payhead, 
+		GROUP_CONCAT(ps.amount ORDER BY ps.pay_head_id) as amount 
+		FROM td_pay_slip ps JOIN md_employee e ON ps.emp_code=e.emp_code JOIN md_branch b ON e.branch_id=b.id 
+		JOIN md_designation d ON e.designation=d.sl_no 
+		WHERE ps.bank_id='.$bank_id.' AND ps.sal_month='.$month.' AND ps.sal_year='.$year.$where.' 
+		GROUP BY e.emp_code, e.emp_name, b.branch_name, d.designation ORDER BY b.branch_name, e.emp_name';
 		$query = $this->db->query($sql);
 		return $query->result();
 	}

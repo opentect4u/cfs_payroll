@@ -54,14 +54,26 @@ $selected = (object) $selected;
                                                             echo '<td>'.$row->emp_name.'</td>';
                                                             echo '<td>'.$row->designation.'</td>';
                                                             echo '<td>'.$row->pan_no.'</td>';
-                                                            echo '<td>'.$row->month.'</td>';
-                                                            echo '<td>'.$row->year.'</td>';
-                                                            echo '<td>'.$row->amount.'</td>';
+                                                            echo '<td>'.$row->sal_month.'</td>';
+                                                            echo '<td>'.$row->sal_year.'</td>';
+                                                            echo '<td align="right">'.floatval($row->amount).'</td>';
                                                             echo '</tr>';
                                                         }
                                                     }
                                                 ?>
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th style="text-align:right"><?= array_sum(array_column($list, 'amount')) ?></th>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -76,6 +88,6 @@ $selected = (object) $selected;
 </div>
 <script>
     $(document).ready(function() {
-      _datatable('TDS Deduction from ' + $('#from_date').val() + ' to ' + $('#to_date').val(), 4, 1);
+      _datatable('TDS Deduction from ' + $('#from_date').val() + ' to ' + $('#to_date').val(), 4, 1, 'tbl', 'landscape');
     });
 </script>

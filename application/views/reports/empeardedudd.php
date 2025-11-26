@@ -1,60 +1,3 @@
-<script>
-    function printDiv() {
-        var divToPrint = document.getElementById('divToPrint');
-        var WindowObject = window.open('', 'Print-Window');
-        WindowObject.document.open();
-        WindowObject.document.writeln('<!DOCTYPE html>');
-        WindowObject.document.writeln('<html><head><title></title><style type="text/css">');
-        WindowObject.document.writeln('@media print { .center { text-align: center;}' +
-            '                                         .row { display: flex;flex-wrap: wrap; }' +
-            '                                         .btmborder { border-bottom: 2px solid black; }' +
-            '                                         .inline { display: inline; }' +
-            '                                         .underline { text-decoration: underline; }' +
-            '                                         .left { margin-left: 315px;} ' +
-            '                                         .right { margin-right: 375px; display: inline; }' +
-            '                                          table { border-collapse: collapse; }' +
-            '                                          th { text-align: center; vertical-align: middle; }' +
-            '                                          th, td { border: 1px solid black; border-collapse: collapse; padding: 10px;}' +
-            '                                           th, td { }' +
-            '                                         .border { border: 1px solid black; } ' +
-            '                                         .bottom { bottom: 5px; width: 100%; position: fixed ' +
-            '                                       ' +
-            '                                   } } </style>');
-        WindowObject.document.writeln('</head><body onload="window.print()">');
-        WindowObject.document.writeln(divToPrint.innerHTML);
-        WindowObject.document.writeln('</body></html>');
-        WindowObject.document.close();
-        setTimeout(function() {
-            WindowObject.close();
-        }, 10);
-    }
-</script>
-<!-- <style>
-@media print {
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .col-3, .col-8 {
-        flex: 1;
-    }
-    .col-3 {
-        max-width: 25%; /* Since col-3 represents 25% width */
-    }
-    .col-8 {
-        max-width: 75%; /* Since col-8 represents 75% width */
-    }
-    img {
-        max-width: 100%; /* Ensure images fit within their columns */
-        height: auto; /* Maintain aspect ratio */
-    }
-    /* Additional print styles */
-    .no-print {
-        display: none;
-    }
-}
-</style> -->
-
 <style>
     th {
         text-align: center;
@@ -70,11 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <div class="card">
                 <div class="card-body" id='divToPrint'>
                     <div class="row">
-                        <div class="col-3"><a href="javascript:void()"><img src="<?= base_url() ?>assets/images/<?php 
-if (isset($this->session->userdata['loggedin']['logo_path'])) {
-    echo $this->session->userdata['loggedin']['logo_path']; 
-}
-?>" alt="logo" height="100" width="100" /></a></div>
+                        <div class="col-3"><a href="javascript:void()">
+                            <img src="<?= base_url() ?>assets/images/<?php 
+                            if (isset($this->session->userdata['loggedin']['logo_path'])) {
+                                echo $this->session->userdata['loggedin']['logo_path']; 
+                            }
+                            ?>" 
+                        alt="logo" height="100" width="100" /></a></div>
                         <div class="col-9" class="center">
                             <div class="center">
                                  <?php include_once('common_report_header.php'); ?>
@@ -84,67 +29,111 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-3"><b>Branch Name:</b><?=$barnch_name?></div>
-                       
-                    </div>
-                    <br>
-                    <div class="row">
                         <div class="col-12">
-                            <div class="table-responsive">
-                                <?php if($bank_id == 1){
-                                    $this->load->view('reports/rardb_pay_report', array('emp_list' => $emp_list));
-                                }else{
-                                    $this->load->view('reports/cbardb_pay_report', array('emp_list' => $emp_list));
-                                } ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive">
-                            <!-- <table class="table" style="width:100%">
+                            <div class="table-responsive" id='ajaxl'>
+                                <table id="tbl" class="table stripe row-border order-column" style="width:100%">
+                                    <thead>
                                         <tr>
-                                            <th></td>
-                                            <th></th>
-                                            <th></th>
-                                            <th>HBL <br> Loan</th>
-                                            <th>Innt.On<br> HBL.Loan</th>
-                                            <th>Emergency <br>Loan</th>
-                                            <th>Innt.On<br> E.Loan</th>
-                                            <th>P.loan</th>
-                                            <th>Innt.On<br> P.Loan</th>
-                                            <th>Net Salary</th>
-                                            <th colspan="3">Signature of Payee</th>
+                                        <th class="not-export">Branch</th>
+                                        <th>Code</th>
+                                        <th>Employee</th>
+                                        <th class="not-export">Designation</th>
+                                        <th>Basic</th>
+                                        <?php 
+                                        foreach($payhead as $row) {
+                                            if($row->pay_head_type == 'E') echo '<th>'.$row->pay_head.'</th>';
+                                        }
+                                        echo '<th>Gross Pay</th>';
+                                        foreach($payhead as $row) {
+                                            if($row->pay_head_type == 'D') echo '<th>'.$row->pay_head.'</th>';
+                                        }
+                                        echo '<th>Net Pay</th>';
+                                        ?>
                                         </tr>
-                                    </table> -->
-                                <div>
-                                    <!-- <p>Amount: <?php //echo @$tot_net . ' (' . getIndianCurrency(@$tot_net > 0 ? $tot_net : 0.00) . ').'; ?></p> -->
-                                </div>
-
-                            </div>
-                            <div class=""  style="margin-top:50px">
-                                    <p style="display: inline;">Prepared By</p>
-                                    <p style="display: inline; margin-left: 8%;"></p>
-                                    <p style="display: inline; margin-left: 8%;"></p>
-                                    <p style="display: inline; margin-left: 8%;">Chief Executive officer</p>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        foreach($list as $row) {
+                                            $key = explode(',', $row->payhead);
+                                            $val = explode(',', $row->amount);
+                                            $row->basic = $val[0];
+                                            echo '<tr>';
+                                            echo '<td>'.$row->branch_name.'</td>';
+                                            echo '<td>'.$row->emp_code.'</td>';
+                                            echo '<td>'.$row->emp_name.'</td>';
+                                            echo '<td>'.$row->designation.'</td>';
+                                            echo '<td>'.floatval($val[0]).'</td>';
+                                            $gross = $val[0];
+                                            foreach($payhead as $ph) {
+                                                if($ph->pay_head_type == 'E') {
+                                                    $position = array_search($ph->pay_head_id, $key);
+                                                    $payhead_name = $ph->pay_head;
+                                                    $amount = 0;
+                                                    if($position > 0) {
+                                                        $amount = $val[$position];
+                                                    }
+                                                    echo '<td>'.floatval($amount).'</td>';
+                                                    $gross += $amount;
+                                                    $row->$payhead_name = $amount;
+                                                }
+                                            }
+                                            echo '<td>'.floatval($gross).'</td>';
+                                            $row->gross = $gross;
+                                            $deduction = 0;
+                                            foreach($payhead as $ph) {
+                                                if($ph->pay_head_type == 'D') {
+                                                    $position = array_search($ph->pay_head_id, $key);
+                                                    $payhead_name = $ph->pay_head;
+                                                    $amount = 0;
+                                                    if($position > 0) {
+                                                        $amount = $val[$position];
+                                                    }
+                                                    echo '<td>'.floatval($amount).'</td>';
+                                                    $deduction += $amount;
+                                                    $row->$payhead_name = $amount;
+                                                }
+                                            }
+                                            $row->net = $gross - $deduction;
+                                            echo '<td>'.floatval($row->net).'</td>';
+                                            echo '</tr>';
+                                        }
+                                        ?>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="not-export"></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th class="not-export"></th>
+                                            <th><?= array_sum(array_column($list, 'basic')) ?></th>
+                                            <?php 
+                                            foreach($payhead as $ph) {
+                                                if($ph->pay_head_type == 'E') {
+                                                    $payhead_name = $ph->pay_head;
+                                                    echo '<th>'.array_sum(array_column($list, $payhead_name)).'</th>';
+                                                }
+                                            }
+                                            echo '<th>'.array_sum(array_column($list, 'gross')).'</th>';
+                                            foreach($payhead as $ph) {
+                                                if($ph->pay_head_type == 'D') {
+                                                    $payhead_name = $ph->pay_head;
+                                                    echo '<th>'.array_sum(array_column($list, $payhead_name)).'</th>';
+                                                }
+                                            }
+                                            echo '<th>'.array_sum(array_column($list, 'net')).'</th>';
+                                            ?>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                        <div class="col-12">
-                        <input type='button' id='btn' value='Print' onclick='printDiv();'>
-                        </div>
-                    </div>
-                
             </div>
         </div>
-
-
-
-    <?php
+    </div>
+<?php
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
     ?>
         <div class="main-panel">
             <div class="content-wrapper">
@@ -218,24 +207,24 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
 
                 </div>
             </div>
-        <?php
-
+        </div>
+<?php
     } else {
-
         echo "<h1 style='text-align: center;'>No Data Found</h1>";
     }
-
-        ?>
-
-        <script>
-            function checkVal() {
-                var month = $('#sal_month').val();
-                var catg_id = $('#category').val();
-                if (month > 0 && catg_id > 0) {
-                    return true;
-                } else {
-                    alert('Please fill all fields')
-                    return false;
-                }
-            }
-        </script>
+?>
+<script>
+    $(document).ready(function() {
+      _datatable('Salary Statement for the month of <?php echo MONTHS[$this->input->post('sal_month')] . ' ' . $this->input->post('year'); ?>',3, 1, 'tbl', 'landscape', 1);
+    });
+    function checkVal() {
+        var month = $('#sal_month').val();
+        var catg_id = $('#category').val();
+        if (month > 0 && catg_id > 0) {
+            return true;
+        } else {
+            alert('Please fill all fields')
+            return false;
+        }
+    }
+</script>

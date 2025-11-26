@@ -251,29 +251,33 @@ class Reports extends CI_Controller
     public function empeardedudd()
     {
        
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-          
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {          
             $month = $this->input->post('sal_month');
             $year = $this->input->post('year');
             $catg_id = $this->input->post('category');
             $branch_id = $this->input->post('branch_id');
             $bank_id = $this->session->userdata('loggedin')['bank_id'];
-            $statement['branchname'] = '';
-            $statement['emp_list']   = $this->Report_Process->get_emp_list($branch_id,$catg_id,$month,$year,$bank_id);
-            $statement['sal_month'] = $this->input->post('sal_month');
-            $statement['year'] = $this->input->post('year');
-            $statement['bank_id'] = $this->session->userdata('loggedin')['bank_id'];
-            if($branch_id > 0 ){
-                $statem =   $this->Report_Process->f_get_particulars("md_branch", NULL, array('id'=>$branch_id), 1);
-                $statement['barnch_name'] = $statem->branch_name;
-            }else{
-                $statement['barnch_name'] = 'ALL';
-            }
-
-          //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+            $data['payhead'] = $this->Report_Process->get_payhead($bank_id, $branch_id, $catg_id, $month, $year);
+            $data['list'] = $this->Report_Process->get_salary_statement($bank_id, $branch_id, $catg_id, $month, $year);
             $this->load->view('post_login/payroll_main');
-            $this->load->view("reports/empeardedudd", $statement);
+            $this->load->view("reports/empeardedudd", $data);
             $this->load->view('post_login/footer');
+
+        //     $statement['branchname'] = '';
+        //     $statement['emp_list']   = $this->Report_Process->get_emp_list($branch_id,$catg_id,$month,$year,$bank_id);
+        //     $statement['sal_month'] = $this->input->post('sal_month');
+        //     $statement['year'] = $this->input->post('year');
+        //     $statement['bank_id'] = $this->session->userdata('loggedin')['bank_id'];
+        //     if($branch_id > 0 ){
+        //         $statem =   $this->Report_Process->f_get_particulars("md_branch", NULL, array('id'=>$branch_id), 1);
+        //         $statement['barnch_name'] = $statem->branch_name;
+        //     }else{
+        //         $statement['barnch_name'] = 'ALL';
+        //     }
+        //   //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+        //     $this->load->view('post_login/payroll_main');
+        //     $this->load->view("reports/empeardedudd", $statement);
+        //     $this->load->view('post_login/footer');
         } else {
             //Month List
             $statement['month_list'] =   $this->Report_Process->f_get_particulars("md_month", NULL, NULL, 0);

@@ -151,9 +151,10 @@ class Admin_Process extends CI_Model
 			}
 		}
 		if($id > 0) {
-			$sql = 'SELECT ph.sl_no, ph.percentage, ed.amount FROM td_earning_deduction ed JOIN md_pay_head ph ON ed.pay_head_id = ph.sl_no WHERE emp_no = ' . $data['code'] . ' AND ph.input_flag = "A"';
+			$sql = 'SELECT ph.sl_no, ph.percentage, ed.amount FROM td_earning_deduction ed JOIN md_pay_head ph ON ed.pay_head_id = ph.sl_no WHERE emp_no = ' . $data['code'] . ' AND ph.input_flag = "A" ORDER BY ph.sl_no';
 			$result = $this->db->query($sql);
 			if($result->num_rows() > 0) {
+				$da = 0;
 				foreach ($result->result() as $row) {
 					$where = array (
 						'increment_id' => $id,
@@ -161,6 +162,12 @@ class Admin_Process extends CI_Model
 					);
 					$result = $this->f_get_particulars('md_increment_dt', NULL, $where, 0);
 					$amount = round(($basic * $row->percentage) / 100, 0);
+					if($row->sl_no == 457) {
+						$da = $amount;
+					}
+					if($row->sl_no == 463) {
+						$amount = round((($basic + $da) * $row->percentage) / 100, 0);
+					}
 					if (count($result) > 0) {
 						$input = array (
 							'percentage' => $row->percentage,

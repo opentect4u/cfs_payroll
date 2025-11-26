@@ -900,6 +900,9 @@ class Salary extends CI_Controller
                     $emp_list = $this->Salary_Process->get_emp_dtls($category);
                   
                     foreach ($emp_list as $emp) {
+                        // if($emp->emp_code != 1108){ 
+                        //     continue;
+                        // }
                         $table_name = 'td_earning_deduction a';
                         $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount';
                         $er_where = array(
@@ -930,7 +933,7 @@ class Salary extends CI_Controller
                             );
                             $this->Salary_Process->f_insert("td_pay_slip", $input_basic);
                         }
-                       
+                       $da = 0;
                        foreach($erning_dts as $erning_dt){
                             $input = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
@@ -948,9 +951,30 @@ class Salary extends CI_Controller
                                 'created_ip' =>$_SERVER["REMOTE_ADDR"]
                             );
                             $this->Salary_Process->f_insert("td_pay_slip", $input);
+                            if($erning_dt->pay_head_id == 457){
+                                $da = $erning_dt->amount;
+                            }
                        }
                         
-				
+                       //checked arrear da amount
+                        $where = array(
+                            'emp_code' => $emp->emp_code,
+                            'bank_id' => $this->session->userdata['loggedin']['bank_id'],
+                            'sal_month' => $sal_month,
+                            'sal_year' => $year,
+                            'pay_head_id' => 459
+                        );
+                        $query = $this->db->get_where('td_pay_slip', $where);
+                        if ($query->num_rows() > 0) {
+                            $result = $query->row();
+                            $arrear_da = $result->amount;
+                            $total = $basic_pay + $da + $arrear_da;
+                            $pf = round($total * 0.12);
+                            $input = array(
+                                'amount' => $pf
+                            );
+                            $this->db->where(array('emp_code' => $emp->emp_code, 'bank_id' => $this->session->userdata['loggedin']['bank_id'], 'sal_month' => $sal_month, 'sal_year' => $year, 'pay_head_id' => 463))->update('td_pay_slip', $input);
+                        }
                     }
                 }
 
@@ -1744,7 +1768,7 @@ class Salary extends CI_Controller
                 $payhead_id = $this->input->post('payhead_id');
                 $payment_date = $this->input->post('payment_date');
                 $year = date('Y', strtotime($payment_date));
-                $month = date('n', strtotime($payment_date));
+                $month = date('m', strtotime($payment_date));
                 $percentage = $this->input->post('percentage');
                 $from_date = $this->input->post('from_date');
                 $to_date = $this->input->post('to_date');
@@ -1769,7 +1793,9 @@ class Salary extends CI_Controller
 
                 foreach ($data['emp_list'] as $emp) {
                     $emp_code = $emp->emp_code;
-
+                    // if($emp_code != 1108){
+                    //     continue;
+                    // }
                     // 1️⃣ Fetch basic sum between from and to date
                     $this->db->select_sum('amount', 'total_basic');
                     $this->db->where('bank_id', $bank_id);
@@ -1779,7 +1805,9 @@ class Salary extends CI_Controller
                                     DATE_FORMAT('$from_date', '%Y%m') AND 
                                     DATE_FORMAT('$to_date', '%Y%m')", NULL, FALSE);
                     $basic = $this->db->get('td_pay_slip')->row()->total_basic;
-
+                    // echo $this->db->last_query();
+                    // echo '<br>';
+                    // echo 'basic: ' . $basic; exit;
                     // 2️⃣ Calculate arrear DA
                     $arrear_amount = round(($basic * $percentage) / 100);
 
