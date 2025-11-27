@@ -99,36 +99,37 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                             <td><?php if (strlen($emp_dtls->prefix_emp_cd) > 0) echo $emp_dtls->prefix_emp_cd; ?><?php echo $emp_dtls->emp_code; ?></td>
                                         </tr>
                                         <tr>
+                                            <td style="width:15%;">Date of Birth</td>
+                                            <td class="left_algn" style="width:2%;">:</td>
+                                            <td class="left_algn" style="width:33%;"><?= (($emp_dtls->dob != "0000-00-00") && ($emp_dtls->dob != NULL)) ? date('d.m.Y', strtotime($emp_dtls->dob)) : ''; ?></td>
                                             <td style="width:15%;">Date of Joining</td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td class="left_algn" style="width:33%;"><?php if (($emp_dtls->join_dt != "0000-00-00") && ($emp_dtls->join_dt != NULL)) {
-                                                                        echo date('d-m-Y', strtotime($emp_dtls->join_dt));
-                                                                    } ?></td>
+                                            <td class="left_algn" style="width:33%;"><?= (($emp_dtls->join_dt != "0000-00-00") && ($emp_dtls->join_dt != NULL)) ? date('d.m.Y', strtotime($emp_dtls->join_dt)) : ''; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:15%;">Posting</td>
+                                            <td class="left_algn" style="width:2%;">:</td>
+                                            <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->branch_name; ?></td>
                                             <td style="width:15%;">Salary A/C No. </td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td><?php echo $emp_dtls->bank_ac_no; ?></td>
                                         </tr>
                                         <tr>
-                                            <td style="width:15%;">Phone Number</td>
-                                            <td class="left_algn" style="width:2%;">:</td>
-                                            <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->phn_no; ?></td>
-                                            <td style="width:15%;">PAN</td>
-                                            <td class="left_algn" style="width:2%;">:</td>
-                                            <td><?php echo $emp_dtls->pan_no; ?></td>
-                                        </tr>
-                                        <tr>
                                             <td style="width:15%;">Designation</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->designation; ?></td>
+                                            <td style="width:15%;">Phone Number</td>
+                                            <td class="left_algn" style="width:2%;">:</td>
+                                            <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->phn_no; ?></td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td style="width:15%;">PAN</td>
+                                            <td class="left_algn" style="width:2%;">:</td>
+                                            <td><?php echo $emp_dtls->pan_no; ?></td>
                                             <td style="width:15%;">UAN</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td><?php echo $emp_dtls->UAN; ?></td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td style="width:15%;" >Address</td>
-                                            <td class="left_algn">:</td>
-                                            <td class="left_algn" colspan="4"><?php echo $emp_dtls->emp_addr; ?></td>
-                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>   
@@ -140,41 +141,48 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                 <tr>
                                     <td style="width:50%;">
                                         <table  style="width:100%;">
-                                       
+                                            <tbody>
+                                                <tr style="font-weight:bold">
+                                                    <td>Earning</td>
+                                                    <td align="right">Amount</td>
+                                                </tr>
+                                                </tbody>
+                                        </table>
+                                    </td>
+                                    <td style="width:50%;">
+                                        <table  style="width:100%;">
+                                            <tbody>
+                                                <tr style="font-weight:bold">
+                                                    <td>Deduction</td>
+                                                    <td align="right">Amount</td>
+                                                </tr>
+                                                </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:50%;">
+                                        <table  style="width:100%;">                                       
                                         <tbody>
-                                        <tr style="font-weight:bold">
-                                                <td>Earning</td>
-                                                <td class="right_algn">Amount</td>
-                                            </tr>
-                                        <?php      $tot_earning = 0 ; $tot_deduction = 0;
+                                        <?php      
+                                        $tot_earning = 0 ; $tot_deduction = 0;
                                          foreach($payslip_dtls as $ekey) {
                                            if($ekey->pay_head_type == 'E') {
                                              $tot_earning += $ekey->amount;
                                          ?>
                                           <tr>
-                                                <td class="left_algn"><?= $ekey->pay_head; ?></td>
-                                                <td class="right_algn"><?= $ekey->amount; ?></td>
-                                               
-                                            </tr>
+                                            <td class="left_algn"><?= $ekey->pay_head; ?></td>
+                                            <td class="right_algn"><?= $ekey->amount; ?></td>
+                                          </tr>
                                             <?php } 
                                             } ?>
-                                             <tr style="font-weight:bold">
-                                                <td class="left_algn">Total</td>
-                                                <td class="right_algn"><?=$tot_earning; ?></td>
-                                              </tr>
                                         </tbody>
                                         </table>  
                                     </td>
                                     <td style="width:50%;">
                                         <table style="width:100%;">
-                                       
                                         <tbody>
-                                            <tr style="font-weight:bold">
-                                                <td>Deduction</td>
-                                                <td class="right_algn">Amount</td>
-                                            </tr>
                                             <?php      
-                                    
                                             foreach($payslip_dtls as $ekey) {
                                                 if($ekey->pay_head_type == 'D') {
                                                 $tot_deduction += $ekey->amount;
@@ -186,13 +194,31 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                             </tr>
                                             <?php } 
                                             } ?>
-                                            <tr style="font-weight:bold">
-                                                <td class="left_algn">Total</td>
-                                                <td class="right_algn"><?= $tot_deduction; ?></td>
-                                            </tr>
                                         </tbody>
                                         </table>
                                     </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:50%;">
+                                            <table  style="width:100%;">
+                                                <tbody>
+                                                    <tr style="font-weight:bold">
+                                                        <td>Total</td>
+                                                        <td align="right"><?= sprintf("%.2f", $tot_earning); ?></td>
+                                                    </tr>
+                                                    </tbody>
+                                            </table>
+                                        </td>
+                                        <td style="width:50%;">
+                                            <table  style="width:100%;">
+                                                <tbody>
+                                                    <tr style="font-weight:bold">
+                                                        <td>Total</td>
+                                                        <td align="right"><?= sprintf("%.2f", $tot_deduction); ?></td>
+                                                    </tr>
+                                                    </tbody>
+                                            </table>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -201,17 +227,13 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                         <div class="row" style="margin-bottom:20px">
                             <div class="col-12">
                                 <br>
-                                    <p style="display: inline;">Net Salary :<b><?php echo $tot_earning-$tot_deduction; ?></b></p>
-                                    <br>
-                                    <p style="display: inline;">Net Salary (<small>in words</small>):
-                                                <b><?php echo getIndianCurrency($tot_earning-$tot_deduction); ?></b>
-                                    </p>
+                                    <b><p style="display: inline;">Net Salary: <?php echo sprintf("%.2f", $tot_earning-$tot_deduction) . ' (<i>' . getIndianCurrency($tot_earning-$tot_deduction) . '</i>)'; ?></p></b>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom:10px">
                             <div class="col-12" style="text-align: center;">
                             <br>
-                            <p style="display: inline;text-transform: uppercase;"><b>system generated no signature required</b></p>
+                            <p style="display: inline;text-transform: uppercase; font-size: 10px;"><b>system generated no signature required</b></p>
                             </div>
                         </div>
                     </div>

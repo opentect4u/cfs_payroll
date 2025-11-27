@@ -301,18 +301,20 @@ class Report_Process extends CI_Model
 		LEFT JOIN md_pay_head c ON b.pay_head_id = c.sl_no 
 		WHERE a.sal_month=b.sal_month AND a.sal_year=b.sal_year AND a.bank_id=b.bank_id AND a.catg_cd=b.catg_id 
 		AND b.emp_code ='.$empno.' AND a.approval_status="A" 
-		AND b.sal_month ='.$sal_month.' AND b.sal_year ='.$sal_yr.' AND a.bank_id ='.$this->session->userdata['loggedin']['bank_id'];
+		AND b.sal_month ='.$sal_month.' AND b.sal_year ='.$sal_yr.' AND a.bank_id ='.$this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.pay_head_type, c.seq';
 		$query = $this->db->query($sql);
+		//echo $this->db->last_query(); exit;
 		return $query->result();
 	}
 
 	function get_payhead($bank_id, $branch_id, $catg_id, $month, $year) {
 		$where = $catg_id > 0 ? ' AND ps.catg_id='.$catg_id : '';
 		$where .= $branch_id > 0 ? ' AND e.branch_id='.$branch_id : '';
-		$sql = 'SELECT DISTINCT ps.pay_head_id, ph.pay_head, ps.pay_head_type 
+		$sql = 'SELECT DISTINCT ps.pay_head_id, ph.code, ph.pay_head, ps.pay_head_type 
 		FROM td_pay_slip ps JOIN md_pay_head ph ON ps.pay_head_id = ph.sl_no JOIN md_employee e ON ps.emp_code=e.emp_code
-		WHERE ps.bank_id='.$bank_id.' AND ps.sal_month='.$month.' AND ps.sal_year='.$year.$where.' ORDER BY ph.sl_no';
+		WHERE ps.bank_id='.$bank_id.' AND ps.sal_month='.$month.' AND ps.sal_year='.$year.$where.' ORDER BY ph.pay_flag, ph.seq';
 		$query = $this->db->query($sql);
+		//echo $this->db->last_query(); exit;
 		return $query->result();
 	}
 

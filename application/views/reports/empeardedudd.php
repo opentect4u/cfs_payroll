@@ -41,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         <th>Basic</th>
                                         <?php 
                                         foreach($payhead as $row) {
-                                            if($row->pay_head_type == 'E') echo '<th>'.$row->pay_head.'</th>';
+                                            if($row->pay_head_type == 'E') echo '<th title="'.$row->pay_head.'">'.$row->code.'</th>';
                                         }
-                                        echo '<th>Gross Pay</th>';
+                                        echo '<th title="Gross Pay">GP</th>';
                                         foreach($payhead as $row) {
-                                            if($row->pay_head_type == 'D') echo '<th>'.$row->pay_head.'</th>';
+                                            if($row->pay_head_type == 'D') echo '<th title="'.$row->pay_head.'">'.$row->code.'</th>';
                                         }
-                                        echo '<th>Net Pay</th>';
+                                        echo '<th title="Net Pay">NP</th>';
                                         ?>
                                         </tr>
                                     </thead>
@@ -67,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             foreach($payhead as $ph) {
                                                 if($ph->pay_head_type == 'E') {
                                                     $position = array_search($ph->pay_head_id, $key);
-                                                    $payhead_name = $ph->pay_head;
+                                                    $code = $ph->code;
                                                     $amount = 0;
                                                     if($position > 0) {
                                                         $amount = $val[$position];
                                                     }
                                                     echo '<td>'.floatval($amount).'</td>';
                                                     $gross += $amount;
-                                                    $row->$payhead_name = $amount;
+                                                    $row->$code = $amount;
                                                 }
                                             }
                                             echo '<td>'.floatval($gross).'</td>';
@@ -83,14 +83,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             foreach($payhead as $ph) {
                                                 if($ph->pay_head_type == 'D') {
                                                     $position = array_search($ph->pay_head_id, $key);
-                                                    $payhead_name = $ph->pay_head;
+                                                    $code = $ph->code;
                                                     $amount = 0;
                                                     if($position > 0) {
                                                         $amount = $val[$position];
                                                     }
                                                     echo '<td>'.floatval($amount).'</td>';
                                                     $deduction += $amount;
-                                                    $row->$payhead_name = $amount;
+                                                    $row->$code = $amount;
                                                 }
                                             }
                                             $row->net = $gross - $deduction;
@@ -109,15 +109,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             <?php 
                                             foreach($payhead as $ph) {
                                                 if($ph->pay_head_type == 'E') {
-                                                    $payhead_name = $ph->pay_head;
-                                                    echo '<th>'.array_sum(array_column($list, $payhead_name)).'</th>';
+                                                    echo '<th>'.array_sum(array_column($list, $ph->code)).'</th>';
                                                 }
                                             }
                                             echo '<th>'.array_sum(array_column($list, 'gross')).'</th>';
                                             foreach($payhead as $ph) {
                                                 if($ph->pay_head_type == 'D') {
-                                                    $payhead_name = $ph->pay_head;
-                                                    echo '<th>'.array_sum(array_column($list, $payhead_name)).'</th>';
+                                                    echo '<th>'.array_sum(array_column($list, $ph->code)).'</th>';
                                                 }
                                             }
                                             echo '<th>'.array_sum(array_column($list, 'net')).'</th>';

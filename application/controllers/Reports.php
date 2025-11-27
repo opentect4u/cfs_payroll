@@ -167,39 +167,16 @@ class Reports extends CI_Controller
             $empno     =  $this->input->post('emp_cd');
             $sal_month  = $this->input->post('sal_month');
             $sal_yr     = $this->input->post('year');
-
-            // $where  =   array(
-            //     "emp_code"            =>  $this->input->post('emp_cd'),
-            //     "sal_month"         =>  $this->input->post('sal_month'),
-            //     "sal_year"          =>  $this->input->post('year'),
-            //     "approval_status"   =>  'U'
-            // );
-			
 			$emp_whr = array(
-                "a.emp_code" =>  $this->input->post('emp_cd'),
-                "a.designation = b.sl_no" => null,
-                "a.bank_id" =>  $this->session->userdata['loggedin']['bank_id']
+                'a.emp_code' =>  $this->input->post('emp_cd'),
+                'a.designation = b.sl_no' => null,
+                'a.branch_id = c.id' => null,
+                'a.bank_id' =>  $this->session->userdata['loggedin']['bank_id']
             );
-            $emp_select = 'a.*,b.designation';
+            $emp_select = 'a.*, c.branch_name, b.designation';
 
-            $payslip['emp_dtls']    =   $this->Report_Process->f_get_particulars("md_employee a,md_designation b", $emp_select, $emp_whr, 1);
+            $payslip['emp_dtls']    =   $this->Report_Process->f_get_particulars("md_employee a, md_designation b, md_branch c", $emp_select, $emp_whr, 1);
             $payslip['payslip_dtls'] = $this->Report_Process->get_payslip_dtls($empno,$sal_month,$sal_yr);
-            // $where = array(
-            //     'a.bank_id' => $this->session->userdata['loggedin']['bank_id'],
-            //     "a.trans_date = b.trans_dt" =>  NULL,
-            //     "a.trans_no = b.trans_no" =>  NULL,
-            //     "a.sal_month = b.sal_month" =>  NULL,
-            //     "a.sal_year = b.sal_year" =>  NULL,
-            //     "a.bank_id = b.bank_id" =>  NULL,
-            //     "a.catg_cd = b.catg_id" =>  NULL,
-            //     "b.pay_head_id = c.sl_no" =>  NULL,
-            //     "a.approval_status"        =>  'A',
-            //     "b.emp_code"            =>  $empno,
-            //     "b.sal_month"           =>  $sal_month,
-            //     "b.sal_year"            =>  $sal_yr,
-            // );
-            // $payslip['payslip_dtls']  = $this->Report_Process->f_get_particulars("td_salary a,td_pay_slip b , md_pay_head c", array('b.*','c.pay_head'), $where, 0);
-            // echo $this->db->last_query(); exit;
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
             $this->load->view('post_login/footer');
