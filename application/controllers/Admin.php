@@ -798,9 +798,21 @@ class Admin extends CI_Controller
 
 	function transfer()
 	{
+		$data['branch_list'] = $this->Admin_Process->f_get_particulars('md_branch', null, array('bank_id'=>$this->session->userdata['loggedin']['bank_id']), 0);
 		$data['list'] = $this->Admin_Process->transfer();
 		$this->load->view('post_login/payroll_main');
 		$this->load->view("transfer/view", $data);
 		$this->load->view('post_login/footer');
+	}
+
+	function transfer_update() {
+		$data = $this->input->post();
+		if ($this->Admin_Process->transfer_update($data)) {
+			$this->session->set_flashdata('msg', 'Successfully updated!');
+			echo true;
+		} else {
+			$this->session->set_flashdata('msg', 'Something went wrong!');
+			echo false;
+		}
 	}
 }

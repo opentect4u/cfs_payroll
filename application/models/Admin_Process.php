@@ -236,13 +236,15 @@ class Admin_Process extends CI_Model
 
 	function other_deduction()
 	{
-		$sql = 'SELECT ed.emp_no as id, e.emp_code, e.emp_name, d.designation, group_concat(ed.pay_head_id) as pay_head_id, group_concat(ed.amount) as amount 
+		$sql = 'SELECT ed.emp_no as id, e.emp_code, e.emp_name, d.designation, 
+				group_concat(ed.pay_head_id order by ph.seq) as pay_head_id, 
+				group_concat(ed.amount order by ph.seq) as amount 
 				FROM td_earning_deduction ed 
 				JOIN md_employee e ON ed.emp_no = e.emp_code JOIN md_designation d ON e.designation = d.sl_no
 				JOIN md_pay_head ph ON ed.pay_head_id = ph.sl_no 
 				WHERE e.emp_status="A" AND ph.input_flag = "M" AND ph.pay_flag = "D" AND ed.amount > 0 AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' 
-				GROUP BY ed.emp_no, e.emp_code, e.emp_name, d.designation ORDER BY e.emp_name, ph.sl_no';
-		$query = $this->db->query($sql);
+				GROUP BY ed.emp_no, e.emp_code, e.emp_name, d.designation ORDER BY e.emp_name';
+		$query = $this->db->query($sql); 
 		return $query->result();
 	}
 
@@ -288,8 +290,38 @@ class Admin_Process extends CI_Model
 	}
 
 	function transfer() {
-		$sql = 'SELECT * FROM md_pay_head WHERE input_flag = "M" AND pay_flag = "E" AND bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY sl_no';
+		$sql = 'SELECT e.emp_code, e.emp_name, d.designation, b.branch_name, e.join_dt  
+		FROM md_employee e JOIN md_designation d ON e.designation = d.sl_no JOIN md_branch b ON e.branch_id = b.id 
+		WHERE e.emp_status = "A" AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.branch_name, e.emp_name';
 		$query = $this->db->query($sql);
 		return $query->result();
+	}
+
+	function transfer_update($data) { 
+		$this->db->trans_start();
+		$leaving_date = date('Y-m-d', strtotime($data['trf_date'] . ' - 1 day'));
+		$result = $this->f_get_particulars('md_employee', NULL, array('emp_code' => $data['code']), 0);
+		$row = $result[0];
+		$input = array (
+			'created' => date('Y-m-d'),
+			'emp_code' => $row->emp_code,
+			'branch_id' => $row->branch_id,
+			'joining_date' => $row->join_dt,
+			'leaving_date' => $leaving_date
+		);
+		$this->Admin_Process->f_insert('td_transfer', $input);
+		$input = array (
+			'branch_id' => $data['branch_id'],
+			'join_dt' => $data['trf_date']
+		);
+		$this->Admin_Process->f_edit('md_employee', $input, array('emp_code' => $data['code']));
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			return FALSE;
+		} else {
+			$this->db->trans_commit();
+			return TRUE;
+		}
 	}
 }
