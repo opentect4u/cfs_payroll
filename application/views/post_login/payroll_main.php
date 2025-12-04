@@ -137,7 +137,6 @@
               </li> -->
               <li class="nav-item nav-profile dropdown mr-0 mr-sm-2">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                  <img src="<?= base_url() ?>assets/images/<?php echo $this->session->userdata['loggedin']['logo_path']; ?>" alt="profile" />
                   <span class="nav-profile-name"><?php echo $this->session->userdata['loggedin']['bank_name']; ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
@@ -240,10 +239,9 @@
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link">
-                <!-- <i class="mdi mdi-file-document-box-outline menu-icon"></i> -->
                 <span class="menu-title">Setting</span>
+                <i class="menu-arrow"></i>
               </a>
-              <i class="menu-arrow"></i></a>
               <div class="submenu">
                 <ul class="submenu-item">
                   <li class="nav-item"><a href="<?php echo site_url("admin/change_password") ?>">Change Password</a></li>

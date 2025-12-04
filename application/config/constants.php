@@ -104,3 +104,13 @@ $proc_end_points = array(
 
 define('API_END_POINTS', serialize($api_end_points));
 define('PROC_END_POINTS', serialize($proc_end_points));
+
+
+
+define('SMS_TEMPLATE_HD', 'http://sms.synergicapi.in/api.php?username=CONTAIARDB&apikey=GJLNb0RYDTGG&senderid=CCARDB&route=OTP&mobile={#var1#}&text=');
+define('SMS_TEMPLATE_TEXT', 'Dear {#var2#}, Your salary for {#var3#} has been successfully processed. To view your paysheet, click the link {#var4#} - Contai CARD Bank Ltd.');
+
+define('PAYHEAD_DA', 457);
+define('PAYHEAD_ARREAR_DA', 459);
+define('PAYHEAD_PF', 463);
+define('PAYHEAD_PTAX', 464);

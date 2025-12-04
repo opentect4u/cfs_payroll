@@ -213,7 +213,17 @@
             return $data->row();
 		}
 		
-		
+		function get_last_salary($bank_id){
+			$this->db->select('sal_month, sal_year, max(trans_date) as trans_date');
+			$this->db->where(array(
+				'bank_id'=>$bank_id,
+				'approval_status'=>'A',
+				'catg_cd'=> 1
+			));
+			$this->db->group_by('sal_month, sal_year');
+			$query = $this->db->get('td_salary');
+			return $query->row();
+		}
 
 	}	
 ?>

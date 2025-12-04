@@ -900,9 +900,9 @@ class Salary extends CI_Controller
                     $emp_list = $this->Salary_Process->get_emp_dtls($category);
                   
                     foreach ($emp_list as $emp) {
-                        // if($emp->emp_code != 1108){ 
+                        // if($emp->emp_code != 1108 && $emp->emp_code != 1144){
                         //     continue;
-                        // }
+                        // } 
                         $table_name = 'td_earning_deduction a';
                         $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount';
                         $er_where = array(
@@ -914,7 +914,7 @@ class Salary extends CI_Controller
                         $erning_dts = $this->Admin_Process->f_get_particulars($table_name, $select, $er_where, 0);
                         
                        $row_count = $this->db->get_where('td_earning_deduction', array('emp_no =' => $emp->emp_code,'bank_id'=>$bank_id))->result();
-                    
+                        $gross = 0;
                        if(count($row_count) > 1){
                             $input_basic = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
@@ -932,6 +932,7 @@ class Salary extends CI_Controller
                                 'created_ip' => $_SERVER["REMOTE_ADDR"]
                             );
                             $this->Salary_Process->f_insert("td_pay_slip", $input_basic);
+                            $gross += $basic_pay;
                         }
                        $da = 0;
                        foreach($erning_dts as $erning_dt){
@@ -951,9 +952,10 @@ class Salary extends CI_Controller
                                 'created_ip' =>$_SERVER["REMOTE_ADDR"]
                             );
                             $this->Salary_Process->f_insert("td_pay_slip", $input);
-                            if($erning_dt->pay_head_id == 457){
+                            if($erning_dt->pay_head_id == PAYHEAD_DA){
                                 $da = $erning_dt->amount;
                             }
+                            $gross += $erning_dt->pay_head_type == 'E' ? $erning_dt->amount : 0;
                        }
                         
                        //checked arrear da amount
@@ -962,7 +964,7 @@ class Salary extends CI_Controller
                             'bank_id' => $this->session->userdata['loggedin']['bank_id'],
                             'sal_month' => $sal_month,
                             'sal_year' => $year,
-                            'pay_head_id' => 459
+                            'pay_head_id' => PAYHEAD_ARREAR_DA
                         );
                         $query = $this->db->get_where('td_pay_slip', $where);
                         if ($query->num_rows() > 0) {
@@ -973,8 +975,27 @@ class Salary extends CI_Controller
                             $input = array(
                                 'amount' => $pf
                             );
-                            $this->db->where(array('emp_code' => $emp->emp_code, 'bank_id' => $this->session->userdata['loggedin']['bank_id'], 'sal_month' => $sal_month, 'sal_year' => $year, 'pay_head_id' => 463))->update('td_pay_slip', $input);
+                            $this->db->where(array('emp_code' => $emp->emp_code, 'bank_id' => $this->session->userdata['loggedin']['bank_id'], 'sal_month' => $sal_month, 'sal_year' => $year, 'pay_head_id' => PAYHEAD_PF))->update('td_pay_slip', $input);
                         }
+                        $this->db->select('tax_amt');
+                        $this->db->where(array(
+                            'from_amt <=' => $gross,
+                            'to_amt >=' => $gross,
+                        ));
+                        $query = $this->db->get('md_ptax_slab');
+                        $ptax = 0;
+                        if ($query->num_rows() > 0) {
+                            $ptax = $query->row()->tax_amt;
+                        }
+                        $input = array(
+                            'amount' => $ptax
+                        );
+                        $this->db->where(array(
+                            'emp_code' => $emp->emp_code,
+                            'sal_month' => $sal_month,
+                            'sal_year' => $year,
+                            'pay_head_id' => PAYHEAD_PTAX
+                        ))->update('td_pay_slip', $input);
                     }
                 }
 
