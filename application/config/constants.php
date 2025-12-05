@@ -88,18 +88,10 @@ defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automat
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 $api_end_points = array(
-    1 => 'rardb_save',
-    2 => 'cbardb_save',
-    3 => 'utkal_save',
-    4 => 'chalk_save',
-	5 => 'sbangla_save',
+    6 => 'contaiardb_save'
 );
 $proc_end_points = array(
-    1 => 'rardb_proc',
-    2 => 'cbardb_proc',
-    3 => 'utkal_proc',
-    4 => 'chalk_proc',
-	5 => 'sbangla_proc',
+    6 => 'contaiardb_proc'
 );
 
 define('API_END_POINTS', serialize($api_end_points));

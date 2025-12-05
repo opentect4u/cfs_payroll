@@ -3,12 +3,14 @@
           <div class="card">
               <div class="card-body">
                   <div class="row">
-                      <div class="col-10">
+                      <div class="col-12">
                           <h3>Other Deduction</h3>
                       </div>
                   </div>
                   <div class="row">
-                      <div class="col-12"><hr></div>
+                      <div class="col-12">
+                        <hr>
+                    </div>
                   </div>
                   <div id="msg" class="row alert alert-success pull-right" style="display: none;"></div>
                   <br>
@@ -66,7 +68,25 @@
                               </table>
                           </div>
                       </div>
-                  </div>
+                  </div> 
+                  <br>
+                  <hr>
+                  <form class="form-group" id="frm_upload" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="multiselect_div">
+                                    <input type="file" name="userfile" data-default-file="" class="dropify" data-max-file-size="500K" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <button type="button" id="submit" name="submit" class="btn btn-primary"><i class="fa fa-upload"></i></button>
+                            </div>
+                        </div>
+                    </div> 
+                  </form>                
               </div>
           </div>
       </div>
@@ -75,6 +95,12 @@
       $(document).ready(function() {
         _datatable('Other Deduction List', 2);
         msg();
+        $('#submit').on('click', function (e) {
+            e.preventDefault();
+            $('#submit').prop('disabled', true);
+            $('.main-panel').off('click');
+            upload();
+        });
       });
 
       function msg () {
@@ -130,4 +156,21 @@
         $('.cls_edit_' + emp_code).show();
         $('.cls_save_' + emp_code).hide();
       }
+
+      function upload() {
+        var formData = new FormData($('#frm_upload')[0]);
+        formData.append('userfile', $('input[type=file]')[0].files[0]);
+        $.ajax({
+            url: '<?=site_url('Admin/upload')?>',
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            async: false
+        }).done(function (data) {
+            alert('Other Deduction uploaded: ' + data);
+            window.location.href = '<?= site_url('Admin/other_deduction') ?>';
+        });
+    }
   </script>

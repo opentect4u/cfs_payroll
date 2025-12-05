@@ -815,4 +815,36 @@ class Admin extends CI_Controller
 			echo false;
 		}
 	}
+
+	function upload() {
+        $config = array(
+            'upload_path' => 'uploads/',
+            'allowed_types' => 'xlsx'
+        );
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('userfile')) {
+            $error = array('error' => $this->upload->display_errors());
+            var_dump($error);
+            exit;
+        } else {
+            $file_info = $this->upload->data();
+            $old_path = $config['upload_path'] . $file_info['raw_name'] . $file_info['file_ext'];
+            $input = array(
+                'created' => date('Y-m-d'),
+                'tag' => 'OTHER_DEDUCTION',
+                'name' => $file_info['orig_name'],
+                'path' => $old_path
+            );
+            $this->db->insert('td_upload_log', $input);
+            $id = $this->db->insert_id();
+            $new_path = $config['upload_path'] . $id . $file_info['file_ext'];
+            rename($file_info['full_path'], str_replace($file_info['raw_name'], $id, $file_info['full_path']));
+            $input = array(
+                'path' => $new_path
+            );
+            $this->db->where('id', $id);
+            $this->db->update('td_upload_log', $input);
+            echo json_encode($this->Admin_Process->process($new_path));
+        }
+    }
 }

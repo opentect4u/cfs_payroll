@@ -99,7 +99,7 @@ class Approves extends CI_Controller
           $integrated_salary = $this->session->userdata['loggedin']['integrated_salary'];
           if($integrated_salary == 1){
 
-            $chunkSize = 50;
+            $chunkSize = 200;
             $chunks = array_chunk($erning_dt, $chunkSize);
       
            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);

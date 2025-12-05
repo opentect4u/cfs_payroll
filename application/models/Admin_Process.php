@@ -324,4 +324,65 @@ class Admin_Process extends CI_Model
 			return TRUE;
 		}
 	}
+
+	function process($file) {
+        $arr = array();
+        $cnt = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($file);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+            switch ($row) {
+                case 1:
+                    break;
+                case 2:
+                    $header[$row][$column] = $data_value;
+                    break;
+                default:
+                    $arr[$row][$column] = $data_value;
+                    break;
+            }
+        }
+        $header = $header[2];
+        foreach ($arr as $row) {
+            $input = array();
+			$emp_code = 0;
+			$payhead_id = 0;
+			$flag = false;
+            foreach ($row as $k => $v) {
+				if ($header[$k] == 'Code') {
+					$emp_code = $row[$k];
+					continue;
+				} else if ($header[$k] == 'Name' || $header[$k] == 'Designation' || $header[$k] == 'P.Tax') {
+					continue;
+				} else {
+					$this->db->where(array(
+						'pay_flag' => 'D',
+						'pay_head' => $header[$k]
+					));
+					$query = $this->db->get('md_pay_head');
+					if($query->num_rows() > 0) {
+						$payhead_id = $query->row()->sl_no;
+					}
+					if($emp_code > 0 && $payhead_id > 0) {
+						$input = array (
+							'amount' => $row[$k]
+						);
+						$this->db->where(array(
+							'emp_no' => $emp_code,
+							'pay_head_id' => $payhead_id,
+							'pay_head_type' => 'D'
+						))->update('td_earning_deduction', $input);
+						$flag = true;
+					}
+				}
+                //$input[$header[$k]] = $row[$k];
+            }
+			$flag ? $cnt++ : '';
+        }
+        return $cnt;
+    }
 }
