@@ -228,12 +228,13 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                             <div class="col-12">
                                 <br>
                                     <b><p style="display: inline;">Net Salary: <?php echo sprintf("%.2f", $tot_earning-$tot_deduction) . ' (<i>' . getIndianCurrency($tot_earning-$tot_deduction) . '</i>)'; ?></p></b>
+                                    <p><b>Accumulated Income Tax: </b><?= $tds ?></p>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom:10px">
                             <div class="col-12" style="text-align: center;">
                             <br>
-                            <p style="display: inline;text-transform: uppercase; font-size: 10px;"><b>system generated no signature required</b></p>
+                            <p style="display: inline;text-transform: uppercase; font-size: 10px;"><b><?= PAYSLIP_FOOTER ?></b></p>
                             </div>
                         </div>
                     </div>

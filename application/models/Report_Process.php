@@ -331,4 +331,16 @@ class Report_Process extends CI_Model
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
+
+	function get_tds($emp_code, $month, $year) {
+		$where = '';
+		if($month > 3) {
+			$where = ' AND (sal_month >= 4 and sal_month <='.$month.') AND sal_year ='.$year;
+		} else {
+			$where = ' AND ((sal_month >= 4 and sal_year ='.($year-1).') OR (sal_month <='.$month.' and sal_year ='.$year.'))';
+		}
+		$sql = 'SELECT sum(amount) as tds FROM td_pay_slip WHERE emp_code ='.$emp_code.' AND pay_head_id = '. PAYHEAD_TDS . $where;
+		$query = $this->db->query($sql);
+		return $query->row()->tds;
+	}
 }

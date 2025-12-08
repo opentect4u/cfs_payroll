@@ -177,6 +177,7 @@ class Reports extends CI_Controller
 
             $payslip['emp_dtls']    =   $this->Report_Process->f_get_particulars("md_employee a, md_designation b, md_branch c", $emp_select, $emp_whr, 1);
             $payslip['payslip_dtls'] = $this->Report_Process->get_payslip_dtls($empno,$sal_month,$sal_yr);
+            $payslip['tds'] = $this->Report_Process->get_tds($empno, $sal_month, $sal_yr);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/payslip", $payslip);
             $this->load->view('post_login/footer');

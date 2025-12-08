@@ -10,21 +10,28 @@ class Payslip extends CI_Controller {
         $this->load->model('payslip_model', 'model');
     }
 
-	public function index()
-	{
+	public function sms($bank_id, $trans_date)
+	{ 
 		$sql = 'SELECT DISTINCT e.emp_code, e.emp_name, e.phn_no, ps.bank_id, ps.sal_month, ps.sal_year 
 		FROM td_salary s 
-		JOIN td_pay_slip ps ON s.trans_date = ps.trans_dt AND s.trans_no = ps.trans_no 
+		JOIN td_pay_slip ps ON s.trans_date = ps.trans_dt AND s.trans_no = ps.trans_no AND s.bank_id=ps.bank_id 
 		JOIN md_employee e ON ps.emp_code = e.emp_code
-		WHERE ps.sal_month=s.sal_month AND ps.sal_year=s.sal_year AND s.approval_status = "A" AND ps.issms = 0';
+		WHERE ps.sal_month=s.sal_month AND ps.sal_year=s.sal_year AND s.approval_status = "A" 
+		AND ps.issms = 0 AND ps.bank_id = '.$bank_id.' AND s.trans_date = "'.$trans_date.'"';
 		$query = $this->db->query($sql); 
 		if($query->num_rows() > 0) {
 			$result = $query->result();
 			foreach($result as $row) {
-				if($row->emp_code != 1108) continue;
+				//if($row->emp_code != 1108) continue;
 				$this->model->send_sms($row);
 			}
+			$input = array('approval_status' => 'S');
+			$this->db->where(array(
+				'bank_id' => $bank_id,
+				'trans_date' => $trans_date
+			))->update('td_salary', $input);
 		}
+		redirect(site_url('payapprv'))
 	}
 	public function download($token = null)
 	{
@@ -40,6 +47,7 @@ class Payslip extends CI_Controller {
 		$data['bank'] = $bank;
 		$data['emp'] = $this->model->get_emp($row->emp_code);
 		$data['sal'] = $this->model->get_sal($row->emp_code, $row->month, $row->year);
+		$data['tds'] = $this->model->get_tds($row->emp_code, $row->month, $row->year);
 		$dompdf = $this->dompdf_lib->load();
 		//$this->load->view('payslip/view', $data);
 		$html = $this->load->view('payslip/view', $data, TRUE);

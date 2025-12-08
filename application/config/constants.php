@@ -106,3 +106,5 @@ define('PAYHEAD_DA', 457);
 define('PAYHEAD_ARREAR_DA', 459);
 define('PAYHEAD_PF', 463);
 define('PAYHEAD_PTAX', 464);
+define('PAYHEAD_TDS', 474);
+define('PAYSLIP_FOOTER', 'This payslip is generated from Synergic Payroll, System generated payslip, needs no signature.');
