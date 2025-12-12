@@ -81,7 +81,8 @@
                                     <thead>
                                         <tr>
                                               <th width="40%">Pay Head Type</th>
-                                              <th width="40%">Amount</th>
+                                              <th width="25%">Amount</th>
+                                              <th>Account No</th>
                                             <th>
                                             <button class="btn btn-success" type="button" id="newrow"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></button>
                                             </th>
@@ -107,11 +108,9 @@
                                       </td>
                                       <td>
                                         <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
-                                      <!-- <?php if($ekey->input_flag == 'A') {  ?> 
-                                        <input type="number" class="form-control damount" id="" name="damount[]" value="<?=round(($earning_dtls[0]->basic_pay*$ekey->percentage)/100)?>" required>
-                                        <?php }else{  ?>
-                                          <input type="number" class="form-control damount" id="" name="damount[]" value="<?=$ekey->amount?>" required>
-                                          <?php } ?> -->
+                                      </td>
+                                      <td>
+                                        <input type="text" class="form-control" name="account_no[]" value="<?=$ekey->account_no?>">
                                       </td>
                                     </tr>
                                     <?php } 
@@ -216,7 +215,10 @@
                         foreach ($dpayhead as $value) {
                           echo "<option value='" . $value->sl_no . "'>" . $value->pay_head . "</option>";
                         }
-                        ?>" + '</select></td>'+'<td><input type="text" class="form-control damount"  id="damount_' + x + '" name="damount[]" oninput="validate(this)" required value="0.00"></td>' +  '<td><button type = "button" class = "btn btn-danger" id = "removeRow"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
+                        ?>" + '</select></td>'
+                        +'<td><input type="text" class="form-control damount"  id="damount_' + x + '" name="damount[]" oninput="validate(this)" required value="0.00"></td>' 
+                        +'<td><input type="text" class="form-control"  id="account_no_' + x + '" name="account_no[]" value=""></td>' 
+                        +'<td><button type = "button" class = "btn btn-danger" id = "removeRow"> <i class = "fa fa-undo" aria-hidden = "true" > </i></button> </td></tr> ');
 			  //$( ".select2" ).select2();
             } else {
                 alert('Please Select Voucher Type First');

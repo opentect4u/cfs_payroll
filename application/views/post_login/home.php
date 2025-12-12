@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6 grid-margin">
+        <div class="col-md-4 grid-margin">
           <div class="card">
             <div class="card-body">
               <p class="card-title">Total Earning</p>
@@ -72,7 +72,7 @@
             <!--                    <canvas id="users-chart"></canvas>-->
           </div>
         </div>
-        <div class="col-md-6 grid-margin">
+        <div class="col-md-4 grid-margin">
           <div class="card">
             <div class="card-body">
               <p class="card-title">Total Deduction </p>
@@ -86,13 +86,13 @@
           </div>
         </div>
 
-        <div class="col-md-6 grid-margin">
+        <div class="col-md-4 grid-margin">
           <div class="card">
             <div class="card-body">
               <p class="card-title"> Last Month Paid Amount <strong>(Parmanent) </strong></p>
               <div class="d-flex flex-wrap align-items-baseline">
 
-                <h2 class="mr-3">Rs. <?=$tot_edp->tot_earn-$tot_edp->tot_dedu?></h2>
+                <h2 class="mr-3">Rs. <?=sprintf('%.2f',$tot_edp->tot_earn-$tot_edp->tot_dedu)?></h2>
                 <!--                          <i class="mdi mdi-arrow-up mr-1 text-danger"></i><span><p class="mb-0 text-danger font-weight-medium">Parmanent</p></span>-->
               </div>
               <!--                      <p class="mb-0 text-muted">Total users world wide</p>-->
@@ -100,22 +100,6 @@
             <!--                    <canvas id="users-chart"></canvas>-->
           </div>
         </div>
-        <div class="col-md-6 grid-margin">
-          <div class="card">
-            <div class="card-body">
-              <p class="card-title"> Last Month Paid Amount <strong>(Temporary)</strong> </p>
-              <div class="d-flex flex-wrap align-items-baseline">
-                <h2 class="mr-3">Rs. <?=$tot_edt->tot_earn-$tot_edt->tot_dedu?></h2>
-                <!--                        <i class="mdi mdi-arrow-up mr-1 text-success"></i><span><p class="mb-0 text-success font-weight-medium">+9.12%</p></span>                          -->
-              </div>
-              <!--                      <p class="mb-0 text-muted">Total users world wide</p>-->
-            </div>
-            <!--                    <canvas id="projects-chart"></canvas>-->
-          </div>
-        </div>
-
-
-
         <div class="col-md-12 grid-margin">
           <div class="card border-radius-2 bg-danger">
             <div class="card-body">
@@ -127,10 +111,6 @@
             <!--                    <canvas id="projects-chart"></canvas>-->
           </div>
         </div>
-
-
-
-
       </div>
 
       <!--

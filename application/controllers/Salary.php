@@ -139,9 +139,11 @@ class Salary extends CI_Controller
                 }
                 $dpay_cd  = $this->input->post('dpay_cd');
                 $damount  = $this->input->post('damount');
+                $account_no  = $this->input->post('account_no');
                 for ($i = 0; $i < count($dpay_cd); $i++) {
                     $ddata_array = array(
                         "amount"        =>  $damount[$i],
+                        "account_no"    =>  $account_no[$i],
                         "modified_by"    =>  $this->session->userdata('loggedin')['user_id'],
                         "modified_dt"    =>  date('Y-m-d H:i:s'),
                         "modified_ip"    =>  $_SERVER['REMOTE_ADDR']
@@ -185,7 +187,7 @@ class Salary extends CI_Controller
             redirect('salary/eardedu');
         }else{
         $select = array(
-            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","c.input_flag","c.percentage","b.amount","c.pay_head"
+            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","b.account_no","c.input_flag","c.percentage","b.amount","c.pay_head"
         );
         $id = $this->input->get('id'); 
         $qdata = explode('/',$id);
@@ -883,7 +885,6 @@ class Salary extends CI_Controller
                 );
 
                 $trans_no     =   $this->Salary_Process->f_get_particulars("td_salary", $select, $where, 1);
-
                 $data_array = array(
                     'bank_id' => $this->session->userdata['loggedin']['bank_id'],
                     "trans_date"   =>  $trans_dt,
@@ -904,7 +905,7 @@ class Salary extends CI_Controller
                         //     continue;
                         // } 
                         $table_name = 'td_earning_deduction a';
-                        $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount';
+                        $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount, a.account_no';
                         $er_where = array(
                             'a.emp_no' => $emp->emp_code,
                             'a.bank_id'=> $this->session->userdata['loggedin']['bank_id'],
@@ -947,6 +948,7 @@ class Salary extends CI_Controller
                                 'pay_head_id' => $erning_dt->pay_head_id,
                                 'pay_head_type' => $erning_dt->pay_head_type,
                                 'amount' => $erning_dt->amount,
+                                'account_no' => $erning_dt->account_no,
                                 'created_by' => $this->session->userdata['loggedin']['user_id'],
                                 'created_dt' => date('Y-m-d h:i:s'),
                                 'created_ip' =>$_SERVER["REMOTE_ADDR"]
