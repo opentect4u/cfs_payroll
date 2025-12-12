@@ -385,4 +385,30 @@ class Admin_Process extends CI_Model
         }
         return $cnt;
     }
+
+	function update_da($percentage) {
+		$sql = 'SELECT emp_code, basic_pay FROM md_employee WHERE emp_status = "A" AND bank_id = ' . $this->session->userdata['loggedin']['bank_id'];
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		foreach ($result as $row) {
+			$da = round($row->basic_pay * $percentage / 100); 
+			$input = array (
+				'amount' => $da
+			);
+			$this->db->where(array(
+				'emp_no' => $row->emp_code,
+				'pay_head_id' => PAYHEAD_DA,
+				'pay_head_type' => 'E'
+			))->update('td_earning_deduction', $input);
+			$pf = round(($row->basic_pay + $da) * 12 / 100);
+			$input = array (
+				'amount' => $pf
+			);
+			$this->db->where(array(
+				'emp_no' => $row->emp_code,
+				'pay_head_id' => PAYHEAD_PF,
+				'pay_head_type' => 'D'
+			))->update('td_earning_deduction', $input);
+		}
+	}
 }

@@ -603,6 +603,9 @@ class Admin extends CI_Controller
 				"modified_at"  =>  date('Y-m-d h:i:s') );
 
 			   $where  =   array("sl_no" =>  $this->input->post('id'));
+			   if($this->input->post('id')==PAYHEAD_DA){
+				   $this->Admin_Process->update_da($this->input->post('percentage'));
+			   }
 			   $this->session->set_flashdata('msg', 'Successfully updated!');
 			   $this->Admin_Process->f_edit('md_pay_head', $data_array, $where);
 			   $this->payhead();

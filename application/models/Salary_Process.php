@@ -358,8 +358,9 @@ class Salary_Process extends CI_Model
 		$bank_id = $this->session->userdata['loggedin']['bank_id'];
 		$this->db->select('emp_code, emp_name, emp_catg, designation, basic_pay, bank_ac_no');
 		$this->db->where(array(
-			'emp_catg' => $catg,'emp_status'=>'A','bank_id'=>$bank_id
+			'emp_catg' => $catg,'bank_id'=>$bank_id
 		));
+		$this->db->where_in('emp_status', array('A', 'S'));
 		$query = $this->db->get('md_employee');
 		return $query->result();
 	}
