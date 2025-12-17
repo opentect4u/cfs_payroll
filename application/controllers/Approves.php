@@ -66,7 +66,7 @@ class Approves extends CI_Controller
                             a.amount, 
                             d.bank_ac_no, 
                             a.created_by, 
-                            d.branch_id,d.pf_ac_no 
+                            d.branch_id,d.pf_ac_no, a.account_no 
                         FROM 
                             td_pay_slip a
                         JOIN 
@@ -125,7 +125,7 @@ class Approves extends CI_Controller
         }
 
         //Unapprove List of Salary
-        $approve['unapprove_tot_dtls'] = $this->Salary_Process->generate_slip($trans_dt = null, $month = null, $year = null, $catg_id = null, $trans_no = null, 0);
+        $approve['unapprove_tot_dtls'] = $this->Salary_Process->generate_slip($trans_dt = null, $month = null, $year = null, $catg_id = null, $trans_no = null, 2);
         $this->load->view('post_login/payroll_main');
         $this->load->view("approve/dashboard", $approve);
         $this->load->view('post_login/footer');
