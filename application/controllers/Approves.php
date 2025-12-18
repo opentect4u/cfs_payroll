@@ -99,16 +99,16 @@ class Approves extends CI_Controller
           $integrated_salary = $this->session->userdata['loggedin']['integrated_salary'];
           if($integrated_salary == 1){
 
-            $chunkSize = 50;
+            $chunkSize = 70;
             $chunks = array_chunk($erning_dt, $chunkSize);
       
            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
-             
+
             if ($allProcessed) {
                 if($bank_id == 4){
                 $data = array(
                     "month" => $month,"year" => $year);
-                $this->call_procedure($data, "https://restaurantapi.opentech4u.co.in/sal/".$proc_end_points[$bank_id]);
+                //$this->call_procedure($data, "https://restaurantapi.opentech4u.co.in/sal/".$proc_end_points[$bank_id]);
                 }
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
