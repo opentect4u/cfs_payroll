@@ -52,12 +52,14 @@ class Salary extends CI_Controller
                 }
                 $dpay_cd  = $this->input->post('dpay_cd');
                 $damount  = $this->input->post('damount');
+                $daccount_no  = $this->input->post('account_no');
                 for ($i = 0; $i < count($dpay_cd); $i++) {
                     $ddata_array = array(
                         'bank_id'       =>  $this->session->userdata['loggedin']['bank_id'],
                         "effective_dt"  =>  $this->input->post('effective_dt'),
                         "emp_no"        =>  $emp_cd,
                         "pay_head_id"   =>  $dpay_cd[$i],
+                        "account_no"    =>  $daccount_no[$i],
                         'pay_head_type' =>  'D',
                         "amount"        =>  $damount[$i],
                         "created_by"    =>  $this->session->userdata('loggedin')['user_id'],
@@ -89,7 +91,7 @@ class Salary extends CI_Controller
     public function eardeduedit()
 	{
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
+                
               $epay_cd  = $this->input->post('epay_cd');
               $eamount  = $this->input->post('eamount');
               $emp_cd   = $this->input->post('emp_cd');
@@ -139,9 +141,11 @@ class Salary extends CI_Controller
                 }
                 $dpay_cd  = $this->input->post('dpay_cd');
                 $damount  = $this->input->post('damount');
+                $daccount_no  = $this->input->post('account_no');
                 for ($i = 0; $i < count($dpay_cd); $i++) {
                     $ddata_array = array(
                         "amount"        =>  $damount[$i],
+                        "account_no"    =>  $daccount_no[$i],
                         "modified_by"    =>  $this->session->userdata('loggedin')['user_id'],
                         "modified_dt"    =>  date('Y-m-d H:i:s'),
                         "modified_ip"    =>  $_SERVER['REMOTE_ADDR']
@@ -154,6 +158,7 @@ class Salary extends CI_Controller
                         "pay_head_id"   =>  $dpay_cd[$i],
                         'pay_head_type' =>  'D',
                         "amount"        =>  $damount[$i],
+                        "account_no"    =>  $daccount_no[$i],
                         "created_by"    =>  $this->session->userdata('loggedin')['user_id'],
                         "created_dt"    =>  date('Y-m-d H:i:s'),
                         "created_ip"    =>  $_SERVER['REMOTE_ADDR']
@@ -185,7 +190,7 @@ class Salary extends CI_Controller
             redirect('salary/eardedu');
         }else{
         $select = array(
-            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","c.input_flag","c.percentage","b.amount","c.pay_head"
+            "a.emp_name","a.emp_code","a.basic_pay","b.effective_dt","b.pay_head_id","b.pay_head_type","c.input_flag","c.percentage","b.amount","b.account_no","c.pay_head"
         );
         $id = $this->input->get('id'); 
         $qdata = explode('/',$id);
