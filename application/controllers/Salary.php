@@ -919,11 +919,13 @@ class Salary extends CI_Controller
                        if(count($row_count) > 1){
                             $input_basic = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
+                                'branch_id' => $emp->branch_id,
                                 'trans_dt' => $trans_dt,
                                 'trans_no' => $data_array['trans_no'],
                                 'sal_month' => $sal_month,
                                 'sal_year' => $year,
                                 'emp_code' => $emp->emp_code,
+                                'desig_id' => $emp->designation,
                                 'catg_id' => $category,
                                 'pay_head_id' => 0,
                                 'pay_head_type' => 'E',
@@ -939,11 +941,13 @@ class Salary extends CI_Controller
                        foreach($erning_dts as $erning_dt){
                             $input = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
+                                'branch_id' => $emp->branch_id,
                                 'trans_dt' => $trans_dt,
                                 'trans_no' => $data_array['trans_no'],
                                 'sal_month' => $sal_month,
                                 'sal_year' => $year,
                                 'emp_code' => $emp->emp_code,
+                                'desig_id' => $emp->designation,
                                 'catg_id' => $category,
                                 'pay_head_id' => $erning_dt->pay_head_id,
                                 'pay_head_type' => $erning_dt->pay_head_type,
