@@ -904,7 +904,7 @@ class Salary extends CI_Controller
                   
                     foreach ($emp_list as $emp) {
                         $table_name = 'td_earning_deduction a';
-                        $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount';
+                        $select = 'a.emp_no,a.pay_head_id,a.pay_head_type,a.amount,a.account_no';
                         $er_where = array(
                             'a.emp_no' => $emp->emp_code,
                             'a.bank_id'=> $this->session->userdata['loggedin']['bank_id'],
@@ -946,6 +946,7 @@ class Salary extends CI_Controller
                                 'pay_head_id' => $erning_dt->pay_head_id,
                                 'pay_head_type' => $erning_dt->pay_head_type,
                                 'amount' => $erning_dt->amount,
+                                "account_no" => $erning_dt->account_no,
                                 'created_by' => $this->session->userdata['loggedin']['user_id'],
                                 'created_dt' => date('Y-m-d h:i:s'),
                                 'created_ip' =>$_SERVER["REMOTE_ADDR"]
