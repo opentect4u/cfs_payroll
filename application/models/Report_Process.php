@@ -253,7 +253,7 @@ class Report_Process extends CI_Model
 		$category_id = $data['category_id'];
 		$where = '';
 		if ($branch_id > 0) {
-			$where .= ' AND e.branch_id = ' . $branch_id;
+			$where .= ' AND p.branch_id = ' . $branch_id;
 		}
 		if ($category_id != '') {
 			$where .= ' AND e.emp_catg = ' . $category_id;
@@ -261,7 +261,7 @@ class Report_Process extends CI_Model
 		$sql = 'SELECT e.emp_code, e.emp_name, b.branch_name, e.uan, e.dob, e.basic_pay, sum(p.amount) as gross, 
 				(p1.amount+p2.amount+ifnull(p3.amount,0)) as wages 
 				FROM md_employee e 
-				JOIN td_pay_slip p ON e.emp_code = p.emp_code JOIN md_branch b ON e.branch_id = b.id 
+				JOIN td_pay_slip p ON e.emp_code = p.emp_code JOIN md_branch b ON p.branch_id = b.id 
 				LEFT JOIN td_pay_slip p1 ON p1.emp_code=p.emp_code AND p1.pay_head_id=0 AND p1.sal_month=p.sal_month AND p1.sal_year=p.sal_year 
 				LEFT JOIN td_pay_slip p2 ON p2.emp_code=p.emp_code AND p2.pay_head_id=457 AND p2.sal_month=p.sal_month AND p2.sal_year=p.sal_year 
 				LEFT JOIN td_pay_slip p3 ON p3.emp_code=p.emp_code AND p3.pay_head_id=459 AND p3.sal_month=p.sal_month AND p3.sal_year=p.sal_year
@@ -287,7 +287,7 @@ class Report_Process extends CI_Model
 		}
 		$sql = 'SELECT e.emp_code, e.emp_name, b.branch_name, d.designation, e.pan_no, p.sal_month, p.sal_year, p.amount 
 				FROM md_employee e JOIN td_pay_slip p ON e.emp_code = p.emp_code 
-				JOIN md_branch b ON e.branch_id = b.id JOIN md_designation d ON e.designation = d.sl_no
+				JOIN md_branch b ON p.branch_id = b.id JOIN md_designation d ON e.designation = d.sl_no
 				WHERE e.bank_id=p.bank_id AND p.pay_head_type="D" AND b.bank_id=e.bank_id 
 				AND p.pay_head_id = 474 AND p.amount > 0 '.$where.
 				' AND p.bank_id = '.$this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.branch_name, e.emp_name, p.sal_year, p.sal_month';
@@ -296,9 +296,11 @@ class Report_Process extends CI_Model
 	}
 
 	function get_payslip_dtls($empno,$sal_month,$sal_yr) {
-		$sql = 'SELECT b.*, if(b.pay_head_id > 0, c.pay_head, "Basic") as pay_head FROM td_salary a 
+		$sql = 'SELECT b.*, if(b.pay_head_id > 0, c.pay_head, "Basic") as pay_head, d.branch_name,e.designation FROM td_salary a 
 		JOIN td_pay_slip b ON a.trans_date = b.trans_dt AND a.trans_no = b.trans_no 
-		LEFT JOIN md_pay_head c ON b.pay_head_id = c.sl_no 
+		LEFT JOIN md_pay_head c ON b.pay_head_id = c.sl_no
+		LEFT JOIN md_branch d ON b.branch_id = d.id
+		LEFT JOIN md_designation e ON b.desig_id = e.sl_no 
 		WHERE a.sal_month=b.sal_month AND a.sal_year=b.sal_year AND a.bank_id=b.bank_id AND a.catg_cd=b.catg_id 
 		AND b.emp_code ='.$empno.' AND a.approval_status="A" 
 		AND b.sal_month ='.$sal_month.' AND b.sal_year ='.$sal_yr.' AND a.bank_id ='.$this->session->userdata['loggedin']['bank_id'] . ' ORDER BY b.pay_head_type, c.seq';
@@ -324,8 +326,9 @@ class Report_Process extends CI_Model
 		$sql = 'SELECT DISTINCT e.emp_code, e.emp_name, b.branch_name, d.designation, 
 		GROUP_CONCAT(ps.pay_head_id ORDER BY ps.pay_head_id) as payhead, 
 		GROUP_CONCAT(ps.amount ORDER BY ps.pay_head_id) as amount 
-		FROM td_pay_slip ps JOIN md_employee e ON ps.emp_code=e.emp_code JOIN md_branch b ON e.branch_id=b.id 
-		JOIN md_designation d ON e.designation=d.sl_no 
+		FROM td_pay_slip ps JOIN md_employee e ON ps.emp_code=e.emp_code 
+		LEFT JOIN md_branch b ON ps.branch_id=b.id 
+		LEFT JOIN md_designation d ON ps.desig_id=d.sl_no 
 		WHERE ps.bank_id='.$bank_id.' AND ps.sal_month='.$month.' AND ps.sal_year='.$year.$where.' 
 		GROUP BY e.emp_code, e.emp_name, b.branch_name, d.designation ORDER BY b.branch_name, e.emp_name';
 		$query = $this->db->query($sql);

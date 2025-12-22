@@ -90,7 +90,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                              <div class="col-12">
                                 <table  style="width:100%;">
                                     <tbody>
-                                        <tr>
+                                        <tr><?php //var_dump($payslip_dtls[0]); ?>
                                             <td style="width:15%;">Name</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->emp_name; ?></td>
@@ -109,7 +109,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                         <tr>
                                             <td style="width:15%;">Posting</td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->branch_name; ?></td>
+                                            <td class="left_algn" style="width:33%;"><?php echo $payslip_dtls[0]->branch_name; ?></td>
                                             <td style="width:15%;">Salary A/C No. </td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td><?php echo $emp_dtls->bank_ac_no; ?></td>
@@ -117,7 +117,8 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                         <tr>
                                             <td style="width:15%;">Designation</td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->designation; ?></td>
+                                            <td class="left_algn" style="width:33%;">
+                                                <?php echo $payslip_dtls[0]->designation; ?><?php //echo $emp_dtls->designation; ?></td>
                                             <td style="width:15%;">Phone Number</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->phn_no; ?></td>                                            
