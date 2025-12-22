@@ -305,14 +305,15 @@ class Admin_Process extends CI_Model
 		$input = array (
 			'created' => date('Y-m-d'),
 			'emp_code' => $row->emp_code,
-			'branch_id' => $row->branch_id,
-			'joining_date' => $row->join_dt,
-			'leaving_date' => $leaving_date
+			'leaving_branch_id' => $row->branch_id,
+			'leaving_date' => $leaving_date,
+			'joining_branch_id' => $data['branch_id'],
+			'joining_date' => $leaving_date
 		);
 		$this->Admin_Process->f_insert('td_transfer', $input);
+		//echo $this->db->last_query(); exit;
 		$input = array (
-			'branch_id' => $data['branch_id'],
-			'join_dt' => $data['trf_date']
+			'branch_id' => $data['branch_id']
 		);
 		$this->Admin_Process->f_edit('md_employee', $input, array('emp_code' => $data['code']));
 		$this->db->trans_complete();
