@@ -100,8 +100,11 @@
       success: function(result) {
         var ndata = jQuery.parseJSON(result);
        if (ndata.status === 1) {
-        // Assuming html is a property containing HTML content
-     //   $('#branch_select').html(ndata.html);
+            if(ndata.user_status == 'S'){
+            $('#error').delay(5000).show();
+            $('#error').html('User account is temporarily suspended.').css("color", "red");
+            $('#error').delay(5000).fadeOut('slow');
+            }
       } else {
           $('#error').delay(5000).show();
           $('#error').html('User id is not correct').css("color", "red");

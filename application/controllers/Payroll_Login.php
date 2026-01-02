@@ -139,6 +139,7 @@
 			   $branch_list_html .='</select>';
 			  // $data['html'] = $branch_list_html;
 			   $data['status']= 1;
+			   $data['user_status']= $user_data->user_status;
 			   echo json_encode($data);
 			}else{
 				$data['status']= 0;
