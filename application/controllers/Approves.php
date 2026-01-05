@@ -101,7 +101,7 @@ class Approves extends CI_Controller
           
           if($integrated_salary == 1){
 
-            $chunkSize = 70;
+            $chunkSize = 100;
             $chunks = array_chunk($erning_dt, $chunkSize);
       
            $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
