@@ -92,8 +92,6 @@
                                                 </tr>
                                       <?php
                                             }
-                                        } else {
-                                            echo "<tr><td colspan='9' style='text-align: center;'>No Record Found</td></tr>";
                                         }
                                         ?>
                                   </tbody>
