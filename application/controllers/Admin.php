@@ -361,10 +361,14 @@ class Admin extends CI_Controller
 					"bank_id"   => $this->session->userdata['loggedin']['bank_id'],
 					"emp_code"   =>  $this->input->post('emp_code')
 				);
-
+				//update payhead in earning and deduction table based on designation
+				$query = $this->db->query("select designation from md_employee where emp_code = " . $this->input->post('emp_code'));
+				$result = $query->result();
+				$designation_id = $result[0]->designation;
+				$this->db->query('UPDATE td_earning_deduction ed, md_payhead_earning pe, md_employee e SET ed.amount = 0 WHERE ed.emp_no = e.emp_code AND e.designation = pe.designation_id AND ed.pay_head_id = pe.payhead_id AND ed.emp_no = ' . $this->input->post('emp_code') . ' AND ed.pay_head_type = "E" AND pe.designation_id = ' . $designation_id);
 				$this->session->set_flashdata('msg', 'Successfully updated!');
 				$this->Admin_Process->f_edit('md_employee', $data_array, $where);
-
+				$this->db->query('UPDATE td_earning_deduction ed, md_payhead_earning pe, md_employee e SET ed.amount = pe.amount WHERE ed.emp_no = e.emp_code AND e.designation = pe.designation_id AND ed.pay_head_id = pe.payhead_id AND ed.emp_no = ' . $this->input->post('emp_code') . ' AND ed.pay_head_type = "E" AND pe.designation_id = ' . $this->input->post('designation'));
 				redirect('stfemp');
 			} else {
 
