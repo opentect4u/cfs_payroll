@@ -95,6 +95,7 @@ $api_end_points = array(
 	5 => 'sbangla_save',
     8 => 'tentia_save',
     9 => 'sultanpur_samabay_save',
+    10 => 'tehatta_save',
 );
 $proc_end_points = array(
     1 => 'rardb_proc',

@@ -64,8 +64,8 @@ class Approves extends CI_Controller
                             END AS acc_cd, 
                             a.pay_head_type, 
                             a.amount,
-                            a.account_no, 
-                            d.bank_ac_no, 
+                            a.account_no,
+                            COALESCE(NULLIF(d.bank_ac_no, ''), 0) AS bank_ac_no,
                             a.created_by, 
                             d.branch_id,d.pf_ac_no 
                         FROM 
@@ -94,9 +94,10 @@ class Approves extends CI_Controller
                 "a.catg_id" => $this->input->get('catg_cd'),
             );
              
-            $paySel = 'a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount,a.account_no, d.bank_ac_no, a.created_by, d.branch_id';
+            $paySel = "a.bank_id, b.bank_name, a.trans_dt, a.sal_month, a.sal_year, a.emp_code, a.pay_head_id, c.pay_head, c.acc_cd, a.pay_head_type, a.amount,a.account_no,COALESCE(NULLIF(d.bank_ac_no, ''), 0) AS bank_ac_no, a.created_by, d.branch_id";
             $erning_dt = $this->Admin_Process->f_get_particulars("td_pay_slip a, md_bank b, md_pay_head c, md_employee d", $paySel, $where1, 0);
          } 
+      
           $integrated_salary = $this->session->userdata['loggedin']['integrated_salary'];
           
           if($integrated_salary == 1){
