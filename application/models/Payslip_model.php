@@ -100,9 +100,9 @@ class Payslip_model extends CI_Model
 		JOIN td_pay_slip b ON a.trans_date = b.trans_dt AND a.trans_no = b.trans_no 
 		LEFT JOIN md_pay_head c ON b.pay_head_id = c.sl_no 
 		WHERE a.sal_month=b.sal_month AND a.sal_year=b.sal_year AND a.bank_id=b.bank_id AND a.catg_cd=b.catg_id 
-		AND b.emp_code ='.$emp_code.' AND a.approval_status="A" 
+		AND b.emp_code ='.$emp_code.' AND a.approval_status="S" 
 		AND b.sal_month ='.$month.' AND b.sal_year ='.$year.' ORDER BY b.pay_head_type, c.seq';
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql); //echo $this->db->last_query(); exit;
 		return $query->result();
     }
 

@@ -115,8 +115,8 @@ class Admin_Process extends CI_Model
 		$sql = 'SELECT ifnull(i.id, 0) as id, e.emp_code, e.emp_name, d.designation, c.category, e.join_dt, if(i.basic_old > 0, i.basic_old, e.basic_pay) as old_basic, if(i.basic_new > 0, i.basic_new, e.basic_pay) as new_basic, ifnull(i.isapplied, 0) as isapplied  
 				FROM md_employee e JOIN md_designation d ON e.designation = d.sl_no JOIN md_category c ON e.emp_catg = c.id 
 				LEFT JOIN md_increment_hd i ON e.emp_code = i.emp_code AND i.month = ' . $month . ' AND i.year = ' . $year . '
-				WHERE e.emp_status = "A" AND e.join_dt like "%-' . str_pad($month, 2, "0", STR_PAD_LEFT) . '-%" AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY c.category, d.designation, e.emp_name';
-		$query = $this->db->query($sql); //echo $this->db->last_query(); exit;
+				WHERE e.emp_status = "A" AND e.join_dt like "%-' . $month . '-%" AND e.bank_id = ' . $this->session->userdata['loggedin']['bank_id'] . ' ORDER BY c.category, d.designation, e.emp_name';
+		$query = $this->db->query($sql);
 		return $query->result();
 	}
 
@@ -305,15 +305,14 @@ class Admin_Process extends CI_Model
 		$input = array (
 			'created' => date('Y-m-d'),
 			'emp_code' => $row->emp_code,
-			'leaving_branch_id' => $row->branch_id,
-			'leaving_date' => $leaving_date,
-			'joining_branch_id' => $data['branch_id'],
-			'joining_date' => $leaving_date
+			'branch_id' => $row->branch_id,
+			'joining_date' => $row->join_dt,
+			'leaving_date' => $leaving_date
 		);
 		$this->Admin_Process->f_insert('td_transfer', $input);
-		//echo $this->db->last_query(); exit;
 		$input = array (
-			'branch_id' => $data['branch_id']
+			'branch_id' => $data['branch_id'],
+			'join_dt' => $data['trf_date']
 		);
 		$this->Admin_Process->f_edit('md_employee', $input, array('emp_code' => $data['code']));
 		$this->db->trans_complete();

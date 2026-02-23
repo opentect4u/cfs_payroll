@@ -1,6 +1,6 @@
 <?php 
-// echo '<pre>';
-// print_r($payslip_dtls);
+//echo '<pre>';
+//print_r(sizeof($payslip_dtls));
 ?>
 <script>
     function printDiv() {
@@ -109,16 +109,15 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                         <tr>
                                             <td style="width:15%;">Posting</td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td class="left_algn" style="width:33%;"><?php echo $payslip_dtls[0]->branch_name; ?></td>
+                                            <td class="left_algn" style="width:33%;"><?php echo sizeof($payslip_dtls) > 0 ? $payslip_dtls[0]->branch_name : ''; ?></td>
                                             <td style="width:15%;">Salary A/C No. </td>
                                             <td class="left_algn" style="width:2%;">:</td>
-                                            <td><?php echo $emp_dtls->bank_ac_no; ?></td>
                                         </tr>
                                         <tr>
                                             <td style="width:15%;">Designation</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td class="left_algn" style="width:33%;">
-                                                <?php echo $payslip_dtls[0]->designation; ?><?php //echo $emp_dtls->designation; ?></td>
+                                                <?php echo sizeof($payslip_dtls) > 0 ? $payslip_dtls[0]->designation : ''; ?><?php //echo $emp_dtls->designation; ?></td>
                                             <td style="width:15%;">Phone Number</td>
                                             <td class="left_algn" style="width:2%;">:</td>
                                             <td class="left_algn" style="width:33%;"><?php echo $emp_dtls->phn_no; ?></td>                                            
@@ -162,7 +161,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width:50%;">
+                                    <td style="width:50%; vertical-align: top;">
                                         <table  style="width:100%;">                                       
                                         <tbody>
                                         <?php      
@@ -173,7 +172,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                          ?>
                                           <tr>
                                             <td class="left_algn"><?= $ekey->pay_head; ?></td>
-                                            <td class="right_algn"><?= $ekey->amount; ?></td>
+											  <td class="right_algn"><?= $ekey->amount; ?></td>
                                           </tr>
                                             <?php } 
                                             } ?>
@@ -190,7 +189,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                         ?>
                                           <tr>
                                                 <td class="left_algn"><?= $ekey->pay_head; ?></td>
-                                                <td class="right_algn"><?= $ekey->amount; ?></td>
+											  <td class="right_algn"><?= $ekey->amount; ?></td>
                                                
                                             </tr>
                                             <?php } 

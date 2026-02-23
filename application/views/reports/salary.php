@@ -331,7 +331,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                     <p style="display: inline; margin-left: 8%;">Chief Executive Officer</p>
 
                                 </div>
-
+<div class="row" style="margin-bottom:10px">
+                            <div class="col-12" style="text-align: center;">
+                            <br>
+                            <p style="display: inline;text-transform: uppercase; font-size: 10px;"><b><?= PAYSLIP_FOOTER ?></b></p>
+                            </div>
+                        </div>
 
                             </div>
                         </div>

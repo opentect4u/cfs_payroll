@@ -919,13 +919,11 @@ class Salary extends CI_Controller
                        if(count($row_count) > 1){
                             $input_basic = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
-                                'branch_id' => $emp->branch_id,
                                 'trans_dt' => $trans_dt,
                                 'trans_no' => $data_array['trans_no'],
                                 'sal_month' => $sal_month,
                                 'sal_year' => $year,
                                 'emp_code' => $emp->emp_code,
-                                'desig_id' => $emp->designation,
                                 'catg_id' => $category,
                                 'pay_head_id' => 0,
                                 'pay_head_type' => 'E',
@@ -941,13 +939,11 @@ class Salary extends CI_Controller
                        foreach($erning_dts as $erning_dt){
                             $input = array(
                                 'bank_id' => $this->session->userdata['loggedin']['bank_id'],
-                                'branch_id' => $emp->branch_id,
                                 'trans_dt' => $trans_dt,
                                 'trans_no' => $data_array['trans_no'],
                                 'sal_month' => $sal_month,
                                 'sal_year' => $year,
                                 'emp_code' => $emp->emp_code,
-                                'desig_id' => $emp->designation,
                                 'catg_id' => $category,
                                 'pay_head_id' => $erning_dt->pay_head_id,
                                 'pay_head_type' => $erning_dt->pay_head_type,
@@ -1785,7 +1781,7 @@ class Salary extends CI_Controller
             $this->form_validation->set_rules('from_date', 'From Date', 'required|date');
             $this->form_validation->set_rules('to_date', 'To Date', 'required|date');
             $this->form_validation->set_rules('payment_date', 'Payment Date', 'required|date');
-           // $this->form_validation->set_rules('percentage', 'Percentage', 'required|numeric|greater_than[0]');
+            $this->form_validation->set_rules('percentage', 'Percentage', 'required|numeric|greater_than[0]');
 
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('error', validation_errors());
@@ -1803,7 +1799,7 @@ class Salary extends CI_Controller
                // Update each employee's payhead amount
                 $data['emp_list'] = $this->Admin_Process->f_get_particulars(
                     "md_employee",
-                    array('emp_code','branch_id','designation'),
+                    array('emp_code'),
                     array('bank_id' => $bank_id, 'emp_status' => 'A', 'emp_catg' => $category),
                     0
                 );
@@ -1841,13 +1837,11 @@ class Salary extends CI_Controller
                     // 3️⃣ Insert new row in td_payslip
                     $insertData = [
                         'bank_id' => $bank_id,
-						'branch_id'=> $emp->branch_id,
                         'trans_dt' => $payment_date,
                         'trans_no' => ($trans_no->trans_no != 0) ? ($trans_no->trans_no) : '1',
                         'sal_month' => $month,
                         'sal_year' => $year,
                         'emp_code' => $emp->emp_code,
-						'desig_id' => $emp->designation,
                         'catg_id' => $category,
                         'pay_head_id' => $payhead_id,
                         'pay_head_type' => 'E',

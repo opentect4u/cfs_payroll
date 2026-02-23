@@ -31,23 +31,27 @@ class Payslip extends CI_Controller {
 				'trans_date' => $trans_date
 			))->update('td_salary', $input);
 		}
-		redirect(site_url('payapprv'))
+		redirect(site_url('payapprv'));
 	}
 	public function download($token = null)
 	{
 		$id = substr(substr($token, 4), 0, -4);
+		//var_dump($id); exit;
 		$this->db->where('id', $id);
 		$query = $this->db->get('td_sms');
 		$row = $query->row();	
 		$this->db->where('sl_no', $row->bank_id);
 		$query = $this->db->get('md_bank');
 		$bank = $query->row();
+		$this->db->query('UPDATE td_sms SET isread=isread+1 WHERE id=' . $id);
 		$data['month'] = $row->month;
 		$data['year'] = $row->year;	
 		$data['bank'] = $bank;
 		$data['emp'] = $this->model->get_emp($row->emp_code);
 		$data['sal'] = $this->model->get_sal($row->emp_code, $row->month, $row->year);
 		$data['tds'] = $this->model->get_tds($row->emp_code, $row->month, $row->year);
+		//echo '<pre>';
+		//print_r($data); exit;
 		$dompdf = $this->dompdf_lib->load();
 		//$this->load->view('payslip/view', $data);
 		$html = $this->load->view('payslip/view', $data, TRUE);

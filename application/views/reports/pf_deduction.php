@@ -92,7 +92,7 @@ $selected = (object) $selected;
                                                             }
                                                             $row->gross = round($row->gross,0);
                                                             $row->epf_wages = round($row->wages,0);
-                                                            $row->eps_wages = $age > 58 ? 0 : (round($row->wages,0) > 15000 ? 15000 : round($row->wages,0));
+                                                            $row->eps_wages = $age >= 58 ? 0 : (round($row->wages,0) > 15000 ? 15000 : round($row->wages,0));
                                                             $row->edli_wages = round($row->wages,0) > 15000 ? 15000 : round($row->wages,0);
                                                             $row->epf_contri_remitted = round(($row->epf_wages*12)/100,0);
                                                             $row->eps_contri_remitted = round(($row->eps_wages*8.33)/100,0);

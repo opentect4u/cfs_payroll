@@ -7,6 +7,18 @@
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+	$logoFile = $this->session->userdata['loggedin']['logo_path'];
+
+	// Convert URL to server file path
+	$imagePath = FCPATH . 'assets/images/' . $logoFile;
+
+	if (file_exists($imagePath)) {
+		$imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
+		$imageData = file_get_contents($imagePath);
+		$base64Image = 'data:image/' . $imageType . ';base64,' . base64_encode($imageData);
+	} else {
+		$base64Image = '';
+	}
 ?>
     <div class="main-panel">
         <div class="content-wrapper">
@@ -14,17 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <div class="card-body" id='divToPrint'>
                     <div class="row">
                         <div class="col-3"><a href="javascript:void()">
-                            <img src="<?= base_url() ?>assets/images/<?php 
-                            if (isset($this->session->userdata['loggedin']['logo_path'])) {
-                                echo $this->session->userdata['loggedin']['logo_path']; 
-                            }
-                            ?>" 
-                        alt="logo" height="100" width="100" /></a></div>
-                        <div class="col-9" class="center">
-                            <div class="center">
+                            <img src="<?php echo $base64Image; ?>" alt="logo" height="100" width="100" />
+							</a></div>
+                        <div class="col-9" style="text-align: center !important;">
                                  <?php include_once('common_report_header.php'); ?>
-                                <h4>Salary summary report for the month of <?php echo MONTHS[$this->input->post('sal_month')] . ' ' . $this->input->post('year'); ?></h4>
-                            </div>
+							<h4>Salary summary report for the month of <?php echo MONTHS[$this->input->post('sal_month')] . ' ' . $this->input->post('year'); ?></h4>
                         </div>
                     </div>
                     <br>
@@ -34,20 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <table id="tbl" class="table stripe row-border order-column" style="width:100%">
                                     <thead>
                                         <tr>
-                                        <th class="not-export">Branch</th>
+                                        <th>Branch</th>
                                         <th>Code</th>
                                         <th>Employee</th>
-                                        <th class="not-export">Designation</th>
+                                        <th>Designation</th>
                                         <th>Basic</th>
                                         <?php 
                                         foreach($payhead as $row) {
                                             if($row->pay_head_type == 'E') echo '<th title="'.$row->pay_head.'">'.$row->code.'</th>';
                                         }
-                                        echo '<th title="Gross Pay">GP</th>';
+                                        echo '<th title="Gross Pay">GPS</th>';
                                         foreach($payhead as $row) {
                                             if($row->pay_head_type == 'D') echo '<th title="'.$row->pay_head.'">'.$row->code.'</th>';
                                         }
-                                        echo '<th title="Net Pay">NP</th>';
+                                        echo '<th title="Net Pay">NS</th>';
                                         ?>
                                         </tr>
                                     </thead>
@@ -62,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             echo '<td>'.$row->emp_code.'</td>';
                                             echo '<td>'.$row->emp_name.'</td>';
                                             echo '<td>'.$row->designation.'</td>';
-                                            echo '<td>'.floatval($val[0]).'</td>';
+                                            echo '<td><b>'.floatval($val[0]).'</b></td>';
                                             $gross = $val[0];
                                             foreach($payhead as $ph) {
                                                 if($ph->pay_head_type == 'E') {
@@ -72,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                     if($position > 0) {
                                                         $amount = $val[$position];
                                                     }
-                                                    echo '<td>'.floatval($amount).'</td>';
+                                                    echo '<td><b>'.floatval($amount).'</b></td>';
                                                     $gross += $amount;
                                                     $row->$code = $amount;
                                                 }
                                             }
-                                            echo '<td>'.floatval($gross).'</td>';
+                                            echo '<td><b>'.floatval($gross).'</b></td>';
                                             $row->gross = $gross;
                                             $deduction = 0;
                                             foreach($payhead as $ph) {
@@ -88,13 +94,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                     if($position > 0) {
                                                         $amount = $val[$position];
                                                     }
-                                                    echo '<td>'.floatval($amount).'</td>';
+                                                    echo '<td><b>'.floatval($amount).'</b></td>';
                                                     $deduction += $amount;
                                                     $row->$code = $amount;
                                                 }
                                             }
                                             $row->net = $gross - $deduction;
-                                            echo '<td>'.floatval($row->net).'</td>';
+                                            echo '<td><b>'.floatval($row->net).'</b></td>';
                                             echo '</tr>';
                                         }
                                         ?>
