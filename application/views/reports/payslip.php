@@ -172,14 +172,17 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                             foreach($payslip_dtls as $ekey) {
                                                 if($ekey->pay_head_type == 'D') {
                                                 $tot_deduction += $ekey->amount;
+                                                if($ekey->amount > 0) {
                                         ?>
                                           <tr>
                                                 <td class="left_algn"><?= $ekey->pay_head; ?></td>
                                                 <td class="right_algn"><?= $ekey->amount; ?></td>
                                                
                                             </tr>
-                                            <?php } 
-                                            } ?>
+
+                                            <?php    }  
+                                                  }
+                                               }    ?>
                                             <tr style="font-weight:bold">
                                                 <td class="left_algn">Total</td>
                                                 <td class="right_algn"><?= $tot_deduction; ?></td>
