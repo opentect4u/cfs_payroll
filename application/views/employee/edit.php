@@ -11,7 +11,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                         <div class="col-2">
-                                                <label for="exampleInputName1">Employee Code:<span class="requiredfield">*</span></label>
+                                                <label for="exampleInputName1">Code Prefix:<span class="requiredfield">*</span></label>
                                                 <input type="text" name="" class="form-control" value="<?php echo $employee_dtls->prefix_emp_cd; ?>" readonly />
                                             </div>
                                             <div class="col-2">
