@@ -93,10 +93,12 @@ $api_end_points = array(
     3 => 'utkal_save',
     4 => 'chalk_save',
 	5 => 'sbangla_save',
+    7 => 'acskus_save',
     8 => 'tentia_save',
     9 => 'sultanpur_samabay_save',
     10 => 'tehatta_save',
     11 => 'kkskus_save',
+    
 );
 $proc_end_points = array(
     1 => 'rardb_proc',
