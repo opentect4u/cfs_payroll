@@ -328,4 +328,18 @@ class Reports extends CI_Controller
         $this->load->view("reports/tds_deduction", $data);
         $this->load->view('post_login/footer');
     }
+    public function emp_loandtls()
+    {
+        $where = array(
+            'a.emp_no = b.emp_code' => NULL,
+            'c.sl_no = a.pay_head_id' => NULL,'LENGTH(a.account_no) > 2' => NULL,
+            'b.emp_status' => 'A','1 order by b.emp_name' => NULL
+        );
+        $select = array('b.emp_name','c.pay_head','a.amount','a.account_no');
+        $list = $this->Report_Process->f_get_particulars('td_earning_deduction a,md_employee b,md_pay_head c', $select, $where, 0);
+        $data['list'] = $list;
+        $this->load->view('post_login/payroll_main');
+        $this->load->view('reports/emp_loandtls', $data);
+        $this->load->view('post_login/footer');
+    }
 }

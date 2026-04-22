@@ -234,6 +234,7 @@
                     <?php //  } ?>
                     <li class="nav-item"><a href="<?php echo site_url('reports/pf_deduction'); ?>">PF Deduction</a></li>
                     <li class="nav-item"><a href="<?php echo site_url('reports/tds_deduction'); ?>">Income Tax Deduction</a></li>
+                    <li class="nav-item"><a href="<?php echo site_url('reports/emp_loandtls'); ?>">Employee Loan Details</a></li>
                   <?php } ?>
                 </ul>
               </div>
