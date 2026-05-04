@@ -182,7 +182,7 @@ class Report_Process extends CI_Model
 		AND a.bank_id = $bank_id
 		AND b.bank_id = $bank_id 
 		AND c.bank_id = $bank_id $branchsql
-		AND a.sal_month = $sal_month AND a.sal_year = $sal_year order by d.srl_no ASC";
+		AND a.sal_month = $sal_month AND a.sal_year = $sal_year ";
 
 		$result	=	$this->db->query($sql);
 		return $result->result();

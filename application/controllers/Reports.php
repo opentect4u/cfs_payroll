@@ -251,7 +251,6 @@ class Reports extends CI_Controller
     {
        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-          
             $month = $this->input->post('sal_month');
             $year = $this->input->post('year');
             $catg_id = $this->input->post('category');
@@ -269,7 +268,9 @@ class Reports extends CI_Controller
                 $statement['barnch_name'] = 'ALL';
             }
 
-          //  $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+            $statement['saldetail']  = $this->Report_Process->get_emp_saldetail($catg_id,$month,$year,$bank_id);
+            //echo $this->db->last_query(); die();
+          
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/empeardedudd", $statement);
             $this->load->view('post_login/footer');
@@ -281,6 +282,96 @@ class Reports extends CI_Controller
             $statement['category']   =   $this->Report_Process->f_get_particulars("md_category", NULL, null, 0);
             $this->load->view('post_login/payroll_main');
             $this->load->view("reports/empeardedudd", $statement);
+            $this->load->view('post_login/footer');
+        }
+    }
+
+    public function payhead_data_emp()
+    {
+       
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $month = $this->input->post('sal_month');
+            $year = $this->input->post('year');
+            $catg_id = $this->input->post('category');
+            $branch_id = $this->input->post('branch_id');
+            $bank_id = $this->session->userdata('loggedin')['bank_id'];
+            $statement['branchname'] = '';
+            $statement['emp_list']   = $this->Report_Process->get_emp_list($branch_id,$catg_id,$month,$year,$bank_id);
+            $statement['sal_month'] = $this->input->post('sal_month');
+            $statement['year'] = $this->input->post('year');
+            $statement['bank_id'] = $this->session->userdata('loggedin')['bank_id'];
+            if($branch_id > 0 ){
+                $statem =   $this->Report_Process->f_get_particulars("md_branch", NULL, array('id'=>$branch_id), 1);
+                $statement['barnch_name'] = $statem->branch_name;
+            }else{
+                $statement['barnch_name'] = 'ALL';
+            }
+           
+            $payheads = $this->db->query("SELECT a.sl_no, a.pay_head, a.pay_flag
+                                FROM md_pay_head a
+                                WHERE a.bank_id = '3'
+                                AND a.pay_flag IN ('E','D')
+                                AND EXISTS (
+                                    SELECT 1 
+                                    FROM td_pay_slip b 
+                                    WHERE b.pay_head_id = a.sl_no 
+                                    AND b.bank_id = '3'
+                                )
+                                ORDER BY 
+                                    CASE 
+                                        WHEN a.pay_flag = 'E' THEN 1
+                                        WHEN a.pay_flag = 'D' THEN 2
+                                    END,
+                                a.sl_no;")->result();   
+           
+          
+            $this->db->select('e.emp_code, e.emp_name, p.pay_head_id, p.amount');
+            $this->db->from('td_pay_slip p');
+            $this->db->join('md_employee e', 'e.emp_code = p.emp_code');
+            $this->db->where('p.bank_id', $bank_id);
+            $this->db->where('e.bank_id', $bank_id);
+            $this->db->where('p.sal_month', $month);    
+            $this->db->where('p.sal_year', $year);
+            $data = $this->db->get()->result();
+            $report = [];
+
+            foreach ($data as $row) {
+
+                if (!isset($report[$row->emp_code])) {
+                    $report[$row->emp_code] = [
+                        'emp_code' => $row->emp_code,
+                        'emp_name' => $row->emp_name,
+                        'payheads' => []
+                    ];
+                }
+
+                $report[$row->emp_code]['payheads'][$row->pay_head_id] = $row->amount;
+            }
+            $statement['report'] = $report;
+            $earnings = [];
+            $deductions = [];
+
+            foreach ($payheads as $ph) {
+                if ($ph->pay_flag == 'E') {
+                    $earnings[] = $ph;
+                } else {
+                    $deductions[] = $ph;
+                }
+            }
+            $statement['earnings'] = $earnings;
+            $statement['deductions'] = $deductions;
+          
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/emp_payhead_data", $statement);
+            $this->load->view('post_login/footer');
+        } else {
+            //Month List
+            $statement['month_list'] =   $this->Report_Process->f_get_particulars("md_month", NULL, NULL, 0);
+            $where = array('bank_id'=>$this->session->userdata('loggedin')['bank_id']);
+            $statement['branchlist']   =   $this->Report_Process->f_get_particulars("md_branch", NULL,$where, 0);
+            $statement['category']   =   $this->Report_Process->f_get_particulars("md_category", NULL, null, 0);
+            $this->load->view('post_login/payroll_main');
+            $this->load->view("reports/emp_payhead_data", $statement);
             $this->load->view('post_login/footer');
         }
     }
