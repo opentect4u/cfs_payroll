@@ -29,31 +29,6 @@ function printDiv() {
     }, 10);
 }
 </script>
-<!-- <style>
-@media print {
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .col-3, .col-8 {
-        flex: 1;
-    }
-    .col-3 {
-        max-width: 25%; /* Since col-3 represents 25% width */
-    }
-    .col-8 {
-        max-width: 75%; /* Since col-8 represents 75% width */
-    }
-    img {
-        max-width: 100%; /* Ensure images fit within their columns */
-        height: auto; /* Maintain aspect ratio */
-    }
-    /* Additional print styles */
-    .no-print {
-        display: none;
-    }
-}
-</style> -->
 
 <style>
 th {
@@ -93,7 +68,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table" style="width:100%">
+                            <table class="table" style="width:100%" id="salaryTable">
                                 <thead>
                                     <tr>
                                         <th>Employee</th>
@@ -114,42 +89,62 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                         <th>Net Salary</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
+                                    <?php
+                                        // GRAND TOTAL VARIABLES
+                                        $total_basic = 0;
+                                        $total_gross = 0;
+                                        $total_deduction_all = 0;
+                                        $total_net = 0;
+                                        $earning_totals = [];
+                                        $deduction_totals = [];
+                                        foreach ($earnings as $ph) {
+                                            $earning_totals[$ph->sl_no] = 0;
+                                        }
+                                        foreach ($deductions as $ph) {
+                                            $deduction_totals[$ph->sl_no] = 0;
+                                        }
+                                        ?>
                                     <?php foreach ($report as $emp) { 
 
-                                        $basic = $this->Report_Process->getempsalryd(
-                                            $emp['emp_code'], $sal_month, $year, $bank_id, 0
-                                        );
+                                            $basic = $this->Report_Process->getempsalryd(
+                                                $emp['emp_code'], $sal_month, $year, $bank_id, 0
+                                            );
 
-                                        $gross = $basic;
-                                        $total_deduction = 0;
-                                    ?>
+                                            $gross = $basic;
+                                            $total_deduction = 0;
+                                            $total_basic += $basic;
+                                        ?>
                                     <tr>
                                         <td><?= $emp['emp_name'] ?></td>
-
                                         <!-- Basic -->
                                         <td><?= $basic ?></td>
-
                                         <!-- Earnings -->
                                         <?php foreach ($earnings as $ph) { 
-                            $val = isset($emp['payheads'][$ph->sl_no]) 
-                                    ? $emp['payheads'][$ph->sl_no] 
-                                    : 0;
-                            $gross += $val;
-                                ?>
+                                            $val = isset($emp['payheads'][$ph->sl_no]) 
+                                                ? $emp['payheads'][$ph->sl_no] 
+                                                : 0;
+
+                                            $gross += $val;
+                                            // COLUMN TOTAL
+                                            $earning_totals[$ph->sl_no] += $val;
+                                        ?>
                                         <td><?= $val ?></td>
                                         <?php } ?>
-
                                         <!-- Gross -->
                                         <td><b><?= $gross ?></b></td>
-
                                         <!-- Deductions -->
                                         <?php foreach ($deductions as $ph) { 
-                            $val = isset($emp['payheads'][$ph->sl_no]) 
-                                    ? $emp['payheads'][$ph->sl_no] 
-                                    : 0;
-                            $total_deduction += $val;
-                        ?>
+                                        $val = isset($emp['payheads'][$ph->sl_no]) 
+                                            ? $emp['payheads'][$ph->sl_no] 
+                                            : 0;
+
+                                        $total_deduction += $val;
+
+                                        // COLUMN TOTAL
+                                        $deduction_totals[$ph->sl_no] += $val;
+                                        ?>
                                         <td><?= $val ?></td>
                                         <?php } ?>
 
@@ -161,10 +156,42 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                                             <b><?= $gross - $total_deduction ?></b>
                                         </td>
                                     </tr>
-                                    <?php } ?>
+                                    <?php
+                                        // GRAND TOTALS
+                                        $total_gross += $gross;
+                                        $total_deduction_all += $total_deduction;
+                                        $total_net += ($gross - $total_deduction);
+
+                                    } ?>
+
+                                    <!-- TOTAL ROW -->
+                                    <tr style="font-weight:bold; background:#f2f2f2;">
+                                        <td>Total</td>
+
+                                        <!-- Total Basic -->
+                                        <td><?= $total_basic ?></td>
+
+                                        <!-- Earnings Totals -->
+                                        <?php foreach ($earnings as $ph) { ?>
+                                        <td><?= $earning_totals[$ph->sl_no] ?></td>
+                                        <?php } ?>
+
+                                        <!-- Total Gross -->
+                                        <td><?= $total_gross ?></td>
+
+                                        <!-- Deduction Totals -->
+                                        <?php foreach ($deductions as $ph) { ?>
+                                        <td><?= $deduction_totals[$ph->sl_no] ?></td>
+                                        <?php } ?>
+
+                                        <!-- Total Deduction -->
+                                        <td><?= $total_deduction_all ?></td>
+
+                                        <!-- Total Net -->
+                                        <td><?= $total_net ?></td>
+                                    </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
@@ -185,16 +212,10 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                     <input type='button' id='btn' value='Print' onclick='printDiv();'>
                 </div>
             </div>
-
         </div>
     </div>
-
-
-
     <?php
-} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-    ?>
+} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {  ?>
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="card">
@@ -273,18 +294,13 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <?php
-
     } else {
-
         echo "<h1 style='text-align: center;'>No Data Found</h1>";
     }
-
         ?>
-
         <script>
         function checkVal() {
             var month = $('#sal_month').val();
@@ -296,4 +312,25 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                 return false;
             }
         }
+        </script>
+        <script>
+        $(document).ready(function() {
+
+            $('#salaryTable').DataTable({
+                dom: 'Bfrtip',
+
+                buttons: [{
+                        extend: 'excelHtml5',
+                        title: 'Salary_Report'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Salary Report'
+                    }
+                ],
+
+                scrollX: true
+            });
+
+        });
         </script>
