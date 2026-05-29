@@ -195,7 +195,7 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12">
 
                         <div class="" style="margin-top:50px">
@@ -205,13 +205,13 @@ if (isset($this->session->userdata['loggedin']['logo_path'])) {
                             <p style="display: inline; margin-left: 8%;">Chief Executive officer</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-12">
                     <input type='button' id='btn' value='Print' onclick='printDiv();'>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <?php
