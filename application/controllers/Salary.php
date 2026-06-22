@@ -828,8 +828,8 @@ class Salary extends CI_Controller
     {
         $bank_id = $this->session->userdata['loggedin']['bank_id'];
         $category = $this->input->post('category');
-        $max_year =   $this->Salary_Process->f_get_particulars("td_salary", NULL, array("bank_id"=>$bank_id,"approval_status" => 'A', 'catg_cd' => $category, '1 ORDER BY sal_year DESC, sal_month DESC limit 1' => NULL), 1);
- 
+        $max_year =   $this->Salary_Process->f_get_particulars("td_salary", NULL, array("bank_id"=>$bank_id,"approval_status" => 'S', 'catg_cd' => $category, '1 ORDER BY sal_year DESC, sal_month DESC limit 1' => NULL), 1);
+        echo $this->db->last_query();die();
         // exit;
         if($max_year) {
             if ($max_year->sal_month == 12) {
