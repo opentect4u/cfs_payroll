@@ -1,2 +1,7 @@
 application/config/database.php
+temp_auto_push.bat
 application/cache/session/*
+.gitignore
+branch_structure.json
+config.bat
+node_modules
