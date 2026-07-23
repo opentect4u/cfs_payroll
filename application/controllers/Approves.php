@@ -105,13 +105,13 @@ class Approves extends CI_Controller
             $chunkSize = 100;
             $chunks = array_chunk($erning_dt, $chunkSize);
       
-           $allProcessed = $this->sendChunksToAPI($chunks, "https://restaurantapi.opentech4u.co.in/sal/".$api_end_point[$bank_id]);
+           $allProcessed = $this->sendChunksToAPI($chunks, "https://connection.synergicdatabank.com/sal/".$api_end_point[$bank_id]);
 
             if ($allProcessed) {
                 if($bank_id == 4){
                 $data = array(
                     "month" => $month,"year" => $year);
-                //$this->call_procedure($data, "https://restaurantapi.opentech4u.co.in/sal/".$proc_end_points[$bank_id]);
+                //$this->call_procedure($data, "https://connection.synergicdatabank.com/sal/".$proc_end_points[$bank_id]);
                 }
                 $this->session->set_flashdata('msg', 'Successfully Approved!');
                 // echo "All data inserted successfully!";
@@ -206,7 +206,7 @@ class Approves extends CI_Controller
 
     function save_sal_slip($data)
     {
-        $url = 'https://restaurantapi.opentech4u.co.in';
+        $url = 'https://connection.synergicdatabank.com';
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
